@@ -1,6 +1,6 @@
 # Question 1
 
-## Utiliser vous une application qui rescence les médias ? (le(s)quelle(s))
+## Utiliser vous une application qui rescence les médias ? (le(s)quelle(s)) 
 
 ### Oscar
 
@@ -10,7 +10,17 @@
 
 # Question 2
 
-## Ca l'interesserais ?
+## Comment tu l'utilises en générale ? (historique, découverte, avis)
+
+### Oscar
+
+### Valérie
+
+### Théo
+
+# Question 2
+
+## Ca l'interesserais ? (notre applis centraliser)
 
 ### Oscar
 
@@ -20,7 +30,7 @@
 
 # Question 3
 
-## Point positif et négatif dans les applis utilisé ?
+## Point positif et négatif dans les applis utilisé ? (fonction inutile)
 
 ### Oscar
 
@@ -50,7 +60,7 @@
 
 # Question 6
 
-## Si tu préfères que ton compte soit privé ou public ?
+## Si tu préfères que ton compte soit privé ou public ? (partager)
 
 ### Oscar
 
@@ -61,6 +71,26 @@
 # Question 7
 
 ## Serez-vous interressé de voir vos stats ?
+
+### Oscar
+
+### Valérie
+
+### Théo
+
+# Question 8
+
+## Quelle info, aimerais-tu pouvoir enregistré ?
+
+### Oscar
+
+### Valérie
+
+### Théo
+
+# Question 9
+
+## Aimerais-tu des recommandation de contenu similaire ?
 
 ### Oscar
 
