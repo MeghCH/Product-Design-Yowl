@@ -1,4 +1,4 @@
-Inspiration : Letterbox, Metacritic, Serializd
+Inspiration : Letterbox, Metacritic, Serializd, BookVillage
 
 # Connexion
 Connexion non obligatoire pour surfer
