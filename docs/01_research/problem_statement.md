@@ -1,0 +1,3 @@
+Les utilisateurs passionnés de culture manquent d’un espace unique pour organiser et partager leurs expériences. Entre les films vus sur une appli, les livres lus ailleurs et les jeux testés sur une autre, il devient compliqué de tout suivre, de retrouver ses avis et de découvrir de nouvelles œuvres qui correspondent à leurs goûts
+
+Nous simplifions la vie des passionnés de culture en regroupant au même endroit le suivi, la notation et la découverte de films, séries, livres et jeux, avec une communauté active qui partage ses avis et recommandations.
