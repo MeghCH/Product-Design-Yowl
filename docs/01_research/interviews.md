@@ -11,6 +11,8 @@ Valérie :
 
 Théo :
 
+Julien : Letterbox, playlist youtube. (Livres = google keep note)
+
 ## Question 2 - Usage principal
 
 Comment utilises-tu généralement ce type d’application ? (historique, découverte de contenus, avis, recommandations, autre…)
@@ -20,6 +22,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Historique de ce qu'il a vu, cool de voir ce que les autres ont vu, voir les watch list des amis etc. Reco des films qui ressemble a ce qu'il a deja vu (style sur un film vu une reco d'un autre film) + ranger les films qu'il a vu !! JUSTE LES FILMS !! et steam pour les JEUX (How long to beat pour savoir le temps du jeu pour le finir) Pour les eries et anime faire le meme principe que l'appli how long to beat (savoir le nombres d'heures que ca prend)
 
 ## Question 3 - Après la consommation d’une œuvre
 
@@ -31,6 +35,8 @@ Valérie :
 
 Théo :
 
+Julien : Jeux et film = En parler avec les copians, mettre sur letterbox vu avec notes, pour livres il fait rien car pas d'app pour les ranger.
+
 ## Question 4 - Appareil principal
 
 Sur quel appareil utilises-tu le plus souvent ce type d’application ? (smartphone, tablette, ordinateur, autre)
@@ -40,6 +46,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Ordi et pas mal telephone ( tel = pour pouvoir en oarler avec les amis)
 
 ## Question 5 - Suivi des sorties
 
@@ -52,6 +60,8 @@ Valérie :
 
 Théo :
 
+Julien : Film oui, reco par des gens de reco sur real insta, jeu pareil, livres = regarde les reco par des potes ou insta ou par rapport a l'auteur.
+
 ## Question 6 - Notes et avis
 
 Aimes-tu noter ou donner ton avis sur les œuvres que tu consommes ? Pourquoi ?
@@ -61,6 +71,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : oui, debatre de la notes quand on est plusieurs a l'avoir vu, et pratique d'aller sur l'appli pour classer par notes. Surtout pour les conseils.
 
 ---
 
@@ -79,6 +91,8 @@ Valérie :
 
 Théo :
 
+Julien : Letterbox = pas vrm de fonction de recommandation en tant que tel. FONCTIONNALITEE MANQUANTE, La classification trop general (par exemple l'horreur ou ont voit tout ou on melange plusieurs genres pas assez precis) pas assez preciser par rapport au genres, pas de sous genre mis en avant. Recommandation a activer ou desactiver pas present sur la page d'acceuil (par rapport au film deja vu) manque d'algo.
+
 ## Question 8 - Centralisation des contenus
 
 Est-ce difficile pour toi de centraliser tes films, séries, livres et jeux dans un seul outil aujourd’hui ?
@@ -90,6 +104,10 @@ Valérie :
 
 Théo :
 
+Julien : Du mal a faire les 4 bien. Que ca soit pas brouillons.
+
+Intereesant = PARTIE TRANSMEDIA = RECO SUR D'AUTRES MEDIA du meme genre guider sur d'autres style de media !!!!
+
 ## Question 9 - Fonctionnalités secondaires
 
 Quelles fonctionnalités te sembleraient secondaires ou optionnelles ?
@@ -99,6 +117,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Letterbox = voir les watch list des autres au debut ou il s'en foutais. mais au final il trouve ca cool.
 
 ---
 
@@ -116,6 +136,8 @@ Valérie :
 
 Théo :
 
+Julien : ranger les choses vu ou jouer, garder la progression de ce que l'on consomme (serie, jeu, livres (recap de chapitre et marque page)) + recap de ce que t'as deja vu mais floutage sur ce que t'as pas encore vu avec cliquage (serie, livre)
+
 ## Question 11 - Informations enregistrées
 
 Quelles informations aimerais-tu pouvoir enregistrer pour chaque média ? (note, avis, date, durée, statut, plateforme, etc.)
@@ -126,6 +148,8 @@ Valérie :
 
 Théo :
 
+Julien : Note, date de visionnage, duree, estimation de duree pour un livre ou serie ou jeu, note global (moyenne)
+
 ## Question 12 - Statistiques personnelles
 
 Serais-tu intéressé(e) par des statistiques personnelles ? (temps passé, nombre d’œuvres vues/lues/jouées, notes moyennes, etc.)
@@ -135,6 +159,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Pas trop personnalisee car impression d'etre suivi.
 
 ## Question 13 - Confidentialité du compte
 
@@ -147,6 +173,8 @@ Valérie :
 
 Théo :
 
+Julien : Si Pseudo = public pas mal car choix d'ajouter ce truc (par contre les stat de combien de temps avoit jouer, ou lu ou etc pas ouf)
+
 ## Question 14 - Simplicité d’utilisation
 
 Sur une échelle de 1 à 5, quelle importance accordes-tu à la simplicité d’utilisation de l’application ?
@@ -157,6 +185,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : 4,5 solide
 
 ---
 
@@ -174,6 +204,8 @@ Valérie :
 
 Théo :
 
+Julien : Vois la vision de pourquoi s'est une bonne idee. Les livres c'est le truc qui apporte une plus value.
+
 ## Question 16 - Recommandations
 
 Aimerais-tu recevoir des recommandations de contenus similaires en fonction de tes goûts et de ton historique ?
@@ -183,6 +215,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : oui Mais pas IA plus du style ca a la meme tag que ce que tu as deja regarder ou acteurs ou realisateur en commun.
 
 ## Question 17 - Notifications et rappels
 
@@ -194,6 +228,8 @@ Valérie :
 
 Théo :
 
+Julien : Si c'est un truc qu'il regarde oui.
+
 ## Question 18 - Niveau de complexité de l’application
 
 Préférerais-tu une application simple et rapide à utiliser, ou une application plus détaillée avec de nombreuses fonctionnalités ?
@@ -203,6 +239,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Simple et rapide, juste qlq chose et pas 10 000 choses avec boutton partout.
 
 ## Question 19 - Préférences d’interface
 
@@ -214,6 +252,8 @@ Valérie :
 
 Théo :
 
+julien : Affiche cool, mais qui ressemble a letterbox, plutot sobre.
+
 ## Question 20 - Intégrations automatiques
 
 Trouverais-tu utile une intégration automatique avec d’autres services (par exemple : Netflix, Steam, Kindle, etc.) pour importer ton historique ou ton activité ?
@@ -223,6 +263,8 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Non, plutot le faire de moi meme. Pour cacher ce qu'il n'a pas envie de montrer qu'il a regarder.
 
 ## Question 21 - Fonctionnalité idéale
 
@@ -234,6 +276,8 @@ Valérie :
 
 Théo :
 
+Julien : Renseigner des cine que t'aimes bien (meme si localisation activer donc bof) + si tout res amis veulent voir le meme film et ont le s memes cine en commun, envoyer une notif du style = Aller voir cette seance a tel heure a tel cinema.
+
 ## Question 22 - Adoption à long terme
 
 Qu’est-ce qui te convaincrait d’adopter et d’utiliser cette application sur le long terme ?
@@ -244,7 +288,15 @@ Valérie :
 
 Théo :
 
-## Question 23 - Suggestions libres
+Julien : Le fait de mettre les livres, une comunaute aussi (reseaux sociale), melanger les spheres.
+
+## Question 23 - Et truc pas cool que tu n'aimerais pas voir sur l'appli ?
+
+Théo :
+
+Julien : Par contre pas cool = message prive pas cool + ia pour reco pas ouf.
+
+## Question 24 - Suggestions libres
 
 Y a-t-il un élément important dont nous n’avons pas parlé et que tu aimerais ajouter ?
 
@@ -253,3 +305,5 @@ Oscar :
 Valérie :
 
 Théo :
+
+Julien : Non pas specialement.
