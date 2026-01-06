@@ -9,7 +9,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Non, utilise les actualitees google pour les jeux videos.
 
 Julien : Letterbox, playlist youtube. (Livres = google keep note)
 
@@ -21,7 +21,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : /
 
 Julien : Historique de ce qu'il a vu, cool de voir ce que les autres ont vu, voir les watch list des amis etc. Reco des films qui ressemble a ce qu'il a deja vu (style sur un film vu une reco d'un autre film) + ranger les films qu'il a vu !! JUSTE LES FILMS !! et steam pour les JEUX (How long to beat pour savoir le temps du jeu pour le finir) Pour les eries et anime faire le meme principe que l'appli how long to beat (savoir le nombres d'heures que ca prend)
 
@@ -33,7 +33,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Discord pour en parler au gens qui joue au meme style de jeu. Film non, livre non.
 
 Julien : Jeux et film = En parler avec les copians, mettre sur letterbox vu avec notes, pour livres il fait rien car pas d'app pour les ranger.
 
@@ -45,7 +45,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : telephone pour les media mais sinon pas d'appli ce type.
 
 Julien : Ordi et pas mal telephone ( tel = pour pouvoir en oarler avec les amis)
 
@@ -58,7 +58,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Oui ! Via reseaux sociaux, youtube, twitter, metacritique via google.
 
 Julien : Film oui, reco par des gens de reco sur real insta, jeu pareil, livres = regarde les reco par des potes ou insta ou par rapport a l'auteur.
 
@@ -70,7 +70,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Oui pour l'avis pas trop pour noter. Aime donner son avis avec les ameliorations etc, pas la note car c'est absurde.
 
 Julien : oui, debatre de la notes quand on est plusieurs a l'avoir vu, et pratique d'aller sur l'appli pour classer par notes. Surtout pour les conseils.
 
@@ -89,7 +89,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Beaucoup de platforme que j'ai quitter car trop de post de critique pour critiquer. ?
 
 Julien : Letterbox = pas vrm de fonction de recommandation en tant que tel. FONCTIONNALITEE MANQUANTE, La classification trop general (par exemple l'horreur ou ont voit tout ou on melange plusieurs genres pas assez precis) pas assez preciser par rapport au genres, pas de sous genre mis en avant. Recommandation a activer ou desactiver pas present sur la page d'acceuil (par rapport au film deja vu) manque d'algo.
 
@@ -102,7 +102,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Pas forcement. Car ca permet de decouvrir d'autres choses. D'ou le fait que j'utilise google car on tombe sur de nouvelles choses.
 
 Julien : Du mal a faire les 4 bien. Que ca soit pas brouillons.
 
@@ -116,7 +116,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Un boutton "J'ai de la chance" sur google qui tenvoie sur un site au hasard.
 
 Julien : Letterbox = voir les watch list des autres au debut ou il s'en foutais. mais au final il trouve ca cool.
 
@@ -134,7 +134,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Pouvoir partager son avis et commenter. ! Un systeme de balise spoil. 
 
 Julien : ranger les choses vu ou jouer, garder la progression de ce que l'on consomme (serie, jeu, livres (recap de chapitre et marque page)) + recap de ce que t'as deja vu mais floutage sur ce que t'as pas encore vu avec cliquage (serie, livre)
 
@@ -146,7 +146,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Enregistrer ce qu'on a vu, une liste j'aime, j'aime pas.
 
 Julien : Note, date de visionnage, duree, estimation de duree pour un livre ou serie ou jeu, note global (moyenne)
 
@@ -158,7 +158,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Oui fan de statistique.
 
 Julien : Pas trop personnalisee car impression d'etre suivi.
 
@@ -171,7 +171,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Ca depend de ce qui est visible sur le compte, Les infos personnels doivent pas etre affiche. Pseudo date de creation du compte et article apprecier sinon le reste non.
 
 Julien : Si Pseudo = public pas mal car choix d'ajouter ce truc (par contre les stat de combien de temps avoit jouer, ou lu ou etc pas ouf)
 
@@ -184,7 +184,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : 5 le plus intuitife possible.
 
 Julien : 4,5 solide
 
@@ -202,7 +202,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : 1 fois pour tester, mais au long terme peut etre pas.
 
 Julien : Vois la vision de pourquoi s'est une bonne idee. Les livres c'est le truc qui apporte une plus value.
 
@@ -214,7 +214,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : oui.
 
 Julien : oui Mais pas IA plus du style ca a la meme tag que ce que tu as deja regarder ou acteurs ou realisateur en commun.
 
@@ -226,7 +226,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : oui ca pourrait etre super interessant.
 
 Julien : Si c'est un truc qu'il regarde oui.
 
@@ -238,7 +238,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Regrete que certaine fonctionnalite disparaissent sur certaine appli. mais pour rendre plus simple donc prefere une interface plus clair et simple mais sans enlever de fonctionnalite.
 
 Julien : Simple et rapide, juste qlq chose et pas 10 000 choses avec boutton partout.
 
@@ -250,7 +250,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Attrayant c'est mieux mais comme dit faut pas perdre l'accessibilite. -> sobre et epurer pour concerver l'accessibilite.
 
 julien : Affiche cool, mais qui ressemble a letterbox, plutot sobre.
 
@@ -262,7 +262,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Oui, automatiser les choses a rentrer manuellement car moins de demarche pour l'utilisateur.
 
 Julien : Non, plutot le faire de moi meme. Pour cacher ce qu'il n'a pas envie de montrer qu'il a regarder.
 
@@ -274,7 +274,7 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Possibilite de faire des visionnage en groupe, comme sur discord ou un groupe de lecture.
 
 Julien : Renseigner des cine que t'aimes bien (meme si localisation activer donc bof) + si tout res amis veulent voir le meme film et ont le s memes cine en commun, envoyer une notif du style = Aller voir cette seance a tel heure a tel cinema.
 
@@ -286,13 +286,15 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Pas le genre d'utilisateur sur lequel il y aurait une retention. Mais peut etre un systeme de point et de succe par rapport a l'utilisation, avec medaille (participation au evenement communotaire, regarder tant d'heure) que tu ajouterais sur ton profil comme clash royal.
 
 Julien : Le fait de mettre les livres, une comunaute aussi (reseaux sociale), melanger les spheres.
 
 ## Question 23 - Et truc pas cool que tu n'aimerais pas voir sur l'appli ?
 
-Théo :
+Valérie : 
+
+Théo : Une IA, car resumer fait par ia sur plein de site.
 
 Julien : Par contre pas cool = message prive pas cool + ia pour reco pas ouf.
 
@@ -304,6 +306,6 @@ Oscar :
 
 Valérie :
 
-Théo :
+Théo : Non, je pense pas.
 
 Julien : Non pas specialement.
