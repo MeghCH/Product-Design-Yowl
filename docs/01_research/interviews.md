@@ -1,99 +1,255 @@
-# Question 1
+**_Habitudes des utilisateurs_**
+(Comprendre ce que font déjà les utilisateurs et comment)
 
-## Utiliser vous une application qui rescence les médias ? (le(s)quelle(s)) 
+## Question 1 - Applications utilisées
 
-### Oscar
+- Utilises-tu actuellement une ou plusieurs applications pour recenser des médias (films, séries, livres, jeux) ? Si oui, lesquelles ?
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 2
+Théo :
 
-## Comment tu l'utilises en générale ? (historique, découverte, avis)
+## Question 2 - Usage principal
 
-### Oscar
+Comment utilises-tu généralement ce type d’application ? (historique, découverte de contenus, avis, recommandations, autre…)
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 2
+Théo :
 
-## Ca l'interesserais ? (notre applis centraliser)
+## Question 3 - Après la consommation d’une œuvre
 
-### Oscar
+Lorsque tu termines une œuvre (film, série, livre ou jeu), que fais-tu généralement ? (en parler, la noter, la recommander, l’oublier, autre…)
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 3
+Théo :
 
-## Point positif et négatif dans les applis utilisé ? (fonction inutile)
+## Question 4 - Appareil principal
 
-### Oscar
+Sur quel appareil utilises-tu le plus souvent ce type d’application ? (smartphone, tablette, ordinateur, autre)
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 4
+Théo :
 
-## Sur quelle appareil est-tu le plus souvent ?
+## Question 5 - Suivi des sorties
 
-### Oscar
+Fais-tu attention aux prochaines sorties (films, séries, livres, jeux) ?
+Si oui, comment les suis-tu actuellement ?
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 5
+Théo :
 
-## Fais tu attention au prochaine sortie ?
+## Question 6 - Notes et avis
 
-### Oscar
+Aimes-tu noter ou donner ton avis sur les œuvres que tu consommes ? Pourquoi ?
 
-### Valérie
+Oscar :
 
-### Théo
+Valérie :
 
-# Question 6
+Théo :
 
-## Si tu préfères que ton compte soit privé ou public ? (partager)
+---
 
-### Oscar
+**_Frustrations et difficultés_**
 
-### Valérie
+(Identifier les problèmes, limites et points de douleur)
 
-### Théo
+## Question 7 - Points positifs et négatifs
 
-# Question 7
+Quels sont, selon toi, les points positifs et négatifs des applications que tu utilises actuellement ?
+Y a-t-il des fonctionnalités inutiles ou manquantes ?
 
-## Serez-vous interressé de voir vos stats ?
+Oscar :
 
-### Oscar
+Valérie :
 
-### Valérie
+Théo :
 
-### Théo
+## Question 8 - Centralisation des contenus
 
-# Question 8
+Est-ce difficile pour toi de centraliser tes films, séries, livres et jeux dans un seul outil aujourd’hui ?
+Si oui, pourquoi ?
 
-## Quelle info, aimerais-tu pouvoir enregistré ?
+Oscar :
 
-### Oscar
+Valérie :
 
-### Valérie
+Théo :
 
-### Théo
+## Question 9 - Fonctionnalités secondaires
 
-# Question 9
+Quelles fonctionnalités te sembleraient secondaires ou optionnelles ?
 
-## Aimerais-tu des recommandation de contenu similaire ?
+Oscar :
 
-### Oscar
+Valérie :
 
-### Valérie
+Théo :
 
-### Théo
+---
+
+**_Besoins des utilisateurs_**
+
+(Ce qui est nécessaire pour eux, ce qu’ils jugent essentiel)
+
+## Question 10 - Fonctionnalités indispensables
+
+Quelles fonctionnalités te paraissent indispensables dans une application de ce type ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 11 - Informations enregistrées
+
+Quelles informations aimerais-tu pouvoir enregistrer pour chaque média ? (note, avis, date, durée, statut, plateforme, etc.)
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 12 - Statistiques personnelles
+
+Serais-tu intéressé(e) par des statistiques personnelles ? (temps passé, nombre d’œuvres vues/lues/jouées, notes moyennes, etc.)
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 13 - Confidentialité du compte
+
+Préférerais-tu que ton compte soit public ou privé ?
+Pourquoi ? (partage avec d’autres utilisateurs, visibilité des avis, etc.)
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 14 - Simplicité d’utilisation
+
+Sur une échelle de 1 à 5, quelle importance accordes-tu à la simplicité d’utilisation de l’application ?
+(1 = peu importante, 5 = très importante)
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+---
+
+**_Attentes et projections_**
+
+(Ce que les utilisateurs aimeraient idéalement avoir)
+
+## Question 15 - Intérêt pour une application centralisée
+
+Serais-tu intéressé(e) par une application qui centralise films, séries, livres et jeux sur une seule plateforme ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 16 - Recommandations
+
+Aimerais-tu recevoir des recommandations de contenus similaires en fonction de tes goûts et de ton historique ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 17 - Notifications et rappels
+
+Trouverais-tu utile que l’application t’envoie des rappels ou des notifications lors de la sortie d’une nouvelle saison, d’une suite ou d’un nouvel épisode ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 18 - Niveau de complexité de l’application
+
+Préférerais-tu une application simple et rapide à utiliser, ou une application plus détaillée avec de nombreuses fonctionnalités ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 19 - Préférences d’interface
+
+Préférerais-tu une interface plutôt sobre et épurée, ou au contraire très visuelle (affiches, jaquettes, images, etc.) ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 20 - Intégrations automatiques
+
+Trouverais-tu utile une intégration automatique avec d’autres services (par exemple : Netflix, Steam, Kindle, etc.) pour importer ton historique ou ton activité ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 21 - Fonctionnalité idéale
+
+Si tu pouvais imaginer une fonctionnalité "idéale" ou "magique", que devrait-elle faire pour toi ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 22 - Adoption à long terme
+
+Qu’est-ce qui te convaincrait d’adopter et d’utiliser cette application sur le long terme ?
+
+Oscar :
+
+Valérie :
+
+Théo :
+
+## Question 23 - Suggestions libres
+
+Y a-t-il un élément important dont nous n’avons pas parlé et que tu aimerais ajouter ?
+
+Oscar :
+
+Valérie :
+
+Théo :
