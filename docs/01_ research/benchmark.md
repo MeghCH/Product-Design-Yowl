@@ -1,32 +1,16 @@
-Inspiration : Letterbox, Metacritic, Serializd, BookVillage
+Inspiration: Letterbox, Metacritic, Serializd, BookVillage
 
-# Connexion
-Connexion non obligatoire pour surfer
-Connexion obligatoire pour noter et écrire
+# Analysis of common features/functionality of Metacritic/Letterbox/Serialized/Book Village
 
-Page différente pour se connecter
+-There is a rating system on all four sites, and ratings can be changed based on comments.
+-Promotion is based on ratings on certain sites, such as Metacritic, while others, such as Serialized, do not display ratings; you have to click on the movie/series to get more information.
 
-# Feed
-Afficher les préférence de l'utilisateur
+-On Serealizd and Letterbox, ratings are also displayed based on the current moment.
+You can see that a movie or series was rated 2 stars a month ago but has rise to 4 stars,
+while on Metacritic you can only see the current rating.
 
-# Création profil
-Choix préférence
+-Serealizd works with images only to better attract the eye, unlike others that use much more text.
 
-# Profil
-On peut créer des listes
-Mettre en favori
-Choisir préférence
+-Serealizd has a pretty nice tag system that clearly explains the category of the movie/series.
 
-# Analyse des point/fonctionnalité en commun de métacritique/letterbox/serialized/book village
-
--Il y a un sytème de notation sur 4 site, les note pouvant etre changer de puis les commentaire.
--POur ce qui est de la mise en avant il est en fonction des notes sur certain site comme par exemple metacritic, tandis que d'autre comme serealizd n'affiche pas les note, il faut clicker sur le film/série afin d'avoir + d'information.
-
--sur Serealizd ainsi  que letter box les note sont affichée aussi en fonction du moment.
-on peux voir que un film sa série était a 2étoile il y a un mois mais remonté a 4 étoile
-tandis que métacritic on ne voit uniquement que la note actuel.
-
--Serealizd marche avec uniquement des image pour mieux attirée l'oeuil contrairement au autre qui utilise beaucoup plus de texte.
-
--Serealizd a lui a sytème de tag assez joli expliquant bien la catégorie du film/série
-
+-bookmark displays a lot of information compared to others, but it does not have a rating or an indication of the amount of CO2 per liter of water used for your order.
