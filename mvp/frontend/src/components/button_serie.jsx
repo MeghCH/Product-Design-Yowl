@@ -5,7 +5,7 @@ export function ButtonSerie({ onClick }) {
             onClick={onClick}
             className="bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
         >
-            Film
+            Serie
         </Button>
     );
 }

@@ -1,4 +1,4 @@
-import import {twMerge} from "tailwind-merge";
+import {twMerge} from "tailwind-merge";
 
 export function Logo({className}) {
     return (
