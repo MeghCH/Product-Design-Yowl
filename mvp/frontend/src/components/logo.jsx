@@ -8,7 +8,7 @@ export function Logo({className}) {
                 className
             )}
         >
-            MyAppLogo
+            Goof Media
         </div>
     );
 }
