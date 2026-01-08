@@ -7,7 +7,7 @@ export function ButtonLog({ onClick }) {
             onClick={onClick}
             className="bg-green-500 hover:bg-green-600 focus:ring-green-500"
         >
-            Login
+            Profil
         </Button>
     );
 }
