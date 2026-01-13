@@ -28,6 +28,28 @@ export function LoginPage() {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                         <input
+                            type="Nom"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input
+                            type="Prénom"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -48,8 +70,7 @@ export function LoginPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <Button type="submit">Connexion</Button>
-                        <a href="#" className="text-sm text-blue-600 hover:underline">Mot de passe oublié ?</a>
+                        <ButtonCreateAccount type="submit">Création</ButtonCreateAccount>
                     </div>
                 </form>
             </div>
