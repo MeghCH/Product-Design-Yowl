@@ -3,13 +3,15 @@ import { Button } from "../components/button";
 import { ButtonCreateAccount } from "../components/button_create_account";
 import { Logo } from "../components/logo";
 
-export function LoginPage() {
+export function CreateAccount() {
+    const [nom, setNom] = useState("");
+    const [prenom, setPrenom] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Login attempt:", { email, password });
+        console.log("Create account attempt:", { nom, prenom, email, password });
     };
 
     return (
@@ -22,26 +24,26 @@ export function LoginPage() {
                     </div>
                 </header>
 
-                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Se connecter</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Créer un compte</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom</label>
                         <input
-                            type="Nom"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            value={nom}
+                            onChange={(e) => setNom(e.target.value)}
                             className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
                         <input
-                            type="Prénom"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            value={prenom}
+                            onChange={(e) => setPrenom(e.target.value)}
                             className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
@@ -70,7 +72,7 @@ export function LoginPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <ButtonCreateAccount type="submit">Création</ButtonCreateAccount>
+                        <Button type="submit" className="bg-purple-500 hover:bg-purple-600 focus:ring-purple-500">Créer</Button>
                     </div>
                 </form>
             </div>
@@ -78,4 +80,4 @@ export function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default CreateAccount;

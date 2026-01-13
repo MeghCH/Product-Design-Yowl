@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { HomePage } from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import CreateAccount from './pages/CreateAccount'
 
 function App() {
   const getRoute = () => window.location.hash || '#/';
@@ -14,7 +15,7 @@ function App() {
 
   return (
     <div className="App self-start w-full">
-      {route === '#/login' ? <LoginPage /> : <HomePage />}
+      {route === '#/login' ? <LoginPage /> : route === '#/create-account' ? <CreateAccount /> : <HomePage />}
     </div>
   )
 }

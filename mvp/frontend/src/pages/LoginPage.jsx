@@ -18,7 +18,7 @@ export function LoginPage() {
             <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <header className="flex items-center justify-between mb-8">
                     <Logo className="text-xl" />
-                    <ButtonCreateAccount onClick={() => console.log('Create account')} />
+                    <ButtonCreateAccount onClick={() => window.location.hash = '#/create-account'} />
                 </header>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
