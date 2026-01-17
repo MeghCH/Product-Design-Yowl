@@ -1,3 +1,3 @@
-Les utilisateurs passionnés de culture manquent d’un espace unique pour organiser et partager leurs expériences. Entre les films vus sur une appli, les livres lus ailleurs et les jeux testés sur une autre, il devient compliqué de tout suivre, de retrouver ses avis et de découvrir de nouvelles œuvres qui correspondent à leurs goûts
+- Culture enthusiasts lack a single space to organize and share their experiences. Between movies watched on one app, books read elsewhere, and games tested on another, it becomes difficult to keep track of everything, find reviews, and discover new works that match their tastes.
 
-Nous simplifions la vie des passionnés de culture en regroupant au même endroit le suivi, la notation et la découverte de films, séries, livres et jeux, avec une communauté active qui partage ses avis et recommandations.
+- We simplify the lives of culture enthusiasts by bringing together tracking, rating, and discovery of movies, TV shows, books, and games in one place, with an active community that shares opinions and recommendations.

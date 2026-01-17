@@ -1,27 +1,27 @@
-## Objectifs mesurables
+## Measurable objectives
 
-Atteindre 100 utilisateurs inscrits le 1 er mois après le lancement.
-Publier une mise à jour majeure par trimestre (ajout de fonctionnalités, amélioration de l’interface, etc).
-Générer un score de satisfaction utilisateur supérieur à 8/10 dans les 6 premiers mois.
+- Reach 100 registered users in the first month after launch.
+- Publish one major update per quarter (addition of features, interface improvements, etc.).
+- Generate a user satisfaction score of over 8/10 in the first six months.
 
-## Hypothèses
+## Assumptions
 
-Une plateforme unique pour centraliser leurs films, séries, livres et jeux.
-Les utilisateurs apprécient partager leurs avis et consulter ceux des autres pour découvrir de nouvelles œuvres.
-Les recommandations personnalisées basées sur les goûts renforceront l’intérêt et le temps passé sur l’application.
-Les notifications de nouvelles sorties inciteront les utilisateurs à revenir régulièrement.
+- A single platform to centralize their movies, TV shows, books, and games.
+- Users enjoy sharing their opinions and reading those of others to discover new works.
+- Personalized recommendations based on tastes will increase interest and time spent on the app.
+- Notifications of new releases will encourage users to return regularly.
 
-## Risques
+## Risks
 
-Manque de visibilité
-Augmenter les charges serveur et performance en cas de croissance rapide du nombre d’utilisateurs.
-Saturation du marché : plusieurs concurrents existent déjà dans chaque domaine séparément.
-Modération des avis et gestion des comportements inappropriés ou faux comptes.
-Difficulté à obtenir les données des oeuvres.
+- Lack of visibility.
+- Increased server load and performance in the event of rapid user growth.
+- Market saturation: several competitors already exist in each separate field.
+- Moderation of reviews and management of inappropriate behavior or fake accounts.
+- Difficulty obtaining data on works.
 
-## Contraintes
+## Constraints
 
-Techniques : besoin d’API fiables pour les bases de données
-Légales : respect du RGPD (données personnelles, création de compte, cookies, etc).
-Équipe : nécessité d’avoir des compétences en développement full-stack, design UI/UX et gestion de données API.
-Financieres : développement initial et la maintenance.
+- **Technical:** need for reliable APIs for databases.
+- **Legal:** compliance with the GDPR (personal data, account creation, cookies, etc.).
+- **Team:** need for skills in full-stack development, UI/UX design, and API data management.
+- **Financial:** initial development and maintenance.

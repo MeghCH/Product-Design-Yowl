@@ -1,163 +1,163 @@
 # Persona - Sophia
 
-**Profil**
+**Profile**
 
-**Nom :** Sophia  
-**Âge :** 16 ans  
-**Occupation :** Lycéenne  
-**Centres d’intérêt :** Lecture, littérature contemporaine, partage de livres en ligne
+**Name:** Sophia  
+**Age:** 16  
+**Occupation:** High school student  
+**Interests:** Reading, contemporary literature, sharing books online
 
 **Description**
 
-Sophia adore la lecture. Après avoir terminé un livre, elle a pour habitude de le revendre ou de le donner, et ne les garde donc jamais. Avec le temps, elle se rend compte qu’elle ne se souvient plus de tous les livres qu’elle a lus.  
-Elle aimerait trouver une application qui lui permette de **recenser tous les livres déjà lus**, ainsi que **ceux qu’elle souhaite lire à l’avenir**, car à sa connaissance, **aucune application ne répond vraiment à ce besoin** pour les lecteurs.
+Sophia loves reading. After finishing a book, she usually resells it or gives it away, so she never keeps them. Over time, she realizes that she no longer remembers all the books she has read.  
+She would like to find an application that allows her to **list all the books she has already read**, as well as **those she wants to read in the future**, because as far as she knows, **no application really meets this need** for readers.
 
-**Goals (Objectifs)**
+**Goals**
 
-- Suivre facilement les livres qu’elle a lus.
-- Garder une trace des livres qu’elle souhaite lire plus tard.
-- Pouvoir visualiser son historique de lecture.
+- Easily track the books she has read.
+- Keep a record of the books she wants to read later.
+- Be able to visualize her reading history.
 
 **Motivations**
 
-- Organiser sa passion pour la lecture.
-- Retrouver des titres oubliés.
-- Avoir un sentiment de progression dans sa culture littéraire.
+- Organize her passion for reading.
+- Rediscover forgotten titles.
+- Feel a sense of progress in her literary culture.
 
-**Behaviours (Comportements)**
+**Behaviours**
 
-- Lit quotidiennement, principalement sur papier.
-- Revend ou donne ses livres après lecture.
-- Utilise déjà des applications mobiles, mais pas de plateforme dédiée à la lecture.
+- Reads daily, mainly on paper.
+- Resells or gives away books after reading.
+- Already uses mobile apps, but not a platform dedicated to reading.
 
-**Pain Points (Points de douleur)**
+**Pain Points**
 
-- Oublie les titres et les auteurs des livres lus.
-- Ne trouve pas d’application simple et adaptée à son usage.
-- Frustration de ne pas pouvoir revisiter ses lectures passées.
+- Forgets the titles and authors of books she has read.
+- Cannot find a simple app adapted to her needs.
+- Frustrated by not being able to revisit her past readings.
 
 ---
 
 # Persona - Ellie
 
-**Profil**
+**Profile**
 
-**Nom :** Ellie  
-**Âge :** 19 ans  
-**Occupation :** Étudiante en lettres modernes  
-**Centres d’intérêt :** Lecture, jeux vidéo, fantasy
+**Name:** Ellie  
+**Age:** 19  
+**Occupation:** Literature student  
+**Interests:** Reading, video games, fantasy
 
 **Description**
 
-Ellie lit énormément et a récemment découvert que certains des livres qu’elle a lus avaient été adaptés en jeux vidéo. Cette découverte l’a conduite à explorer **le monde du gaming**.  
-Après avoir terminé son premier jeu, elle réalise qu’elle aimerait en commencer un nouveau, mais **ne sait pas lequel choisir**.  
-Elle souhaiterait donc avoir **un outil capable de lui recommander des jeux vidéo correspondant à ses goûts littéraires et aux genres narratifs qu’elle apprécie.**
+Ellie reads a lot and recently discovered that some of the books she had read were adapted into video games. This discovery led her to explore **the world of gaming**.  
+After finishing her first game, she realizes that she would like to start a new one, but **doesn’t know which one to choose**.  
+She would therefore like to have **a tool able to recommend video games that match her literary tastes and the narrative genres she enjoys.**
 
-**Goals (Objectifs)**
+**Goals**
 
-- Découvrir de nouveaux jeux inspirés de ses goûts de lecture.
-- Trouver des jeux avec un univers ou une narration similaire à ses livres préférés.
-- Centraliser ses expériences de lecture et de jeu.
+- Discover new games inspired by her reading tastes.
+- Find games with a universe or narrative similar to her favorite books.
+- Centralize her reading and gaming experiences.
 
 **Motivations**
 
-- Explorer de nouvelles formes de narration.
-- Relier ses passions : littérature et jeux vidéo.
-- Gagner du temps dans la recherche de nouveaux jeux.
+- Explore new forms of storytelling.
+- Connect her passions: literature and video games.
+- Save time when looking for new games.
 
-**Behaviours (Comportements)**
+**Behaviours**
 
-- Joue principalement sur PC et console.
-- Suit des influenceurs littéraires et gaming sur les réseaux sociaux.
-- Cherche souvent des recommandations personnalisées.
+- Mainly plays on PC and console.
+- Follows literary and gaming influencers on social media.
+- Often looks for personalized recommendations.
 
-**Pain Points (Points de douleur)**
+**Pain Points**
 
-- Difficulté à trouver des jeux qui correspondent à ses goûts littéraires.
-- Peu d’applications combinant lecture et jeu vidéo.
-- Sentiment de perdre du temps à chercher un nouveau jeu à essayer.
+- Difficulty finding games that match her literary tastes.
+- Very few apps combine reading and video games.
+- Feels she wastes time searching for a new game to try.
 
 ---
 
 # Persona - Benjamin
 
-**Profil**
+**Profile**
 
-**Nom :** Benjamin  
-**Âge :** 28 ans  
-**Occupation :** Développeur web  
-**Centres d’intérêt :** Jeux vidéo, technologie, plateformes Steam
+**Name:** Benjamin  
+**Age:** 28  
+**Occupation:** Web developer  
+**Interests:** Video games, technology, Steam platform
 
 **Description**
 
-Benjamin est un grand amateur de jeux vidéo. Il joue régulièrement, aussi bien pour se détendre que pour relever des défis.  
-Cependant, il en a assez de **ne jamais savoir combien de temps lui prendra la fin d’un jeu**, car sur Steam, la plateforme qu’il utilise le plus, cette information n’est pas clairement indiquée.  
-Il aimerait également **recevoir des recommandations de jeux adaptés à ses goûts personnels** et à son temps disponible, afin d’optimiser son expérience de jeu.
+Benjamin is a big video game fan. He plays regularly, both to relax and to take on challenges.  
+However, he is tired of **never knowing how long it will take him to finish a game**, because on Steam, the platform he uses the most, this information is not clearly shown.  
+He would also like to **receive game recommendations adapted to his personal tastes** and to his available time, in order to optimize his gaming experience.
 
-**Goals (Objectifs)**
+**Goals**
 
-- Connaître la durée moyenne d’un jeu avant de le commencer.
-- Recevoir des recommandations de jeux personnalisées selon ses goûts et son emploi du temps.
-- Gérer efficacement sa bibliothèque de jeux.
+- Know the average length of a game before starting it.
+- Receive personalized game recommendations based on his tastes and schedule.
+- Manage his game library efficiently.
 
 **Motivations**
 
-- Optimiser son temps de loisir.
-- Découvrir de nouveaux jeux sans perdre du temps à chercher.
-- Avoir une expérience de jeu plus planifiée et adaptée à son rythme de vie.
+- Optimize his leisure time.
+- Discover new games without wasting time searching.
+- Have a more planned and life-adapted gaming experience.
 
-**Behaviours (Comportements)**
+**Behaviours**
 
-- Joue principalement sur PC via Steam.
-- Consulte souvent les avis et les notes avant d’acheter un jeu.
-- Préfère les jeux narratifs ou immersifs, mais manque parfois de temps pour les terminer.
+- Mainly plays on PC via Steam.
+- Often checks reviews and ratings before buying a game.
+- Prefers narrative or immersive games, but sometimes lacks time to finish them.
 
-**Pain Points (Points de douleur)**
+**Pain Points**
 
-- Ne sait pas combien de temps durera un jeu avant de le lancer.
-- Frustration de ne pas pouvoir anticiper le temps nécessaire pour finir un jeu.
-- Manque de recommandations pertinentes basées sur son style de jeu et ses préférences.
+- Doesn’t know how long a game will last before starting it.
+- Frustrated by not being able to anticipate the time needed to finish a game.
+- Lack of relevant recommendations based on his play style and preferences.
 
 ---
 
 # Persona - Eliot
 
-**Profil**
+**Profile**
 
-**Nom :** Eliot  
-**Âge :** 40 ans  
-**Occupation :** Enseignant et cinéphile passionné  
-**Centres d’intérêt :** Cinéma, séries, plateformes de streaming
+**Name:** Eliot  
+**Age:** 40  
+**Occupation:** Teacher and movie enthusiast  
+**Interests:** Cinema, series, streaming platforms
 
 **Description**
 
-Eliot est un passionné de cinéma qui commence à s’intéresser aux séries.  
-Au fil du temps, il s’est rendu compte qu’il a vu énormément de films, mais **n’en garde pas toujours un souvenir précis** : il se souvient parfois du titre, mais pas de l’histoire.  
-Il aimerait disposer d’une application qui lui permette de **recenser tous les films qu’il a vus**, d’en **retrouver les résumés**, et de **recevoir des recommandations de séries et de films** selon ses goûts cinématographiques ou ses **réalisateurs préférés**.  
-De plus, il souhaiterait également **pouvoir consulter des résumés des épisodes de séries qu’il a regardés**, afin de se remémorer plus facilement leur contenu.
+Eliot is a movie lover who is starting to get interested in TV series.  
+Over time, he has realized that he has seen many films, but **doesn’t always remember them clearly**: sometimes he remembers the title, but not the story.  
+He would like an application that allows him to **list all the movies he has seen**, **find their summaries again**, and **receive recommendations for series and movies** according to his cinematic tastes or his **favorite directors**.  
+In addition, he would also like to **be able to consult summaries of the episodes he has watched**, in order to more easily remember their content.
 
-**Goals (Objectifs)**
+**Goals**
 
-- Retrouver et organiser sa mémoire cinématographique.
-- Découvrir de nouvelles séries en lien avec ses goûts.
-- Accéder facilement à des résumés fiables de films et d’épisodes vus.
+- Retrieve and organize his cinematic memory.
+- Discover new series related to his tastes.
+- Easily access reliable summaries of movies and episodes already watched.
 
 **Motivations**
 
-- Ne plus oublier les films et séries qu’il a visionnés.
-- Cultiver sa passion pour le cinéma et les réalisateurs.
-- Simplifier le suivi de son activité de visionnage.
+- No longer forget the movies and series he has watched.
+- Nurture his passion for cinema and directors.
+- Simplify the tracking of his viewing activity.
 
-**Behaviours (Comportements)**
+**Behaviours**
 
-- Regarde régulièrement films et séries sur plusieurs plateformes (Netflix, Prime, etc.).
-- Consulte souvent les critiques et notes avant de regarder un film.
-- Partage occasionnellement ses recommandations avec ses amis.
+- Regularly watches movies and series on several platforms (Netflix, Prime, etc.).
+- Often checks reviews and ratings before watching a movie.
+- Occasionally shares his recommendations with friends.
 
-**Pain Points (Points de douleur)**
+**Pain Points**
 
-- Oublie les intrigues des films ou épisodes déjà vus.
-- Aucune application ne centralise ses visionnages et ses préférences.
-- Difficulté à trouver des recommandations pertinentes basées sur ses goûts précis.
+- Forgets the plots of movies or episodes already seen.
+- No app centralizes his viewings and preferences.
+- Difficulty finding relevant recommendations based on his specific tastes.
 
 ---
