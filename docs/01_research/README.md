@@ -1,4 +1,4 @@
-## /docs/01_research — Summary
+## /docs/01_research 
 
 This folder contains the deliverables from the user and market research phase.
 

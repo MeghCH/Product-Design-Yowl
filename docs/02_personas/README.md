@@ -1,4 +1,4 @@
-## /docs/02_personas — README
+## /docs/02_personas 
 
 This document presents four personas representing different user profiles and needs related to culture, entertainment, and recommendation tools.
 
