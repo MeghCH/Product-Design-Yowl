@@ -2,7 +2,15 @@
 
 (Understanding what users already do and how)
 
-## ## Question 1 - Applications Used
+- **Oscar:** Grande École Program (PGE), 1st year
+
+- **Valérie (23):** Grande École Program (PGE), 1st year
+
+- **Théo (20):** MSc, 1st year
+
+- **Julien (25):** Grande École Program (PGE), 5th year
+
+## Question 1 - Applications Used
 
 **Do you currently use one or more apps to keep track of media (movies, series, books, games)? If yes, which ones?**
 
@@ -19,8 +27,8 @@
 - **Valérie:** I usually use TikTok or YouTube to see reviews of things that might interest me.
 - **Théo:** /
 - **Julien:** I like seeing the history of what I’ve watched. It’s cool to see what others have watched, their watchlists, etc. I like getting recommendations for similar movies and ranking the ones I’ve already seen (only movies!).
-I also use Steam for games and How Long to Beat to know how long it takes to finish a game.
-For shows and anime, I’d love a similar app that tells you how many hours they take to finish.
+  I also use Steam for games and How Long to Beat to know how long it takes to finish a game.
+  For shows and anime, I’d love a similar app that tells you how many hours they take to finish.
 
 ## Question 3 - After Finishing a Work
 
@@ -72,7 +80,7 @@ For shows and anime, I’d love a similar app that tells you how many hours they
 - **Valérie:** These apps aren’t visible enough—I didn’t even know they existed.
 - **Théo:** I’ve left many platforms because there were too many posts made just to criticize.
 - **Julien:** On Letterboxd, there’s not really a proper recommendation feature.
-Missing features:
+  Missing features:
 
 - The classification is too broad (for example, in “horror” you see everything mixed together—subgenres aren’t specific enough).
 

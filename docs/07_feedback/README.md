@@ -1,4 +1,4 @@
-# /docs/07_feedback
+## /docs/07_feedback - README
 
 This folder contains the documentation related to user testing of the prototype.
 

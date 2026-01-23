@@ -1,4 +1,4 @@
-## /docs/04_wireframes — README
+## /docs/04_wireframes - README
 
 This folder contains the low-fidelity wireframes of the main screens of the application.
 

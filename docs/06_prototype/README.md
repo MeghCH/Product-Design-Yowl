@@ -1,4 +1,4 @@
-## /docs/06_prototype — README
+## /docs/06_prototype - README
 
 This folder contains the interactive prototype of the application in desktop version and mobile version.
 

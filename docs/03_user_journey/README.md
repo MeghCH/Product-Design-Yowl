@@ -1,4 +1,4 @@
-## /docs/02_personas — User Journey Summary
+## /docs/02_personas - README
 
 This document describes the main user scenario from first visit to personalized recommendations.
 

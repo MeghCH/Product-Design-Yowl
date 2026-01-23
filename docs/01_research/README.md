@@ -1,4 +1,4 @@
-## /docs/01_research 
+## /docs/01_research - README
 
 This folder contains the deliverables from the user and market research phase.
 

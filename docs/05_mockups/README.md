@@ -1,4 +1,4 @@
-## /docs/05_mockups 
+## /docs/05_mockups - README
 
 This folder contains the high-fidelity mockups of the application.
 

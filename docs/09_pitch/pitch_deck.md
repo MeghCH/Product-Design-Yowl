@@ -5,6 +5,7 @@ paginate: true
 ---
 
 # Media Catalog App
+
 ### Centralize, track and share cultural works
 
 Books · Video Games · Movies · TV Series
@@ -27,16 +28,19 @@ Cultural works are currently spread across multiple platforms.
 ## Target Users
 
 ### Regular cultural consumers
+
 - Watch movies and TV series
 - Play video games
 - Read books
 - Want to track what they have seen or plan to see
 
 ### Opinion-driven users
+
 - Enjoy rating and writing reviews
 - Discover content through other users’ opinions
 
 ### Students and young professionals
+
 - Already use cultural tracking apps
 - Look for a simple, unified solution
 
@@ -59,13 +63,16 @@ An application that allows users to:
 ## UX Walkthrough
 
 ### 1. Authentication
+
 - Sign up / log in
 
 ### 2. Search
+
 - Search by title
 - Filter by type (book, video game, movie, TV series)
 
 ### 3. Work Details
+
 - Main information
 - Average rating
 - Actions: To Watch / Seen, rating, review
@@ -75,10 +82,12 @@ An application that allows users to:
 ## UX Walkthrough (continued)
 
 ### 4. Personal Library
+
 - List of the user’s works
 - Filter by status
 
 ### 5. User Profile
+
 - Public profile
 - Ratings and reviews visible to others
 
@@ -87,6 +96,7 @@ An application that allows users to:
 ## MVP Scope
 
 ### Included
+
 - User authentication
 - Work search
 - Work detail page

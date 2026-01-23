@@ -1,4 +1,4 @@
-# /docs/08_prioritization
+# /docs/08_prioritization - README
 
 This repository contains the **MVP definition and prioritization documents** for a media catalog application inspired by platforms such as Letterboxd or Serializd.
 
