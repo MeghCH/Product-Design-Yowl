@@ -17,7 +17,7 @@ export function ButtonLog({ onClick }) {
     return (
         <Button
             onClick={handleClick}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black focus:ring-yellow-500"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-500"
         >
             Login
         </Button>
