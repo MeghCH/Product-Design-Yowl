@@ -1,6 +1,6 @@
 const express = require("express");
 const { authenticateToken } = require("../../middleware/auth");
-const prisma = require("../../../prisma/prismaClient");
+const db = require("../../db");
 
 const router = express.Router();
 
@@ -11,18 +11,24 @@ function serverError(res, err) {
 
 router.get("/", async (req, res) => {
   try {
-    const posts = await prisma.post.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-          },
-        },
+    const [rows] = await db.execute(`
+      SELECT p.id, p.content, p.created_at, p.user_id,
+             u.id as user_id, u.username, u.email
+      FROM posts p
+      JOIN users u ON p.user_id = u.id
+      ORDER BY p.created_at DESC
+    `);
+
+    const posts = rows.map(row => ({
+      id: row.id,
+      content: row.content,
+      created_at: row.created_at,
+      user: {
+        id: row.user_id,
+        username: row.username,
+        email: row.email,
       },
-      orderBy: { created_at: "desc" },
-    });
+    }));
 
     res.json(posts);
   } catch (err) {
@@ -34,20 +40,26 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const post = await prisma.post.findUnique({
-      where: { id: Number(id) },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-          },
-        },
-      },
-    });
+    const [rows] = await db.execute(`
+      SELECT p.id, p.content, p.created_at, p.user_id,
+             u.id as user_id, u.username, u.email
+      FROM posts p
+      JOIN users u ON p.user_id = u.id
+      WHERE p.id = ?
+    `, [Number(id)]);
 
-    if (!post) return res.status(404).json({ msg: "Not found" });
+    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
+
+    const post = {
+      id: rows[0].id,
+      content: rows[0].content,
+      created_at: rows[0].created_at,
+      user: {
+        id: rows[0].user_id,
+        username: rows[0].username,
+        email: rows[0].email,
+      },
+    };
 
     res.json(post);
   } catch (err) {
@@ -63,21 +75,29 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   try {
-    const post = await prisma.post.create({
-      data: {
-        content,
-        user_id: Number(req.user.id),
+    const [result] = await db.execute(
+      "INSERT INTO posts (content, user_id) VALUES (?, ?)",
+      [content, Number(req.user.id)]
+    );
+
+    const [rows] = await db.execute(`
+      SELECT p.id, p.content, p.created_at, p.user_id,
+             u.id as user_id, u.username, u.email
+      FROM posts p
+      JOIN users u ON p.user_id = u.id
+      WHERE p.id = ?
+    `, [result.insertId]);
+
+    const post = {
+      id: rows[0].id,
+      content: rows[0].content,
+      created_at: rows[0].created_at,
+      user: {
+        id: rows[0].user_id,
+        username: rows[0].username,
+        email: rows[0].email,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-          },
-        },
-      },
-    });
+    };
 
     res.status(201).json(post);
   } catch (err) {
@@ -90,30 +110,38 @@ router.put("/:id", authenticateToken, async (req, res) => {
   const { content } = req.body;
 
   try {
-    const existing = await prisma.post.findFirst({
-      where: {
-        id: Number(id),
-        user_id: Number(req.user.id),
-      },
-    });
+    const [existingRows] = await db.execute(
+      "SELECT id, content FROM posts WHERE id = ? AND user_id = ?",
+      [Number(id), Number(req.user.id)]
+    );
 
-    if (!existing) return res.status(404).json({ msg: "Not found" });
+    if (existingRows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    const updated = await prisma.post.update({
-      where: { id: Number(id) },
-      data: {
-        content: content ?? existing.content,
+    const newContent = content ?? existingRows[0].content;
+
+    await db.execute(
+      "UPDATE posts SET content = ? WHERE id = ? AND user_id = ?",
+      [newContent, Number(id), Number(req.user.id)]
+    );
+
+    const [rows] = await db.execute(`
+      SELECT p.id, p.content, p.created_at, p.user_id,
+             u.id as user_id, u.username, u.email
+      FROM posts p
+      JOIN users u ON p.user_id = u.id
+      WHERE p.id = ?
+    `, [Number(id)]);
+
+    const updated = {
+      id: rows[0].id,
+      content: rows[0].content,
+      created_at: rows[0].created_at,
+      user: {
+        id: rows[0].user_id,
+        username: rows[0].username,
+        email: rows[0].email,
       },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-          },
-        },
-      },
-    });
+    };
 
     res.json(updated);
   } catch (err) {
@@ -125,14 +153,12 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await prisma.post.deleteMany({
-      where: {
-        id: Number(id),
-        user_id: Number(req.user.id),
-      },
-    });
+    const [result] = await db.execute(
+      "DELETE FROM posts WHERE id = ? AND user_id = ?",
+      [Number(id), Number(req.user.id)]
+    );
 
-    if (result.count === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({ msg: "Not found" });
     }
 

@@ -1,27 +1,20 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { authenticateToken } = require("../../middleware/auth");
-const prisma = require("../../../prisma/prismaClient");
+const db = require("../../db");
 
 const router = express.Router();
 
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        firstname: true,
-        role: true,
-        created_at: true,
-      },
-    });
+    const [rows] = await db.execute(
+      "SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?",
+      [req.user.id]
+    );
 
-    if (!user) return res.status(404).json({ msg: "Not found" });
+    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    res.json(user);
+    res.json(rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Internal server error" });
@@ -29,54 +22,29 @@ router.get("/", authenticateToken, async (req, res) => {
 });
 
 router.get("/todos", authenticateToken, async (req, res) => {
-  try {
-    const todos = await prisma.todo.findMany({
-      where: { user_id: req.user.id },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        created_at: true,
-        due_time: true,
-        status: true,
-        user_id: true,
-      },
-      orderBy: { id: "desc" },
-    });
-
-    res.json(todos);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Internal server error" });
-  }
+  res.json([]);
 });
 
 router.get("/:identifier", authenticateToken, async (req, res) => {
   const { identifier } = req.params;
 
   try {
-    let where = {};
+    let query = "SELECT id, email, name, firstname, role, created_at FROM users WHERE ";
+    let params = [];
+
     if (!isNaN(identifier)) {
-      where = { id: Number(identifier) };
+      query += "id = ?";
+      params = [Number(identifier)];
     } else {
-      where = { email: identifier };
+      query += "email = ?";
+      params = [identifier];
     }
 
-    const user = await prisma.user.findUnique({
-      where,
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        firstname: true,
-        role: true,
-        created_at: true,
-      },
-    });
+    const [rows] = await db.execute(query, params);
 
-    if (!user) return res.status(404).json({ msg: "Not found" });
+    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    res.json(user);
+    res.json(rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Internal server error" });
@@ -100,39 +68,31 @@ router.put("/:id", authenticateToken, async (req, res) => {
       return res.status(400).json({ msg: "Mot de passe actuel obligatoire" });
     }
 
-    const existing = await prisma.user.findUnique({
-      where: { id: Number(id) },
-      select: { password: true },
-    });
-    if (!existing) return res.status(404).json({ msg: "Not found" });
+    const [existingRows] = await db.execute(
+      "SELECT password_hash FROM users WHERE id = ?",
+      [Number(id)]
+    );
+    if (existingRows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    const isValid = await bcrypt.compare(currentPassword, existing.password);
+    const isValid = await bcrypt.compare(currentPassword, existingRows[0].password_hash);
     if (!isValid) {
       return res.status(401).json({ msg: "Mot de passe actuel incorrect" });
     }
 
-    let hashed = existing.password;
+    let hashed = existingRows[0].password_hash;
     if (typeof password === "string" && password.trim() !== "") {
       hashed = await bcrypt.hash(password.trim(), 10);
     }
 
-    const updated = await prisma.user.update({
-      where: { id: Number(id) },
-      data: {
-        email,
-        password: hashed,
-        name,
-        firstname,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        firstname: true,
-        role: true,
-        created_at: true,
-      },
-    });
+    await db.execute(
+      "UPDATE users SET email = ?, password_hash = ?, name = ?, firstname = ? WHERE id = ?",
+      [email, hashed, name, firstname, Number(id)]
+    );
+
+    const [updatedRows] = await db.execute(
+      "SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?",
+      [Number(id)]
+    );
 
     res.json(updated);
   } catch (err) {
@@ -149,8 +109,11 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 
   try {
-    await prisma.todo.deleteMany({ where: { user_id: Number(id) } });
-    await prisma.user.delete({ where: { id: Number(id) } });
+    // Delete related records first
+    await db.execute("DELETE FROM commentaire WHERE user_id = ?", [Number(id)]);
+    await db.execute("DELETE FROM posts WHERE user_id = ?", [Number(id)]);
+    await db.execute("DELETE FROM playlists WHERE user_id = ?", [Number(id)]);
+    await db.execute("DELETE FROM users WHERE id = ?", [Number(id)]);
 
     res.json({ msg: `Successfully deleted record number: ${id}` });
   } catch (err) {

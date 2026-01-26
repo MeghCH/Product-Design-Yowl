@@ -1,6 +1,6 @@
 const express = require("express");
 const { authenticateToken } = require("../../middleware/auth");
-const prisma = require("../../../prisma/prismaClient");
+const db = require("../../db");
 
 const router = express.Router();
 
@@ -11,18 +11,12 @@ function serverError(res, err) {
 
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const playlists = await prisma.playlist.findMany({
-      where: { user_id: Number(req.user.id) },
-      select: {
-        id: true,
-        name: true,
-        created_at: true,
-        user_id: true,
-      },
-      orderBy: { created_at: "desc" },
-    });
+    const [rows] = await db.execute(
+      "SELECT id, name, created_at, user_id FROM playlists WHERE user_id = ? ORDER BY created_at DESC",
+      [Number(req.user.id)]
+    );
 
-    res.json(playlists);
+    res.json(rows);
   } catch (err) {
     return serverError(res, err);
   }
@@ -32,22 +26,14 @@ router.get("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const playlist = await prisma.playlist.findFirst({
-      where: {
-        id: Number(id),
-        user_id: Number(req.user.id),
-      },
-      select: {
-        id: true,
-        name: true,
-        created_at: true,
-        user_id: true,
-      },
-    });
+    const [rows] = await db.execute(
+      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ? AND user_id = ?",
+      [Number(id), Number(req.user.id)]
+    );
 
-    if (!playlist) return res.status(404).json({ msg: "Not found" });
+    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    res.json(playlist);
+    res.json(rows[0]);
   } catch (err) {
     return serverError(res, err);
   }
@@ -61,20 +47,17 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   try {
-    const playlist = await prisma.playlist.create({
-      data: {
-        name,
-        user_id: Number(req.user.id),
-      },
-      select: {
-        id: true,
-        name: true,
-        created_at: true,
-        user_id: true,
-      },
-    });
+    const [result] = await db.execute(
+      "INSERT INTO playlists (name, user_id) VALUES (?, ?)",
+      [name, Number(req.user.id)]
+    );
 
-    res.status(201).json(playlist);
+    const [rows] = await db.execute(
+      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ?",
+      [result.insertId]
+    );
+
+    res.status(201).json(rows[0]);
   } catch (err) {
     return serverError(res, err);
   }
@@ -85,29 +68,28 @@ router.put("/:id", authenticateToken, async (req, res) => {
   const { name } = req.body;
 
   try {
-    const existing = await prisma.playlist.findFirst({
-      where: {
-        id: Number(id),
-        user_id: Number(req.user.id),
-      },
-    });
+    // Check if playlist exists and belongs to user
+    const [existingRows] = await db.execute(
+      "SELECT id, name FROM playlists WHERE id = ? AND user_id = ?",
+      [Number(id), Number(req.user.id)]
+    );
 
-    if (!existing) return res.status(404).json({ msg: "Not found" });
+    if (existingRows.length === 0) return res.status(404).json({ msg: "Not found" });
 
-    const updated = await prisma.playlist.update({
-      where: { id: Number(id) },
-      data: {
-        name: name ?? existing.name,
-      },
-      select: {
-        id: true,
-        name: true,
-        created_at: true,
-        user_id: true,
-      },
-    });
+    const existingName = existingRows[0].name;
+    const newName = name ?? existingName;
 
-    res.json(updated);
+    await db.execute(
+      "UPDATE playlists SET name = ? WHERE id = ? AND user_id = ?",
+      [newName, Number(id), Number(req.user.id)]
+    );
+
+    const [rows] = await db.execute(
+      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ?",
+      [Number(id)]
+    );
+
+    res.json(rows[0]);
   } catch (err) {
     return serverError(res, err);
   }
@@ -117,14 +99,12 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await prisma.playlist.deleteMany({
-      where: {
-        id: Number(id),
-        user_id: Number(req.user.id),
-      },
-    });
+    const [result] = await db.execute(
+      "DELETE FROM playlists WHERE id = ? AND user_id = ?",
+      [Number(id), Number(req.user.id)]
+    );
 
-    if (result.count === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({ msg: "Not found" });
     }
 

@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const prisma = require("../../../prisma/prismaClient");
+const db = require("../../db");
 
 const router = express.Router();
 
@@ -19,34 +19,27 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const existing = await prisma.user.findUnique({
-      where: { email },
-    });
+    const [existing] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
 
-    if (existing) {
+    if (existing.length > 0) {
       return res.status(409).json({ msg: "Account already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-        firstname,
-        role,
-      },
+    const [result] = await db.execute(
+      "INSERT INTO users (email, password_hash, name, firstname, role) VALUES (?, ?, ?, ?, ?)",
+      [email, hashedPassword, name, firstname, role]
+    );
 
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        firstname: true,
-        role: true,
-        created_at: true,
-      },
-    });
+    const newUser = {
+      id: result.insertId,
+      email,
+      name,
+      firstname,
+      role,
+      created_at: new Date(),
+    };
 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, role: newUser.role },
@@ -69,15 +62,17 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const [rows] = await db.execute(
+      "SELECT id, email, password_hash, name, firstname, role, created_at FROM users WHERE email = ?",
+      [email]
+    );
 
-    if (!user) {
+    if (rows.length === 0) {
       return res.status(401).json({ msg: "Invalid Credentials" });
     }
 
-    const valid = await bcrypt.compare(password, user.password);
+    const user = rows[0];
+    const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) {
       return res.status(401).json({ msg: "Invalid Credentials" });
     }
