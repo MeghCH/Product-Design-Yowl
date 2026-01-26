@@ -19,15 +19,25 @@ The front-end is built with **React.js** and styled using **Tailwind CSS** to pr
 
 ## Installation & Run Instructions
 
-### Prerequisites
-
 ### Installation
 
-### Run in Development Mode
+React + Vite
 
----
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Deployment Instructions
+Currently, two official plugins are available:
+
+    @vitejs/plugin-react uses Babel (or oxc when used in rolldown-vite) for Fast Refresh
+    @vitejs/plugin-react-swc uses SWC for Fast Refresh
+
+React Compiler
+
+The React Compiler is enabled on this template. See this documentation for more information.
+
+Note: This will impact Vite dev & build performances.
+Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the TS template for information on how to integrate TypeScript and typescript-eslint in your project.
 
 ---
 
@@ -76,7 +86,10 @@ These choices allow fast prototyping, good performance, and scalability.
 ## Prototype
 
 Clickable Figma prototype :
-Link :
+
+**Desktop version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=57-470&t=dlxWCK7gQHqi0MEK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A470&show-proto-sidebar=1
+
+**Mobile version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=44-363&t=OpLZq6SRHj2jM9FP-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A630&show-proto-sidebar=1
 
 ---
 
