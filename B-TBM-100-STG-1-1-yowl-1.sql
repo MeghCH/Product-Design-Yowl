@@ -1,1 +1,0 @@
-SELECT * FROM yowl_db.users;
