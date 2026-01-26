@@ -68,7 +68,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
   const { name } = req.body;
 
   try {
-    // Check if playlist exists and belongs to user
+
     const [existingRows] = await db.execute(
       "SELECT id, name FROM playlists WHERE id = ? AND user_id = ?",
       [Number(id), Number(req.user.id)]
