@@ -8,7 +8,7 @@ export function NavTabs({ active, onChange }) {
       className="
         h-11 inline-flex items-center
         rounded-2xl
-        bg-blue-950
+        bg-deepblue
         px-2
         backdrop-blur-md
       "
@@ -23,7 +23,7 @@ export function NavTabs({ active, onChange }) {
               "h-full px-6 rounded-2xl text-sm font-medium transition-colors",
               isActive
                 ? "bg-yellow-400 text-blue-800"
-                : "text-blue-200 hover:text-yellow-200 hover:bg-blue-500",
+                : "text-lightblue hover:text-textyellow hover:bg-hoverblue",
             ].join(" ")}
           >
             {t}
