@@ -25,11 +25,9 @@ export function LoginPage() {
       "
       style={{ backgroundImage: `url(${bg})` }}
     >
-      {/* overlay sombre + vignette */}
       <div className="absolute inset-0 bg-black/55" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
 
-      {/* HEADER */}
       <div className="relative z-10 fixed inset-x-0 top-0">
         <header className="w-full px-10 py-6 flex items-center justify-between">
           <Logo />
@@ -43,9 +41,7 @@ export function LoginPage() {
         </header>
       </div>
 
-      {/* CONTENU */}
       <main className="relative z-10 px-10 pt-20 md:pt-24">
-        {/* card login à gauche */}
         <div
           className="
             w-[420px] max-w-full mt-8 md:mt-12 ml-6 md:ml-16
