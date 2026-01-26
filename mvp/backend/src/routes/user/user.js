@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const { authenticateToken } = require("../auth/auth");
+const { authenticateToken } = require("../../middleware/auth");
 const db = require("../../db");
 
 const router = express.Router();
@@ -109,7 +109,6 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 
   try {
-    // Delete related records first
     await db.execute("DELETE FROM commentaire WHERE user_id = ?", [Number(id)]);
     await db.execute("DELETE FROM posts WHERE user_id = ?", [Number(id)]);
     await db.execute("DELETE FROM playlists WHERE user_id = ?", [Number(id)]);

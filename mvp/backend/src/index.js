@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth/auth.js");
+const { router: authRoutes } = require("./middleware/auth.js");
 const userRoutes = require("./routes/user/user.js");
 const postsRoutes = require("./routes/posts/posts.js");
 const commentsRoutes = require("./routes/comments/comments.js");
@@ -20,7 +20,7 @@ app.use(
 
 app.use(express.json());
 
-app.use(authRoutes);
+app.use("/auth", authRoutes);
 
 app.use("/user", userRoutes);
 
