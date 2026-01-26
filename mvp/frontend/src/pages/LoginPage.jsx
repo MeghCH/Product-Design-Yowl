@@ -23,10 +23,8 @@ export default function LoginPage() {
         const data = await response.json();
 
         if (response.ok && data.user) {
-            // 1. On stocke l'ID pour que la page profil sache qui afficher
             localStorage.setItem("userId", data.user.id);
             
-            // 2. LA REDIRECTION (C'est cette ligne qui te manque peut-être)
             navigate("/profile"); 
         } else {
             alert("Erreur: " + data.message);
