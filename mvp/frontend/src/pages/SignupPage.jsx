@@ -4,25 +4,23 @@ import { NavTabs } from "../components/nav-bar";
 import { SearchBar } from "../components/search_bar";
 import { ButtonLog } from "../components/button_log";
 import bg from "./Fallout baniere.jpg";
-import { useNavigate } from "react-router-dom";
 
-export function LoginPage() {
+export function SignupPage() {
   const [active, setActive] = useState("Home");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Tentative de connexion avec :", { email, password });
+    console.log("Signup:", { firstName, lastName, email, password });
   };
 
   return (
     <div
-      className="
-        min-h-screen w-full
-        bg-cover bg-center bg-no-repeat
-        relative
-      "
+      className="min-h-screen w-full bg-cover bg-center bg-no-repeat relative"
       style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="absolute inset-0 bg-black/55" />
@@ -53,13 +51,47 @@ export function LoginPage() {
           "
         >
           <div className="mb-6">
-            <p className="text-blue-200 font-semibold">Welcome back.</p>
-            <p className="text-blue-200 text-sm">
-              Open your kingdom of culture
-            </p>
+            <p className="text-blue-200 font-semibold">Create your account.</p>
+            <p className="text-blue-200 text-sm">Join Goof Media</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="
+                h-11 w-full rounded-2xl
+                bg-[#001D3D]/80
+                px-5
+                text-sm text-blue-200
+                placeholder:text-blue-200/40
+                outline-none
+                focus:ring-1 focus:ring-blue-800
+                shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+              "
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="First name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="
+                h-11 w-full rounded-2xl
+                bg-[#001D3D]/80
+                px-5
+                text-sm text-blue-200
+                placeholder:text-blue-200/40
+                outline-none
+                focus:ring-1 focus:ring-blue-800
+                shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+              "
+              required
+            />
+
             <input
               type="email"
               placeholder="Email"
@@ -99,15 +131,16 @@ export function LoginPage() {
             <div className="pt-2">
               <button
                 type="submit"
-                className="h-11 px-8 rounded-2xl
-        bg-yellow-500 text-blue-800
-        font-medium
-        transition-colors duration-200
-        hover:bg-yellow-300
-        focus:outline-none focus:ring-2 focus:ring-yellow-300/60
-                 "
+                className="
+                  h-11 px-8 rounded-2xl
+                  bg-yellow-500 text-blue-800
+                  font-medium
+                  transition-colors duration-200
+                  hover:bg-yellow-300
+                  focus:outline-none focus:ring-2 focus:ring-yellow-300/60
+                "
               >
-                Sign in
+                Create account
               </button>
             </div>
 
@@ -115,17 +148,9 @@ export function LoginPage() {
               <button
                 type="button"
                 className="text-blue-200 hover:text-blue-200 underline-offset-2 hover:underline"
-                onClick={() => (window.location.hash = "#/signup")}
+                onClick={() => (window.location.hash = "#/login")}
               >
-                Don't have a profile ? Sign up
-              </button>
-
-              <button
-                type="button"
-                className="block text-blue-200 hover:text-blue-200 underline-offset-2 hover:underline"
-                onClick={() => console.log("forgot")}
-              >
-                Forgot your password ?
+                Already have an account? Login
               </button>
             </div>
           </form>
@@ -135,4 +160,4 @@ export function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;
