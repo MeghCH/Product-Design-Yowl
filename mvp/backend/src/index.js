@@ -4,7 +4,6 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/auth/auth.js");
 const userRoutes = require("./routes/user/user.js");
-const usersRoutes = require("./routes/users/users.js");
 const postsRoutes = require("./routes/posts/posts.js");
 const commentsRoutes = require("./routes/comments/comments.js");
 const playlistsRoutes = require("./routes/playlists/playlists.js");
@@ -24,8 +23,6 @@ app.use(express.json());
 app.use(authRoutes);
 
 app.use("/user", userRoutes);
-
-app.use("/users", usersRoutes);
 
 app.use("/posts", postsRoutes);
 
