@@ -11,7 +11,7 @@ export function HomePage() {
   return (
     <div className="relative">
       <div className="fixed inset-x-0 top-0 z-40 bg-transparent">
-        <header className="w-full max-w-6xl mx-auto flex justify-between items-center p-4">
+        <header className="w-full flex justify-between items-center px-8 py-4">
           <Logo />
 
           <div className="flex items-center gap-6">
