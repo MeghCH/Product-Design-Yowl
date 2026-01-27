@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Logo } from "../components/logo";
-import { NavTabs } from "../components/nav-bar";
-import { SearchBar } from "../components/search_bar";
-import { ButtonLog } from "../components/button_log";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
 export function LoginPage() {
-  const [active, setActive] = useState("Home");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
