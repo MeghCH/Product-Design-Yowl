@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
 
-export function ButtonLog({ onClick, to = "/login" }) {
+export function ButtonProfile({ onClick, to = "/profile" }) {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -20,16 +20,15 @@ export function ButtonLog({ onClick, to = "/login" }) {
   return (
     <Button
       onClick={handleClick}
-      className="
-        h-11 px-8 rounded-2xl
-        bg-yellow-500 text-blue-800
+      className=" 
+         h-11 px-8 rounded-2xl
+         bg-deepblue text-blue-200
         font-medium
         transition-colors duration-200
-        hover:bg-yellow-300
-        focus:outline-none focus:ring-2 focus:ring-yellow-300/60
+        hover:bg-hoverblue
       "
     >
-      Login
+      Profile
     </Button>
   );
 }

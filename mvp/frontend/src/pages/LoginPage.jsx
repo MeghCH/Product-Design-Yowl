@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
 import { SearchBar } from "../components/search_bar";
 import { ButtonLog } from "../components/button_log";
+
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -11,20 +14,43 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Tentative de connexion avec :", { email, password });
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:4000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.user) {
+        localStorage.setItem("userId", data.user.id);
+
+        navigate("/profile");
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (err) {
+      console.error("Erreur lors de la redirection:", err);
+    }
   };
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Background desktop */}
       <div
         className="absolute inset-0 hidden md:block bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${bg})` }}
       />
       <div className="absolute inset-0 hidden md:block bg-black/55" />
       <div className="absolute inset-0 hidden md:block bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
-      {/* Version mobile */}
+
+      {/* Background mobile */}
       <div className="absolute inset-0 md:hidden">
         <div
           className="absolute top-0 left-0 w-full h-[55vh] bg-cover bg-center bg-no-repeat"
@@ -39,7 +65,7 @@ export function LoginPage() {
         <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
       </div>
 
-      {/* header desktop */}
+      {/* Header desktop */}
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
         <header className="w-full px-10 py-6 flex items-center justify-between">
           <Logo />
@@ -118,26 +144,16 @@ export function LoginPage() {
                 />
 
                 <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="
-                      h-11 px-8 rounded-2xl
-                      bg-yellow-500 text-blue-800
-                      font-medium
-                      transition-colors duration-200
-                      hover:bg-yellow-300
-                      focus:outline-none focus:ring-2 focus:ring-yellow-300/60
-                    "
-                  >
+                  <ButtonLog type="submit" onClick={handleSubmit}>
                     Sign in
-                  </button>
+                  </ButtonLog>
                 </div>
 
                 <div className="pt-3 space-y-1 text-sm">
                   <button
                     type="button"
                     className="text-blue-200 underline-offset-2 hover:underline"
-                    onClick={() => (window.location.hash = "#/signup")}
+                    onClick={() => navigate("/signup")}
                   >
                     Don&apos;t have a profile ? Sign up
                   </button>

@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
 import { SearchBar } from "../components/search_bar";
 import { ButtonLog } from "../components/button_log";
+
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -14,9 +17,14 @@ export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signup:", { firstName, lastName, email, password });
+
+    // Exemple: après inscription réussie
+    // navigate("/login");
   };
 
   return (
@@ -55,6 +63,7 @@ export function SignupPage() {
           <ButtonLog />
         </header>
       </div>
+
       {/* Page */}
       <main className="relative z-10 min-h-screen md:px-10 md:pt-20 md:pt-24">
         <div className="min-h-screen flex items-end justify-center px-6 pb-10 pt-24 md:min-h-0 md:block md:px-0 md:pb-0 md:pt-0">
@@ -179,7 +188,7 @@ export function SignupPage() {
                   <button
                     type="button"
                     className="text-blue-200 underline-offset-2 hover:underline"
-                    onClick={() => (window.location.hash = "#/login")}
+                    onClick={() => navigate("/login")}
                   >
                     Already have an account? Login
                   </button>

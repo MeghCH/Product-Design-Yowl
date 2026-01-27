@@ -60,3 +60,6 @@ CREATE TABLE IF NOT EXISTS Jeu_video (
     platform VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+insert into users (id,username,email,password_hash)
+values(1,'test','test@test.com','test1234')

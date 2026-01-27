@@ -9,7 +9,7 @@ export function SearchBar({
   return (
     <div
       className={twMerge(
-        "h-11 w-[320px] max-w-full rounded-2xl bg-blue-950 px-5 backdrop-blur-md flex items-center gap-3",
+        "h-11 w-[320px] max-w-full rounded-2xl bg-deepblue px-5 backdrop-blur-md flex items-center gap-3",
         className,
       )}
     >
