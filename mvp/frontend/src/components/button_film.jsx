@@ -1,11 +1,16 @@
 import { Button } from "./button";
-export function ButtonFilm({ onClick }) {
-    return (
-        <Button
-            onClick={onClick}
-            className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
-        >
-            Film
-        </Button>
-    );
+
+export function ButtonFilm({ onClick, active = false }) {
+  return (
+    <Button
+      onClick={onClick}
+      className="
+    h-10 px-6 rounded-2xl
+    text-sm font-medium
+    bg-white/8 text-white
+  "
+    >
+      Film
+    </Button>
+  );
 }
