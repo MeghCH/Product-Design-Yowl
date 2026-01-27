@@ -61,7 +61,8 @@ export function SignupPage() {
               <img
                 src={badge}
                 alt="Goof Media"
-                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)]"
+                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)] cursor-pointer"
+                onClick={() => window.location.hash = "#/"}
               />
             </div>
 

@@ -1,10 +1,11 @@
 import { twMerge } from "tailwind-merge";
 
-export function Logo({ className }) {
+export function Logo({ className, onClick }) {
   return (
     <div
       style={{ fontFamily: '"Libre Barcode 128 Text", cursive' }}
-      className={twMerge("text-6xl text-blue-200", className)}
+      className={twMerge("text-6xl text-blue-200 cursor-pointer", className)}
+      onClick={onClick}
     >
       <span className="text-textyellow">G</span>oof{" "}
       <span className="text-textyellow">M</span>edia

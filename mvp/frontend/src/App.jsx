@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { HomePage } from "./pages/HomePage";
+import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 
@@ -13,15 +14,22 @@ function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  const renderPage = () => {
+    if (route === "#/login") {
+      return <LoginPage />;
+    } else if (route === "#/signup") {
+      return <SignupPage />;
+    } else if (route.startsWith("#/category/")) {
+      const category = decodeURIComponent(route.split("#/category/")[1]);
+      return <CategoryPage category={category} />;
+    } else {
+      return <HomePage />;
+    }
+  };
+
   return (
     <div className="App self-start w-full">
-      {route === "#/login" ? (
-        <LoginPage />
-      ) : route === "#/signup" ? (
-        <SignupPage />
-      ) : (
-        <HomePage />
-      )}
+      {renderPage()}
     </div>
   );
 }

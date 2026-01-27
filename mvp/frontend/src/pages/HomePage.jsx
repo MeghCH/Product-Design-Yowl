@@ -42,7 +42,12 @@ export function HomePage() {
                   New {category.replace('_', ' ')}s
                 </h2>
               </div>
-              <button className="text-blue-100/80 text-sm">See all {'>'}</button>
+              <button
+                className="text-blue-100/80 text-sm"
+                onClick={() => window.location.hash = `#/category/${category}`}
+              >
+                See all {'>'}
+              </button>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
@@ -79,7 +84,7 @@ export function HomePage() {
 
         <main className="px-4 pt-6 pb-28 space-y-8">
           {categories.map((category) => (
-            <Section key={category} title={`New ${category.replace('_', ' ')}s`} />
+            <Section key={category} title={`New ${category.replace('_', ' ')}s`} category={category} />
           ))}
         </main>
 
@@ -94,12 +99,17 @@ export function HomePage() {
   );
 }
 
-function Section({ title }) {
+function Section({ title, category }) {
   return (
     <section>
       <div className="flex items-center justify-between">
         <h2 className="text-yellow-400 font-semibold">{title}</h2>
-        <button className="text-blue-100/80 text-sm">See all &gt;</button>
+        <button
+          className="text-blue-100/80 text-sm"
+          onClick={() => window.location.hash = `#/category/${encodeURIComponent(category)}`}
+        >
+          See all &gt;
+        </button>
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-4">

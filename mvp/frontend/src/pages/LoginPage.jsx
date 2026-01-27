@@ -38,9 +38,7 @@ export function LoginPage() {
       {/* header desktop */}
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
         <header className="w-full px-10 py-6">
-          <div onClick={() => window.location.hash = "#/"} className="cursor-pointer">
-            <Logo />
-          </div>
+          <Logo onClick={() => window.location.hash = "#/"} />
         </header>
       </div>
 
@@ -53,7 +51,8 @@ export function LoginPage() {
               <img
                 src={badge}
                 alt="Goof Media"
-                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)]"
+                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)] cursor-pointer"
+                onClick={() => window.location.hash = "#/"}
               />
             </div>
 
