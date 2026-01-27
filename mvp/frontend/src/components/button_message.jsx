@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
+import { twMerge } from "tailwind-merge";
 
-export function ButtonMsg({ onClick, to = "/message" }) {
+export function ButtonMsg({ onClick, to = "/message", className }) {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -20,13 +21,10 @@ export function ButtonMsg({ onClick, to = "/message" }) {
   return (
     <Button
       onClick={handleClick}
-      className=" 
-         h-11 px-8 rounded-2xl
-         bg-deepblue text-blue-200
-        font-medium
-        transition-colors duration-200
-        hover:bg-hoverblue
-      "
+      className={twMerge(
+        "h-11 px-8 rounded-2xl bg-deepblue text-blue-200 font-medium transition-colors duration-200 hover:bg-hoverblue",
+        className,
+      )}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

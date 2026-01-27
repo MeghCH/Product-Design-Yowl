@@ -8,6 +8,8 @@ import { NavTabsProfils } from "../components/nav-barre-profile";
 import { ButtonMsg } from "../components/button_message";
 import { ButtonProfile } from "../components/button_profile";
 import ButtonLogOut from "../components/button_logout";
+import MobileNavBarLoged from "../components/mobile-nav-bar-loged";
+import MobileTopFilter from "../components/mobile-top-filter";
 
 export function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -18,6 +20,8 @@ export function ProfilePage() {
   const [activeTop, setActiveTop] = useState("Home");
   const navigate = useNavigate();
   const [activeProfileTab, setActiveProfileTab] = useState("Activity");
+
+  const [mobileCategory, setMobileCategory] = useState("Games");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -81,129 +85,235 @@ export function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#000814] text-blue-100">
-      {/* Header */}
-      <div className="sticky top-0 z-50">
-        <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
-          <header className="w-full flex justify-between items-center px-8 py-4">
-            <Logo />
+      {/*  DESKTOP  */}
+      <div className="hidden md:block">
+        {/* Header */}
+        <div className="sticky top-0 z-50">
+          <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
+            <header className="w-full flex justify-between items-center px-8 py-4">
+              <Logo />
 
-            <div className="flex items-center gap-6">
-              <NavTabs active={activeTop} onChange={setActiveTop} />
-              <SearchBar />
-            </div>
-
-            <div className="flex items-center gap-3">
-              {/* petit rond (notif / icone) comme sur la maquette */}
-              <ButtonMsg type="button" aria-label="Quick action" />
-              <ButtonProfile type="button" aria-label="Profile">
-                Profile
-              </ButtonProfile>
-            </div>
-          </header>
-        </div>
-      </div>
-
-      {/* Page */}
-      <main className="max-w-6xl mx-auto px-8 py-10 space-y-10">
-        {/* Bloc profil centré (avatar + infos + stats + logout) */}
-        <section className="flex items-center justify-between">
-          <div className="flex items-center gap-10">
-            {/* Avatar rond */}
-            <div className="relative">
-              <div className="h-45 w-45 rounded-full bg-linear-to-br from-blue-300/40 to-blue-100/10 border border-white/10 flex items-center justify-center overflow-hidden">
-                <span className="text-4xl font-bold text-blue-50">
-                  {initials}
-                </span>
+              <div className="flex items-center gap-6">
+                <NavTabs active={activeTop} onChange={setActiveTop} />
+                <SearchBar />
               </div>
 
-              {/* badge */}
-              <button
-                type="button"
-                className="absolute top-1 right-1 h-10 w-10 rounded-full bg-yellow-400 text-blue-900 font-bold flex items-center justify-center shadow-lg"
-                aria-label="Edit"
-                onClick={() => console.log("edit")}
-              >
-                ✎
-              </button>
+              <div className="flex items-center gap-3">
+                <ButtonMsg type="button" aria-label="Quick action" />
+                <ButtonProfile type="button" aria-label="Profile">
+                  Profile
+                </ButtonProfile>
+              </div>
+            </header>
+          </div>
+        </div>
 
-              {/* Edit */}
+        {/* Page */}
+        <main className="max-w-6xl mx-auto px-8 py-10 space-y-10">
+          <section className="flex items-center justify-between">
+            <div className="flex items-center gap-10">
+              <div className="relative">
+                <div className="h-45 w-45 rounded-full bg-linear-to-br from-blue-300/40 to-blue-100/10 border border-white/10 flex items-center justify-center overflow-hidden">
+                  <span className="text-4xl font-bold text-blue-50">
+                    {initials}
+                  </span>
+                </div>
+
+                {/* badge */}
+                <button
+                  type="button"
+                  className="absolute top-1 right-1 h-10 w-10 rounded-full bg-yellow-400 text-blue-900 font-bold flex items-center justify-center shadow-lg"
+                  aria-label="Edit"
+                  onClick={() => console.log("edit")}
+                >
+                  ✎
+                </button>
+
+                {/* Edit */}
+                <button
+                  type="button"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 h-9 px-4 rounded-xl bg-[#001D3D]/70 border border-white/10 text-blue-100 text-sm shadow-md"
+                  onClick={() => console.log("edit")}
+                >
+                  Edit
+                </button>
+              </div>
+
+              {/* Infos user + stats */}
+              <div className="flex items-center gap-10">
+                <div>
+                  <h1 className="text-2xl text-blue-200 font-semibold leading-tight">
+                    {user?.username || "User"}
+                  </h1>
+                  <p className="text-blue-100/60 text-sm">
+                    Joined on {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-10">
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">{followers}</div>
+                    <div className="text-blue-100/60 text-sm">Followers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">{following}</div>
+                    <div className="text-blue-100/60 text-sm">Following</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bouton logout */}
+            <ButtonLogOut onClick={handleLogout} />
+          </section>
+
+          {/* Tabs profil */}
+          <div className="flex justify-center">
+            <div>
+              <NavTabsProfils
+                active={activeProfileTab}
+                onChange={setActiveProfileTab}
+              />
+            </div>
+          </div>
+
+          {/* Recent likes */}
+          <section className="grid grid-cols-[1fr_220px] gap-10 items-start">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-yellow-400 font-semibold">Recent likes</h2>
+                <button className="text-blue-100/70 text-sm hover:text-blue-100">
+                  See all &gt;
+                </button>
+              </div>
+
+              {/* cards */}
+              <div className="grid grid-cols-4 gap-6">
+                {(favorites.length ? favorites : [1, 2, 3, 4])
+                  .slice(0, 4)
+                  .map((item, idx) => (
+                    <div
+                      key={item?.id ?? idx}
+                      className="aspect-2/3 rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                    >
+                      {item?.image ? (
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-sm">
+                          Cover
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="pt-38">
+              <div className="h-44 w-full flex items-end gap-4">
+                {chart.map((d) => (
+                  <div
+                    key={d.label}
+                    className="flex-1 flex flex-col items-center gap-2"
+                  >
+                    <div className="text-blue-100/70 text-xs">{d.value}</div>
+                    <div
+                      className="w-full rounded-t-sm bg-[#1F6FEB]/60"
+                      style={{
+                        height: `${Math.round((d.value / maxV) * 140)}px`,
+                      }}
+                    />
+                    <div className="text-yellow-400 text-xs">{d.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      {/* MOBILE  */}
+      <div className="md:hidden">
+        {/* Nav bar */}
+
+        <MobileTopFilter />
+
+        <main className="px-4 pt-6 pb-28">
+          {/* Profil header */}
+          <section className="flex items-center gap-4">
+            {/* Photo */}
+            <div className="flex flex-col items-center">
+              <div className="relative">
+                <div className="h-24 w-24 rounded-full overflow-hidden border border-white/10 bg-[#001D3D]/40 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-blue-200">
+                    {initials}
+                  </span>
+                </div>
+
+                {/* Badge */}
+                <div className="absolute -top-2 -right-2 h-10 w-10 rounded-full bg-[#0B2A52] border border-white/10 flex items-center justify-center">
+                  <div className="h-5 w-5 rounded bg-yellow-400" />
+                </div>
+              </div>
+
               <button
-                type="button"
-                className="absolute
-    top-full
-    left-1/2
-    -translate-x-1/2
-    mt-3
-    h-9 px-4
-    rounded-xl
-    bg-[#001D3D]/70
-    border border-white/10
-    text-blue-100 text-sm
-    shadow-md"
+                className="mt-3 h-6 px-2 rounded-md bg-[#001D3D]/60 border border-white/10 text-blue-200 text-sm"
                 onClick={() => console.log("edit")}
               >
                 Edit
               </button>
             </div>
 
-            {/* Infos user + stats */}
-            <div className="flex items-center gap-10">
-              <div>
-                <h1 className="text-2xl font-semibold leading-tight">
-                  {user?.username || "User"}
-                </h1>
-                <p className="text-blue-100/60 text-sm">
-                  Joined on {new Date().toLocaleDateString()}
-                </p>
+            {/* Infos */}
+            <div className="flex-1">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h1 className="text-2xl  text-blue-200 font-semibold leading-tight">
+                    {user?.username || "User"}
+                  </h1>
+                  <p className="text-blue-200/70 text-sm">
+                    Joined on {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+
+                {/* Logout*/}
+                <ButtonLogOut onClick={handleLogout} />
               </div>
 
-              <div className="flex items-center gap-10">
+              {/* stats */}
+              <div className="mt-5 flex items-center gap-10">
                 <div className="text-center">
                   <div className="text-lg font-semibold">{followers}</div>
-                  <div className="text-blue-100/60 text-sm">Followers</div>
+                  <div className="text-blue-100/70 text-sm">Followers</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold">{following}</div>
-                  <div className="text-blue-100/60 text-sm">Following</div>
+                  <div className="text-blue-100/70 text-sm">Following</div>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Bouton logout */}
-          <ButtonLogOut onClick={handleLogout} />
-        </section>
-
-        {/* Tabs profil */}
-        <div className="flex justify-center">
-          <div>
-            <NavTabsProfils
-              active={activeProfileTab}
-              onChange={setActiveProfileTab}
-            />
-          </div>
-        </div>
-
-        {/* Recent likes */}
-        <section className="grid grid-cols-[1fr_220px] gap-10 items-start">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-yellow-400 font-semibold">Recent likes</h2>
-              <button className="text-blue-100/70 text-sm hover:text-blue-100">
-                See all &gt;
-              </button>
+          {/* Recent likes */}
+          <section className="mt-10">
+            <div className="flex items-center justify-between">
+              <h2 className="text-yellow-400 font-semibold text-lg">
+                Recent likes
+              </h2>
+              <button className="text-blue-100/70 text-sm">See all &gt;</button>
             </div>
 
-            {/* cards */}
-            <div className="grid grid-cols-4 gap-6">
-              {(favorites.length ? favorites : [1, 2, 3, 4])
-                .slice(0, 4)
+            <div className="mt-4 grid grid-cols-3 gap-4">
+              {(favorites.length ? favorites : [1, 2, 3])
+                .slice(0, 3)
                 .map((item, idx) => (
                   <div
                     key={item?.id ?? idx}
-                    className="aspect-2/3 rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                    className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
                   >
-                    {/* api envoi d'image */}
                     {item?.image ? (
                       <img
                         src={item.image}
@@ -211,36 +321,75 @@ export function ProfilePage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-sm">
+                      <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-xs">
                         Cover
                       </div>
                     )}
                   </div>
                 ))}
             </div>
-          </div>
+          </section>
 
-          <div className="pt-38">
-            <div className="h-44 w-full flex items-end gap-4">
-              {chart.map((d) => (
-                <div
-                  key={d.label}
-                  className="flex-1 flex flex-col items-center gap-2"
+          {/* Menu gauche + chart droite */}
+          <section className="mt-10 grid grid-cols-[1fr_1.2fr] gap-6 items-end">
+            <div className="space-y-3">
+              {[
+                "Reviews",
+                "Statistics",
+                "Games",
+                "Movies",
+                "TV Shows",
+                "Books",
+              ].map((label) => (
+                <button
+                  key={label}
+                  className="w-full h-10 px-3 rounded-md bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/80"
+                  onClick={() => console.log(label)}
                 >
-                  <div className="text-blue-100/70 text-xs">{d.value}</div>
-                  <div
-                    className="w-full rounded-t-md bg-[#1F6FEB]/60"
-                    style={{
-                      height: `${Math.round((d.value / maxV) * 140)}px`,
-                    }}
-                  />
-                  <div className="text-yellow-400 text-xs">{d.label}</div>
-                </div>
+                  <span className="text-sm">{label}</span>
+                  <span className="text-blue-100/70">{">"}</span>
+                </button>
               ))}
             </div>
-          </div>
-        </section>
-      </main>
+
+            <div className="pb-2">
+              <div className="h-44 w-full flex items-end gap-4">
+                {chart.map((d) => (
+                  <div
+                    key={d.label}
+                    className="flex-1 flex flex-col items-center"
+                  >
+                    <div className="text-blue-100/80 text-xs mb-2">
+                      {d.value}
+                    </div>
+                    <div
+                      className="w-full rounded-t-sm bg-[#1F6FEB]/60"
+                      style={{
+                        height: `${Math.round((d.value / maxV) * 150)}px`,
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 flex items-center justify-between text-[11px]">
+                {chart.map((d) => (
+                  <div
+                    key={d.label}
+                    className="flex-1 text-center text-yellow-400"
+                  >
+                    {d.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <div className="fixed bottom-4 left-0 right-0 px-4">
+          <MobileNavBarLoged />
+        </div>
+      </div>
     </div>
   );
 }

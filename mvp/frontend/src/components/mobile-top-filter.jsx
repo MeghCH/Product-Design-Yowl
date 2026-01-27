@@ -9,7 +9,7 @@ export default function MobileTopFilter({
     <div className="md:hidden px-4 pt-6">
       <div
         className="
-          rounded-xl
+          rounded-sm
           bg-deepblue
           border border-white/10
           overflow-hidden
@@ -22,17 +22,13 @@ export default function MobileTopFilter({
             return (
               <button
                 key={label}
-                type="button"
+                className={[
+                  "py-3 text-sm",
+                  isActive
+                    ? "text-textyellow"
+                    : "text-blue-200 hover:text-blue-50",
+                ].join(" ")}
                 onClick={() => setActive(label)}
-                className={`
-                  py-4 text-center text-sm
-                  transition-colors
-                  ${
-                    isActive
-                      ? "bg-yellow-400 text-blue-800"
-                      : "text-lightblue hover:text-textyellow hover:bg-hoverblue"
-                  }
-                `}
               >
                 {label}
               </button>

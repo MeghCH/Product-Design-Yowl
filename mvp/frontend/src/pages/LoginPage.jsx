@@ -60,7 +60,7 @@ export function LoginPage() {
         <div className="absolute top-0 left-0 w-full h-[55vh] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
 
         {/* fond bleu mobile */}
-        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-color-deepblue" />
+        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-[#000814]" />
 
         <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
       </div>
