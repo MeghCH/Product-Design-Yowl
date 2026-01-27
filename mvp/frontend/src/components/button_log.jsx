@@ -1,11 +1,13 @@
 import { Button } from "./button";
 
-export function ButtonLog({ onClick }) {
+export function ButtonLog({ onClick, type = "button" }) {
     const handleClick = (e) => {
-        console.log("ButtonLog clicked", { hasProp: !!onClick });
+        // 1. Si une fonction onClick est passées
         if (onClick) {
-            try { return onClick(e); } catch (err) { console.error(err); }
+            return onClick(e);
         }
+
+        // 2. Sinon, comportement par défaut : redirection vers login
         try {
             window.location.hash = "#/login";
         } catch (err) {
@@ -16,8 +18,9 @@ export function ButtonLog({ onClick }) {
 
     return (
         <Button
+            type={type} // Permet de passer "submit"
             onClick={handleClick}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-500"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-yellow-500 font-bold px-6 py-2 rounded-md transition-colors"
         >
             Login
         </Button>
