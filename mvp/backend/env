@@ -1,5 +1,0 @@
-PORT=3306
-DB_HOST=localhost
-DB_USER=vscode
-DB_PASS=root
-DB_NAME=yowl_db
