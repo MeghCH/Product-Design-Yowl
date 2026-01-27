@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Logo } from "../components/logo";
 import { ButtonLog } from "../components/button_log";
 import { useNavigate } from "react-router-dom";
+import bg from "../assets/Fallout baniere.jpg";
 
 
 export default function LoginPage() {

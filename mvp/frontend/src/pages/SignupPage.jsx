@@ -3,7 +3,7 @@ import { Button } from "../components/button";
 import { ButtonCreateAccount } from "../components/button_create_account";
 import { Logo } from "../components/logo";
 
-export function LoginPage() {
+export function SignupPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -77,5 +77,4 @@ export function LoginPage() {
         </div>
     );
 }
-
-export default LoginPage;
+export default SignupPage;
