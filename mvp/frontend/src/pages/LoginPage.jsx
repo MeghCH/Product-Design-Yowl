@@ -36,12 +36,19 @@ export function LoginPage() {
         <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
       </div>
 
+      {/* Header desktop */}
+      <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
+        <header className="w-full px-10 py-6">
+          <Logo />
+        </header>
+      </div>
+
       {/* Page */}
-      <main className="relative z-10 min-h-screen md:px-10">
+      <main className="relative z-10 min-h-screen md:px-10 md:pt-24">
         <div className="min-h-screen flex items-end justify-center px-6 pb-10 pt-24 md:min-h-0 md:block md:px-0 md:pb-0 md:pt-0">
           <div className="relative w-full max-w-[420px] md:w-[420px] md:mt-8 md:mt-12 md:ml-6 md:ml-16">
             {/* Logo mobile */}
-            <div className="absolute -top-14 left-1/2 -translate-x-1/2 md:hidden z-20">
+            <div className="absolute -top-14 left-1/2 -translate-x-1/2 md:hidden z-20 cursor-pointer" onClick={() => window.location.hash = "#/"}>
               <img
                 src={badge}
                 alt="Goof Media"
