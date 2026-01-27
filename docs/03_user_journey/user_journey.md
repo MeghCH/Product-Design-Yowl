@@ -4,11 +4,9 @@
 
 The user arrives on the site's home page.
 
-They see:
+**He see:** Popular movies
 
-Popular movies
-
-Personalized recommendations (if they are already known)
+Personalized recommendations (if He are already known)
 
 A Log in / Sign up button
 
@@ -16,73 +14,39 @@ A Log in / Sign up button
 
 The user clicks on Log in.
 
-They enter:
+**He enter:** Their email address/username - Their password
 
-Their email address/username
+He confirm.
 
-Their password
-
-They confirm.
-
-The system:
-
-Verifies their credentials
-
-Loads their profile (history, reviews, movie list)
+**The system:** Verifies their credentials - Loads their profile (history, reviews, movie list)
 
 The user is redirected to the logged-in home page.
 
 ## 3. Accessing history or searching for a movie
 
-The user:
+**The user:** Goes to My History or uses the search bar to find the movie He watched
 
-Goes to My History
-or
-
-Uses the search bar to find the movie they watched
-
-They click on the relevant movie page.
+He click on the relevant movie page.
 
 ## 4. Viewing the movie page
 
-On the movie page, the user sees:
-
-Synopsis
-
-Trailer
-
-Average rating
-
-Other users' reviews
-
-A Give my review button
+On the movie page, the user sees: Synopsis - Trailer - Average rating - Other users' reviews - A Give my review button
 
 ## 5. Adding a review
 
 The user clicks on Give my review.
 
-A form opens:
+**A form opens:** Rating (e.g., 1 to 5 stars) - Text comment (optional)
 
-Rating (e.g., 1 to 5 stars)
+He confirm their review.
 
-Text comment (optional)
-
-They confirm their review.
-
-The system:
-
-Saves the review
-
-Updates the film's average rating
-
-Adds the film to the user's “Films already seen” list
+**The system:** Saves the review - Updates the film's average rating - Adds the film to the user's “Films already seen” list
 
 ## 6. Suggestions appear
 
-After the review is validated, a section is displayed:
-“Films you may like”
+**After the review is validated, a section is displayed:** “Films you may like”
 
-The suggestions are based on:
+**The suggestions are based on:**
 
 The movie rated
 
@@ -92,10 +56,9 @@ The user's favorite genres
 
 Reviews from similar users
 
-
 ## 7. Adding to the personal list
 
-Each suggested movie displays:
+**Each suggested movie displays:**
 
 Poster
 
@@ -103,7 +66,7 @@ Title
 
 Add to my list button
 
-The user:
+**The user:**
 
 Adds one or more movies to their list
 
@@ -115,7 +78,7 @@ Updates the list of movies to watch
 
 ## 8. Viewing the list
 
-The user can:
+**The user can:**
 
 Go to My List
 
@@ -123,4 +86,4 @@ View the added movies
 
 Sort them (by genre, date, popularity)
 
-Remove them if they change their mind
+Remove them if He change their mind
