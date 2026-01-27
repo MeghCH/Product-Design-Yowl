@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { Logo } from "../components/logo";
-import { NavTabs } from "../components/nav-bar";
-import { SearchBar } from "../components/search_bar";
-import { ButtonLog } from "../components/button_log";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
 export function SignupPage() {
-  const [active, setActive] = useState("Home");
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,13 +41,8 @@ export function SignupPage() {
 
       {/* Header desktop */}
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
-        <header className="w-full px-10 py-6 flex items-center justify-between">
+        <header className="w-full px-10 py-6">
           <Logo />
-          <div className="flex items-center gap-8">
-            <NavTabs active={active} onChange={setActive} />
-            <SearchBar />
-          </div>
-          <ButtonLog />
         </header>
       </div>
       {/* Page */}
