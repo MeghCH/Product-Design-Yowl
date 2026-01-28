@@ -2,11 +2,12 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const { router: authRoutes } = require("./middleware/auth.js");
+const authRoutes = require("./routes/auth/auth.js");
 const userRoutes = require("./routes/user/user.js");
 const postsRoutes = require("./routes/posts/posts.js");
 const commentsRoutes = require("./routes/comments/comments.js");
 const playlistsRoutes = require("./routes/playlists/playlists.js");
+const reviewsRoutes = require("./routes/reviews/reviews.js");
 const notFound = require("./middleware/notFound.js");
 
 const app = express();
@@ -20,7 +21,7 @@ app.use(
 
 app.use(express.json());
 
-app.use("/auth", authRoutes);
+app.use(authRoutes);
 
 app.use("/user", userRoutes);
 
@@ -29,6 +30,8 @@ app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
 
 app.use("/playlists", playlistsRoutes);
+
+app.use("/reviews", reviewsRoutes);
 
 app.use(notFound);
 

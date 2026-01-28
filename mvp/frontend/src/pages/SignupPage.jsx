@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Logo } from "../components/logo";
-import { NavTabs } from "../components/nav-bar";
-import { SearchBar } from "../components/search_bar";
-import { ButtonLog } from "../components/button_log";
+
+import { Link } from "react-router-dom";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -14,9 +15,14 @@ export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signup:", { firstName, lastName, email, password });
+
+    // Exemple: après inscription réussie
+    // navigate("/login");
   };
 
   return (
@@ -39,19 +45,20 @@ export function SignupPage() {
         <div className="absolute top-0 left-0 w-full h-[55vh] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
 
         {/* Fond bleu mobile */}
-        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-color-deepblue" />
+        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-[#000814]" />
 
         <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
       </div>
 
       {/* Header desktop */}
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
-        <header className="w-full px-10 py-6">
-          <div onClick={() => window.location.hash = "#/"} className="cursor-pointer">
+        <header className="w-full px-10 py-6 flex items-center justify-between">
+          <Link to="/" className="cursor-pointer">
             <Logo />
-          </div>
+          </Link>
         </header>
       </div>
+
       {/* Page */}
       <main className="relative z-10 min-h-screen md:px-10 md:pt-20 md:pt-24">
         <div className="min-h-screen flex items-end justify-center px-6 pb-10 pt-24 md:min-h-0 md:block md:px-0 md:pb-0 md:pt-0">
@@ -61,8 +68,7 @@ export function SignupPage() {
               <img
                 src={badge}
                 alt="Goof Media"
-                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)] cursor-pointer"
-                onClick={() => window.location.hash = "#/"}
+                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)]"
               />
             </div>
 
@@ -177,7 +183,7 @@ export function SignupPage() {
                   <button
                     type="button"
                     className="text-blue-200 underline-offset-2 hover:underline"
-                    onClick={() => (window.location.hash = "#/login")}
+                    onClick={() => navigate("/login")}
                   >
                     Already have an account? Login
                   </button>

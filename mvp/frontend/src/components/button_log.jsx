@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
 
-export function ButtonLog({ onClick }) {
+export function ButtonLog({ onClick, to = "/login" }) {
+  const navigate = useNavigate();
+
   const handleClick = (e) => {
     console.log("ButtonLog clicked", { hasProp: !!onClick });
+
     if (onClick) {
       try {
         return onClick(e);
@@ -10,12 +14,7 @@ export function ButtonLog({ onClick }) {
         console.error(err);
       }
     }
-    try {
-      window.location.hash = "#/login";
-    } catch (err) {
-      console.warn("hash set failed, using href", err);
-      window.location.href = "#/login";
-    }
+    navigate(to);
   };
 
   return (

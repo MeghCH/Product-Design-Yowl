@@ -1,7 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "./button";
 
 export function NavTabs({ active, onChange }) {
-  const tabs = ["Home", "Games", "Movies", "TV Shows", "Books"];
+  const navigate = useNavigate();
+
+  const tabs = [
+    { label: "Home", path: "/home/log" },
+    { label: "Games", path: "/category/games" },
+    { label: "Movies", path: "/category/movies" },
+    { label: "TV Shows", path: "/category/tv_shows" },
+    { label: "Books", path: "/category/books" },
+  ];
 
   return (
     <div
@@ -13,12 +22,16 @@ export function NavTabs({ active, onChange }) {
         backdrop-blur-md
       "
     >
-      {tabs.map((t) => {
-        const isActive = t === active;
+      {tabs.map(({ label, path }) => {
+        const isActive = label === active;
+
         return (
           <Button
-            key={t}
-            onClick={() => onChange(t)}
+            key={label}
+            onClick={() => {
+              onChange(label);
+              navigate(path);
+            }}
             className={[
               "h-full px-6 rounded-2xl text-sm font-medium transition-colors",
               isActive
@@ -26,7 +39,7 @@ export function NavTabs({ active, onChange }) {
                 : "text-lightblue hover:text-textyellow hover:bg-hoverblue",
             ].join(" ")}
           >
-            {t}
+            {label}
           </Button>
         );
       })}

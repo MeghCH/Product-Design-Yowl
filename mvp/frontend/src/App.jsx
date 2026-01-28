@@ -1,35 +1,27 @@
-import { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import { ProfilePage } from "./pages/ProfilePageActivity";
+import { ReviewPage } from "./pages/ReviewPage";
+import HomePageLoged from "./pages/HomePageLoged";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
-  const getRoute = () => window.location.hash || "#/";
-  const [route, setRoute] = useState(getRoute());
-
-  useEffect(() => {
-    const onHash = () => setRoute(getRoute());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-
-  const renderPage = () => {
-    if (route === "#/login") {
-      return <LoginPage />;
-    } else if (route === "#/signup") {
-      return <SignupPage />;
-    } else if (route.startsWith("#/category/")) {
-      const category = decodeURIComponent(route.split("#/category/")[1]);
-      return <CategoryPage category={category} />;
-    } else {
-      return <HomePage />;
-    }
-  };
-
   return (
-    <div className="App self-start w-full">
-      {renderPage()}
+    <div className="App self-start w-full bg-[#000814] min-h-screen">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/home/log" element={<HomePageLoged />} />
+        <Route path="/category/:category" element={<CategoryPage />} />
+
+        <Route path="/review/:type/:id" element={<ReviewPage />} />
+
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </div>
   );
 }
