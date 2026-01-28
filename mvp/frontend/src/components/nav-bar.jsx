@@ -3,9 +3,10 @@ import { Button } from "./button";
 
 export function NavTabs({ active, onChange }) {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("userId");
 
   const tabs = [
-    { label: "Home", path: "/home/log" },
+    { label: "Home", path: isLoggedIn ? "/home/log" : "/" },
     { label: "Games", path: "/category/games" },
     { label: "Movies", path: "/category/movies" },
     { label: "TV Shows", path: "/category/tv_shows" },

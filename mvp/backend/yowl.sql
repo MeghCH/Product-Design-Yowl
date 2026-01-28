@@ -64,21 +64,8 @@ CREATE TABLE Reviews (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY unique_review (user_id, media_type, media_id)
 );
-
-CREATE TABLE IF NOT EXISTS user_media_list (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  media_type ENUM('film','serie','livre','jeu') NOT NULL,
-  media_id INT NOT NULL,
-  status ENUM('seen','to_see') NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uniq (user_id, media_type, media_id),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 INSERT INTO users (username, email, password_hash, picture) 
 VALUES ('Test', 'test@test.com', 'test1234', 'calgar_avatar.png');
-
 
 -- 5. INSERTION DES MÉDIAS AVEC DESCRIPTIONS COMPLÈTES
 INSERT INTO Livre (title, author, description, picture) 
@@ -101,7 +88,7 @@ INSERT INTO Serie (title, description, picture)
 VALUES (
     'Breaking Bad', 
     'Un professeur de chimie atteint d un cancer s associe à un ancien élève pour fabriquer et vendre de la méthamphétamine.', 
-    'breaking_bad.jpg'
+    'breaking.jpg'
 );
 
 INSERT INTO Jeu_video (title, platform, description, picture) 
@@ -113,7 +100,7 @@ VALUES (
 );
 
 INSERT INTO Reviews (user_id, media_type, media_id, rating, comment)
-VALUES (1, 'livre', 1, 5, 'Chef-d\'oeuvre de la littérature fantastique !');
+VALUES 1, 'livre', 1, 5, 'Chef-d\'oeuvre de la littérature fantastique !');
 
 USE yowl_db;
 DELETE FROM Jeu_video;
@@ -124,10 +111,33 @@ VALUES (1, 'Crash Twinsanity', 'PS2', 'Crash et Cortex font équipe.', 'crash.jp
 INSERT INTO users (username, email, password_hash)
 VALUES ('testuser', 'test@test.com', 'password123');
 
+-- End of seed data
+ 
+-- Test user (plain password)
+INSERT INTO users (username, email, password_hash)
+VALUES ('testuser', 'test@test.com', 'password123');
+
 INSERT INTO user_media_list (user_id, media_type, media_id, status)
 VALUES
 (1, 'serie', 1, 'seen'),
 (1, 'livre', 1, 'to_see');
+
+CREATE TABLE IF NOT EXISTS user_media_list (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  media_type ENUM('film','serie','livre','jeu') NOT NULL,
+  media_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_like (user_id, media_type, media_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+INSERT IGNORE INTO user_media_list (user_id, media_type, media_id) VALUES
+(1,'film',1),
+(1,'serie',1),
+(1,'livre',1),
+(1,'jeu',1);
+
 
 
 -- End of seed data

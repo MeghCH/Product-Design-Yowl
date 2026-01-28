@@ -20,8 +20,6 @@ export function SignupPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Signup:", { firstName, lastName, email, password });
-
-   \
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Logo } from "../components/logo";
@@ -9,19 +9,115 @@ import { NavTabs } from "../components/nav-bar";
 import MobileNavBar from "../components/mobile-nav-bar";
 import MobileTopFilter from "../components/mobile-top-filter";
 
+const API_BASE = "http://localhost:4000";
+
+const gamesImgs = import.meta.glob("../assets/Games/*", {
+  eager: true,
+  import: "default",
+});
+const moviesImgs = import.meta.glob("../assets/Movies/*", {
+  eager: true,
+  import: "default",
+});
+const booksImgs = import.meta.glob("../assets/Books/*", {
+  eager: true,
+  import: "default",
+});
+const tvShowsImgs = import.meta.glob("../assets/Series/*", {
+  eager: true,
+  import: "default",
+});
+
+function makeIndex(globMap) {
+  const index = {};
+  for (const [path, url] of Object.entries(globMap)) {
+    const filename = path.split("/").pop();
+    if (!filename) continue;
+    index[filename] = url;
+    index[filename.toLowerCase()] = url;
+  }
+  return index;
+}
+
+const categoryToApiType = {
+  games: "Jeu_video",
+  movies: "Film",
+  books: "Livre",
+  tv_shows: "Serie",
+};
+
 export function CategoryPage() {
   const navigate = useNavigate();
-  const { category } = useParams(); 
+  const { category } = useParams();
 
-  const safeCategory = category || "games";
+  const safeCategory = (category || "games").toLowerCase().replaceAll("-", "_");
   const categoryDisplayName = safeCategory.replaceAll("_", " ");
 
   const [active, setActive] = useState("Home");
   const [mobileFilter, setMobileFilter] = useState(safeCategory);
 
+  const [items, setItems] = useState([]);
+
   useEffect(() => {
     setMobileFilter(safeCategory);
   }, [safeCategory]);
+
+  const imageIndexByCategory = useMemo(() => {
+    return {
+      games: makeIndex(gamesImgs),
+      movies: makeIndex(moviesImgs),
+      books: makeIndex(booksImgs),
+      tv_shows: makeIndex(tvShowsImgs),
+    };
+  }, []);
+
+  useEffect(() => {
+    async function load() {
+      const apiType = categoryToApiType[safeCategory];
+      if (!apiType) {
+        setItems([]);
+        return;
+      }
+
+      const res = await fetch(`${API_BASE}/media/${apiType}`);
+      const data = await res.json();
+      setItems(Array.isArray(data) ? data : []);
+    }
+
+    load().catch(console.error);
+  }, [safeCategory]);
+
+  const displayItems = useMemo(() => {
+    const idx = imageIndexByCategory[safeCategory] || {};
+    return items.map((x) => {
+      const pic = (x.picture || "").toString();
+      return {
+        id: x.id,
+        title: x.title,
+        img: idx[pic] ?? idx[pic.toLowerCase()] ?? null,
+      };
+    });
+  }, [items, imageIndexByCategory, safeCategory]);
+
+  const filledDesktop = useMemo(() => {
+    return [
+      ...displayItems,
+      ...Array.from(
+        { length: Math.max(0, 20 - displayItems.length) },
+        () => null,
+      ),
+    ];
+  }, [displayItems]);
+
+  const filledMobile = useMemo(() => {
+    return [
+      ...displayItems,
+      ...Array.from(
+        { length: Math.max(0, 12 - displayItems.length) },
+        () => null,
+      ),
+    ];
+  }, [displayItems]);
 
   return (
     <div className="relative min-h-screen bg-[#000814]">
@@ -48,7 +144,7 @@ export function CategoryPage() {
         </header>
       </div>
 
-      {/* Ordi */}
+      {/* DESKTOP */}
       <main className="hidden md:block pt-20 w-full max-w-7xl mx-auto p-4 space-y-20">
         <section className="space-y-6 mt-32">
           <div className="flex items-center gap-3">
@@ -59,33 +155,63 @@ export function CategoryPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            {Array.from({ length: 20 }, (_, i) => i + 1).map((i) => (
-              <div
-                key={i}
-                className="group cursor-pointer flex flex-col space-y-4"
-              >
-                <div className="relative aspect-[2/3] bg-[#001D3D]/40 rounded-2xl overflow-hidden border border-white/5 group-hover:border-yellow-500/50 transition-all duration-300 shadow-xl">
-                  <div className="w-full h-full bg-gray-800 rounded-2xl flex items-center justify-center">
-                    <span className="text-gray-600 text-sm">Placeholder</span>
+            {filledDesktop.map((item, i) =>
+              item ? (
+                <div
+                  key={item.id ?? i}
+                  className="group cursor-pointer flex flex-col space-y-4"
+                >
+                  <div className="relative aspect-[2/3] bg-[#001D3D]/40 rounded-2xl overflow-hidden border border-white/5 group-hover:border-yellow-500/50 transition-all duration-300 shadow-xl">
+                    {item.img ? (
+                      <img
+                        src={item.img}
+                        alt={item.title}
+                        className="w-full h-full object-cover rounded-2xl"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 rounded-2xl flex items-center justify-center">
+                        <span className="text-gray-600 text-sm">No image</span>
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="bg-yellow-500 text-black px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform">
+                        Voir l&apos;avis
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="bg-yellow-500 text-black px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform">
-                      Voir l&apos;avis
-                    </span>
+                  <div className="px-1">
+                    <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {categoryDisplayName}
+                    </p>
                   </div>
                 </div>
+              ) : (
+                <div
+                  key={`ph-${i}`}
+                  className="group cursor-pointer flex flex-col space-y-4"
+                >
+                  <div className="relative aspect-[2/3] bg-[#001D3D]/40 rounded-2xl overflow-hidden border border-white/5 shadow-xl">
+                    <div className="w-full h-full bg-gray-800 rounded-2xl flex items-center justify-center">
+                      <span className="text-gray-600 text-sm">Placeholder</span>
+                    </div>
+                  </div>
 
-                <div className="px-1">
-                  <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors">
-                    Placeholder Title {i}
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {categoryDisplayName}
-                  </p>
+                  <div className="px-1">
+                    <h3 className="font-bold text-sm line-clamp-1 text-gray-400">
+                      Placeholder Title
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {categoryDisplayName}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </section>
       </main>
@@ -95,7 +221,7 @@ export function CategoryPage() {
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
         <main className="px-4 pt-6 pb-28 space-y-8">
-          <Section title={`New ${categoryDisplayName}s`} />
+          <Section title={`New ${categoryDisplayName}s`} items={filledMobile} />
         </main>
 
         <MobileNavBar
@@ -109,7 +235,7 @@ export function CategoryPage() {
   );
 }
 
-function Section({ title }) {
+function Section({ title, items = [] }) {
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -117,12 +243,27 @@ function Section({ title }) {
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-4">
-        {Array.from({ length: 12 }, (_, i) => i + 1).map((i) => (
-          <div
-            key={i}
-            className="aspect-[2/3] rounded-2xl bg-[#001D3D]/40 border border-white/5"
-          />
-        ))}
+        {items.map((item, i) =>
+          item ? (
+            <div
+              key={item.id ?? i}
+              className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5"
+            >
+              {item.img ? (
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              ) : null}
+            </div>
+          ) : (
+            <div
+              key={`m-ph-${i}`}
+              className="aspect-[2/3] rounded-2xl bg-[#001D3D]/40 border border-white/5"
+            />
+          ),
+        )}
       </div>
     </section>
   );

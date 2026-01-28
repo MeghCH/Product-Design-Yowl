@@ -13,9 +13,8 @@ app.use(
 
 app.use(express.json());
 
-// --- CONNEXION MYSQL ---
 const db = mysql.createConnection({
-  host: "127.0.0.1",
+  host: "localhost",
   port: 3306,
   user: "vscode",
   password: "root",
@@ -24,15 +23,45 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error("❌ Erreur MySQL :", err.message);
+    console.error("Erreur MySQL :", err.message);
   } else {
-    console.log("✅ connecté à la DB");
+    console.log("Connecté à la DB");
   }
 });
 
-// --- ROUTES ---
+app.get("/api/home", async (req, res) => {
+  try {
+    const [games] = await db
+      .promise()
+      .query(
+        "SELECT id_jeu AS id, title, picture, created_at FROM Jeu_video ORDER BY created_at DESC LIMIT 5",
+      );
 
-// 1. Route Media (Pour la HomePage)
+    const [movies] = await db
+      .promise()
+      .query(
+        "SELECT id_film AS id, title, picture, created_at FROM Film ORDER BY created_at DESC LIMIT 5",
+      );
+
+    const [tvShows] = await db
+      .promise()
+      .query(
+        "SELECT id_serie AS id, title, picture, created_at FROM Serie ORDER BY created_at DESC LIMIT 5",
+      );
+
+    const [books] = await db
+      .promise()
+      .query(
+        "SELECT id_livre AS id, title, picture, created_at FROM Livre ORDER BY created_at DESC LIMIT 5",
+      );
+
+    res.json({ games, movies, tvShows, books });
+  } catch (err) {
+    console.error("/api/home error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/media/:type", (req, res) => {
   const type = req.params.type;
   const idMap = {
@@ -45,7 +74,6 @@ app.get("/media/:type", (req, res) => {
 
   if (!idColumn) return res.status(400).json({ error: "Type invalide" });
 
-  // On ajoute 'AS id' pour que React trouve item.id sans effort
   const sql = `SELECT *, ${idColumn} AS id FROM ${type} ORDER BY created_at DESC LIMIT 5`;
   db.query(sql, (err, result) => {
     if (err) return res.status(500).json(err);
@@ -53,7 +81,6 @@ app.get("/media/:type", (req, res) => {
   });
 });
 
-// 2. Route Media Details (Pour la ReviewPage)
 app.get("/media-details/:type/:id", (req, res) => {
   const { type, id } = req.params;
   const idMap = {
@@ -75,11 +102,9 @@ app.get("/media-details/:type/:id", (req, res) => {
   });
 });
 
-// 3. Route des Avis (Pour la ReviewPage - Reviews Section)
 app.get("/reviews/:type/:id", (req, res) => {
   const { type, id } = req.params;
 
-  // Jointure pour récupérer le nom de l'utilisateur qui a écrit l'avis
   const sql = `
         SELECT r.*, u.username 
         FROM reviews r 
@@ -93,7 +118,6 @@ app.get("/reviews/:type/:id", (req, res) => {
   });
 });
 
-// 4. Route Login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   const sql =
@@ -108,7 +132,56 @@ app.post("/login", (req, res) => {
   });
 });
 
+// ✅ Recent likes (covers) pour ProfilePage
+// GET /user/:id/favorites
+app.get("/user/:id/favorites", async (req, res) => {
+  try {
+    const userId = Number(req.params.id);
+    if (!userId) return res.status(400).json({ error: "Invalid user id" });
+
+    const [rows] = await db.promise().query(
+      `
+      SELECT 
+        uml.media_type,
+        uml.media_id,
+        COALESCE(f.title, s.title, l.title, j.title) AS title,
+        COALESCE(f.picture, s.picture, l.picture, j.picture) AS picture,
+        uml.created_at
+      FROM user_media_list uml
+      LEFT JOIN Film f 
+        ON uml.media_type = 'film' AND uml.media_id = f.id_film
+      LEFT JOIN Serie s 
+        ON uml.media_type = 'serie' AND uml.media_id = s.id_serie
+      LEFT JOIN Livre l 
+        ON uml.media_type = 'livre' AND uml.media_id = l.id_livre
+      LEFT JOIN Jeu_video j
+        ON uml.media_type = 'jeu' AND uml.media_id = j.id_jeu
+      WHERE uml.user_id = ?
+      ORDER BY uml.created_at DESC
+      LIMIT 4
+      `,
+      [userId],
+    );
+
+    // format simple pour le front
+    res.json(
+      rows.map((r) => ({
+        id: `${r.media_type}-${r.media_id}`,
+        mediaType: r.media_type,
+        mediaId: r.media_id,
+        title: r.title,
+        picture: r.picture,
+        createdAt: r.created_at,
+      })),
+    );
+  } catch (err) {
+    console.error("❌ /user/:id/favorites error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = 4000;
+
 app.listen(PORT, () => {
-  console.log(`🚀 SERVEUR ACTIF : http://localhost:${PORT}`);
+  console.log(`SERVEUR ACTIF : http://localhost:${PORT}`);
 });

@@ -11,17 +11,91 @@ import ButtonLogOut from "../components/button_logout";
 import MobileNavBarLoged from "../components/mobile-nav-bar-loged";
 import MobileTopFilter from "../components/mobile-top-filter";
 
+const API_BASE = "http://localhost:4000";
+
+// ✅ Globs covers (comme homepage)
+const gamesImgs = import.meta.glob("../assets/Games/*", {
+  eager: true,
+  import: "default",
+});
+const moviesImgs = import.meta.glob("../assets/Movies/*", {
+  eager: true,
+  import: "default",
+});
+const booksImgs = import.meta.glob("../assets/Books/*", {
+  eager: true,
+  import: "default",
+});
+const tvShowsImgs = import.meta.glob("../assets/Series/*", {
+  eager: true,
+  import: "default",
+});
+
+function makeIndex(globMap) {
+  const index = {};
+  for (const [path, url] of Object.entries(globMap)) {
+    const filename = path.split("/").pop();
+    if (!filename) continue;
+    index[filename] = url;
+    index[filename.toLowerCase()] = url; // tolérance casse
+  }
+  return index;
+}
+
+// ✅ évite JSON.parse crash si le backend renvoie du HTML (404, Cannot GET...)
+async function safeJson(res) {
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    console.error("Réponse non-JSON:", {
+      status: res.status,
+      url: res.url,
+      text: text.slice(0, 200),
+    });
+    return null;
+  }
+}
+
+function resolveCoverFromPicture(picture, indexes) {
+  const key = String(picture || "").trim();
+  if (!key) return null;
+
+  const lower = key.toLowerCase();
+  return (
+    indexes.movies[key] ||
+    indexes.movies[lower] ||
+    indexes.tv_shows[key] ||
+    indexes.tv_shows[lower] ||
+    indexes.books[key] ||
+    indexes.books[lower] ||
+    indexes.games[key] ||
+    indexes.games[lower] ||
+    null
+  );
+}
+
 export function ProfilePage() {
-  const [user, setUser] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null); // peut rester null si pas d'api /user/:id
+  const [favorites, setFavorites] = useState([]); // ✅ recent likes
+  const [comments, setComments] = useState([]); // optionnel
   const [loading, setLoading] = useState(true);
 
   const [activeTop, setActiveTop] = useState("Home");
-  const navigate = useNavigate();
   const [activeProfileTab, setActiveProfileTab] = useState("Activity");
-
   const [mobileCategory, setMobileCategory] = useState("Games");
+
+  // ✅ index images une fois
+  const imageIndexes = useMemo(() => {
+    return {
+      games: makeIndex(gamesImgs),
+      movies: makeIndex(moviesImgs),
+      books: makeIndex(booksImgs),
+      tv_shows: makeIndex(tvShowsImgs),
+    };
+  }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -30,25 +104,39 @@ export function ProfilePage() {
       return;
     }
 
-    Promise.all([
-      fetch(`http://localhost:4000/user/${userId}`).then((res) => res.json()),
-      fetch(`http://localhost:4000/user/${userId}/favorites`)
-        .then((res) => res.json())
-        .catch(() => []),
-      fetch(`http://localhost:4000/user/${userId}/comments`)
-        .then((res) => res.json())
-        .catch(() => []),
-    ])
-      .then(([userData, favData, commentData]) => {
-        setUser(userData);
-        setFavorites(Array.isArray(favData) ? favData : []);
-        setComments(Array.isArray(commentData) ? commentData : []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erreur de chargement:", err);
-        setLoading(false);
-      });
+    async function load() {
+      setLoading(true);
+
+      // ✅ 1) Favorites (c’est ce que tu veux)
+      const favRes = await fetch(`${API_BASE}/user/${userId}/favorites`);
+      const favData = await safeJson(favRes);
+      setFavorites(Array.isArray(favData) ? favData : []);
+
+      // ✅ 2) User (optionnel) : si tu n’as pas l’api, ça ne casse pas
+      try {
+        const userRes = await fetch(`${API_BASE}/user/${userId}`);
+        const userData = await safeJson(userRes);
+        if (userData && typeof userData === "object") setUser(userData);
+      } catch (e) {
+        console.warn("API user absente ou erreur:", e);
+      }
+
+      // ✅ 3) Comments (optionnel)
+      try {
+        const cRes = await fetch(`${API_BASE}/user/${userId}/comments`);
+        const cData = await safeJson(cRes);
+        setComments(Array.isArray(cData) ? cData : []);
+      } catch (e) {
+        console.warn("API comments absente ou erreur:", e);
+      }
+
+      setLoading(false);
+    }
+
+    load().catch((err) => {
+      console.error("Erreur chargement Profile:", err);
+      setLoading(false);
+    });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -75,6 +163,20 @@ export function ProfilePage() {
   );
   const maxV = Math.max(...chart.map((d) => d.value), 1);
 
+  // ✅ Ajoute cover URL aux favorites
+  const favoritesWithCover = useMemo(() => {
+    return (favorites || []).map((f) => ({
+      ...f,
+      cover:
+        // si ton API renvoie un champ "image" déjà complet
+        (typeof f.image === "string" && f.image.trim().length > 0
+          ? f.image
+          : null) ||
+        // sinon on mappe le "picture" à l’asset local
+        resolveCoverFromPicture(f.picture, imageIndexes),
+    }));
+  }, [favorites, imageIndexes]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#000814] text-blue-100 flex items-center justify-center">
@@ -85,9 +187,8 @@ export function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#000814] text-blue-100">
-      {/*  DESKTOP  */}
+      {/* DESKTOP */}
       <div className="hidden md:block">
-        {/* Header */}
         <div className="sticky top-0 z-50">
           <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
             <header className="w-full flex justify-between items-center px-8 py-4">
@@ -108,7 +209,6 @@ export function ProfilePage() {
           </div>
         </div>
 
-        {/* Page */}
         <main className="max-w-6xl mx-auto px-8 py-10 space-y-10">
           <section className="flex items-center justify-between">
             <div className="flex items-center gap-10">
@@ -118,28 +218,8 @@ export function ProfilePage() {
                     {initials}
                   </span>
                 </div>
-
-                {/* badge */}
-                <button
-                  type="button"
-                  className="absolute top-1 right-1 h-10 w-10 rounded-full bg-yellow-400 text-blue-900 font-bold flex items-center justify-center shadow-lg"
-                  aria-label="Edit"
-                  onClick={() => console.log("edit")}
-                >
-                  ✎
-                </button>
-
-                {/* Edit */}
-                <button
-                  type="button"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 h-9 px-4 rounded-xl bg-[#001D3D]/70 border border-white/10 text-blue-100 text-sm shadow-md"
-                  onClick={() => console.log("edit")}
-                >
-                  Edit
-                </button>
               </div>
 
-              {/* Infos user + stats */}
               <div className="flex items-center gap-10">
                 <div>
                   <h1 className="text-2xl text-blue-200 font-semibold leading-tight">
@@ -163,21 +243,17 @@ export function ProfilePage() {
               </div>
             </div>
 
-            {/* Bouton logout */}
             <ButtonLogOut onClick={handleLogout} />
           </section>
 
-          {/* Tabs profil */}
           <div className="flex justify-center">
-            <div>
-              <NavTabsProfils
-                active={activeProfileTab}
-                onChange={setActiveProfileTab}
-              />
-            </div>
+            <NavTabsProfils
+              active={activeProfileTab}
+              onChange={setActiveProfileTab}
+            />
           </div>
 
-          {/* Recent likes */}
+          {/* ✅ Recent likes + covers */}
           <section className="grid grid-cols-[1fr_220px] gap-10 items-start">
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -187,19 +263,22 @@ export function ProfilePage() {
                 </button>
               </div>
 
-              {/* cards */}
               <div className="grid grid-cols-4 gap-6">
-                {(favorites.length ? favorites : [1, 2, 3, 4])
+                {(favoritesWithCover.length
+                  ? favoritesWithCover
+                  : [null, null, null, null]
+                )
                   .slice(0, 4)
                   .map((item, idx) => (
                     <div
                       key={item?.id ?? idx}
                       className="aspect-2/3 rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                      title={item?.title || ""}
                     >
-                      {item?.image ? (
+                      {item?.cover ? (
                         <img
-                          src={item.image}
-                          alt=""
+                          src={item.cover}
+                          alt={item?.title || ""}
                           className="h-full w-full object-cover"
                         />
                       ) : (
@@ -235,14 +314,11 @@ export function ProfilePage() {
         </main>
       </div>
 
-      {/* MOBILE  */}
+      {/* MOBILE */}
       <div className="md:hidden">
-        {/* Nav bar */}
-
-        <MobileTopFilter />
+        <MobileTopFilter value={mobileCategory} onChange={setMobileCategory} />
 
         <main className="px-4 pt-6 pb-28">
-          {/* Profil header */}
           <section className="flex items-center gap-4">
             {/* Photo */}
             <div className="flex flex-col items-center">
@@ -296,9 +372,8 @@ export function ProfilePage() {
               </div>
             </div>
           </section>
-
-          {/* Recent likes */}
-          <section className="mt-10">
+          {/* Mobile likes */}
+          <section className="mt-6">
             <div className="flex items-center justify-between">
               <h2 className="text-yellow-400 font-semibold text-lg">
                 Recent likes
@@ -307,17 +382,21 @@ export function ProfilePage() {
             </div>
 
             <div className="mt-4 grid grid-cols-3 gap-4">
-              {(favorites.length ? favorites : [1, 2, 3])
+              {(favoritesWithCover.length
+                ? favoritesWithCover
+                : [null, null, null]
+              )
                 .slice(0, 3)
                 .map((item, idx) => (
                   <div
                     key={item?.id ?? idx}
                     className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                    title={item?.title || ""}
                   >
-                    {item?.image ? (
+                    {item?.cover ? (
                       <img
-                        src={item.image}
-                        alt=""
+                        src={item.cover}
+                        alt={item?.title || ""}
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -328,61 +407,61 @@ export function ProfilePage() {
                   </div>
                 ))}
             </div>
-          </section>
 
-          {/* Menu gauche + chart droite */}
-          <section className="mt-10 grid grid-cols-[1fr_1.2fr] gap-6 items-end">
-            <div className="space-y-3">
-              {[
-                "Reviews",
-                "Statistics",
-                "Games",
-                "Movies",
-                "TV Shows",
-                "Books",
-              ].map((label) => (
-                <button
-                  key={label}
-                  className="w-full h-10 px-3 rounded-md bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/80"
-                  onClick={() => console.log(label)}
-                >
-                  <span className="text-sm">{label}</span>
-                  <span className="text-blue-100/70">{">"}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="pb-2">
-              <div className="h-44 w-full flex items-end gap-4">
-                {chart.map((d) => (
-                  <div
-                    key={d.label}
-                    className="flex-1 flex flex-col items-center"
+            {/* Menu gauche + chart droite */}
+            <section className="mt-10 grid grid-cols-[1fr_1.2fr] gap-6 items-end">
+              <div className="space-y-3">
+                {[
+                  "Reviews",
+                  "Statistics",
+                  "Games",
+                  "Movies",
+                  "TV Shows",
+                  "Books",
+                ].map((label) => (
+                  <button
+                    key={label}
+                    className="w-full h-10 px-3 rounded-md bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/80"
+                    onClick={() => console.log(label)}
                   >
-                    <div className="text-blue-100/80 text-xs mb-2">
-                      {d.value}
-                    </div>
+                    <span className="text-sm">{label}</span>
+                    <span className="text-blue-100/70">{">"}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="pb-2">
+                <div className="h-44 w-full flex items-end gap-4">
+                  {chart.map((d) => (
                     <div
-                      className="w-full rounded-t-sm bg-[#1F6FEB]/60"
-                      style={{
-                        height: `${Math.round((d.value / maxV) * 150)}px`,
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
+                      key={d.label}
+                      className="flex-1 flex flex-col items-center"
+                    >
+                      <div className="text-blue-100/80 text-xs mb-2">
+                        {d.value}
+                      </div>
+                      <div
+                        className="w-full rounded-t-sm bg-[#1F6FEB]/60"
+                        style={{
+                          height: `${Math.round((d.value / maxV) * 150)}px`,
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-              <div className="mt-3 flex items-center justify-between text-[11px]">
-                {chart.map((d) => (
-                  <div
-                    key={d.label}
-                    className="flex-1 text-center text-yellow-400"
-                  >
-                    {d.label}
-                  </div>
-                ))}
+                <div className="mt-3 flex items-center justify-between text-[11px]">
+                  {chart.map((d) => (
+                    <div
+                      key={d.label}
+                      className="flex-1 text-center text-yellow-400"
+                    >
+                      {d.label}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </section>
           </section>
         </main>
 

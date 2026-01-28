@@ -13,7 +13,6 @@ import { ButtonMsg } from "../components/button_message";
 import { ButtonProfile } from "../components/button_profile";
 import { NavTabsProfils } from "../components/nav-barre-profile";
 
-// Images locales: mets-les dans src/assets/posters/
 const posterModules = import.meta.glob("../assets/posters/*", { eager: true });
 function getPosterUrl(filename) {
   if (!filename) return null;
