@@ -11,7 +11,7 @@ import MobileTopFilter from "../components/mobile-top-filter";
 
 export function CategoryPage() {
   const navigate = useNavigate();
-  const { category } = useParams(); // ex: /category/games
+  const { category } = useParams(); 
 
   const safeCategory = category || "games";
   const categoryDisplayName = safeCategory.replaceAll("_", " ");
@@ -19,7 +19,6 @@ export function CategoryPage() {
   const [active, setActive] = useState("Home");
   const [mobileFilter, setMobileFilter] = useState(safeCategory);
 
-  // si l'URL change, on met à jour le filtre mobile
   useEffect(() => {
     setMobileFilter(safeCategory);
   }, [safeCategory]);

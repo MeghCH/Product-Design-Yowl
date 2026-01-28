@@ -21,8 +21,7 @@ export function SignupPage() {
     e.preventDefault();
     console.log("Signup:", { firstName, lastName, email, password });
 
-    // Exemple: après inscription réussie
-    // navigate("/login");
+   \
   };
 
   return (

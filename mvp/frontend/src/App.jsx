@@ -6,6 +6,7 @@ import { ProfilePage } from "./pages/ProfilePageActivity";
 import { ReviewPage } from "./pages/ReviewPage";
 import HomePageLoged from "./pages/HomePageLoged";
 import CategoryPage from "./pages/CategoryPage";
+import ProfileMediaPage from "./pages/ProfileMediaPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/home/log" element={<HomePageLoged />} />
         <Route path="/category/:category" element={<CategoryPage />} />
+        <Route path="/profile/:mediaType" element={<ProfileMediaPage />} />
 
         <Route path="/review/:type/:id" element={<ReviewPage />} />
 
