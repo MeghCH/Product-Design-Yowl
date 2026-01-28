@@ -187,7 +187,6 @@ export function SignupPage() {
                 </div>
               </form>
             </div>
-            {/* END CARD */}
           </div>
         </div>
       </main>

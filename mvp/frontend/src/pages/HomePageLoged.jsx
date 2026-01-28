@@ -40,9 +40,10 @@ function makeIndex(globMap) {
 }
 
 function HomeSection({ title, seeAllTo, items }) {
+  const top = (items ?? []).slice(0, 3);
   const filled = [
-    ...items,
-    ...Array.from({ length: Math.max(0, 5 - items.length) }, () => null),
+    ...top,
+    ...Array.from({ length: Math.max(0, 3 - top.length) }, () => null),
   ];
 
   return (
@@ -63,7 +64,7 @@ function HomeSection({ title, seeAllTo, items }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-5 gap-8">
+      <div className="grid grid-cols-3 gap-8">
         {filled.map((item, idx) =>
           item ? (
             <div key={item.id ?? idx} className="group cursor-pointer">
@@ -73,6 +74,7 @@ function HomeSection({ title, seeAllTo, items }) {
                     src={item.img}
                     alt={item.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
@@ -105,6 +107,74 @@ function HomeSection({ title, seeAllTo, items }) {
   );
 }
 
+function MobileSection({ title, seeAllTo, items }) {
+  const top = (items ?? []).slice(0, 3);
+  const filled = [
+    ...top,
+    ...Array.from({ length: Math.max(0, 3 - top.length) }, () => null),
+  ];
+
+  return (
+    <section className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="w-1.5 h-6 bg-yellow-500 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+          <h2 className="text-yellow-400 font-black uppercase tracking-tighter">
+            {title}
+          </h2>
+        </div>
+
+        <Link
+          to={seeAllTo}
+          className="text-blue-100/80 text-sm hover:text-blue-100"
+        >
+          See all &gt;
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {filled.map((item, idx) =>
+          item ? (
+            <div key={item.id ?? idx} className="group cursor-pointer">
+              <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5 shadow-xl group-hover:border-yellow-500/50 transition-all duration-300">
+                {item.img ? (
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                    <span className="text-gray-600 text-xs">No image</span>
+                  </div>
+                )}
+
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="bg-yellow-500 text-black px-3 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform">
+                    Voir l&apos;avis
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-2 px-1">
+                <h3 className="font-bold text-xs line-clamp-1 group-hover:text-yellow-500 transition-colors text-white">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+          ) : (
+            <div
+              key={`ph-${idx}`}
+              className="aspect-[2/3] rounded-2xl bg-[#001D3D]/40 border border-white/5"
+            />
+          ),
+        )}
+      </div>
+    </section>
+  );
+}
+
 export function HomePageLoged() {
   const [active, setActive] = useState("Home");
   const [mobileFilter, setMobileFilter] = useState("Games");
@@ -113,7 +183,7 @@ export function HomePageLoged() {
   const [games, setGames] = useState([]);
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
-  const [books, setBooks] = useState([]); // ✅ LIVRES
+  const [books, setBooks] = useState([]);
 
   const imageIndex = useMemo(() => {
     return {
@@ -132,7 +202,7 @@ export function HomePageLoged() {
       setGames(Array.isArray(data.games) ? data.games : []);
       setMovies(Array.isArray(data.movies) ? data.movies : []);
       setTvShows(Array.isArray(data.tvShows) ? data.tvShows : []);
-      setBooks(Array.isArray(data.books) ? data.books : []); // ✅ LIVRES
+      setBooks(Array.isArray(data.books) ? data.books : []);
     }
 
     load().catch(console.error);
@@ -216,7 +286,6 @@ export function HomePageLoged() {
             items={tvShowItems}
           />
 
-          {/* ✅ SECTION LIVRES */}
           <HomeSection
             title="New Books"
             seeAllTo="/category/books"
@@ -225,12 +294,35 @@ export function HomePageLoged() {
         </div>
       </main>
 
-      {/* MOBILE */}
+      {/* MOBILE  */}
       <div className="md:hidden">
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
-        {/* (si tu veux une version mobile plus tard, on la fera comme la HomePage) */}
-        <main className="px-4 pt-6 pb-28" />
+        <main className="px-4 pt-6 pb-28 space-y-10">
+          <MobileSection
+            title="New Games"
+            seeAllTo="/category/games"
+            items={gamesItems}
+          />
+
+          <MobileSection
+            title="New Films"
+            seeAllTo="/category/movies"
+            items={moviesItems}
+          />
+
+          <MobileSection
+            title="New TV Shows"
+            seeAllTo="/category/tv_shows"
+            items={tvShowItems}
+          />
+
+          <MobileSection
+            title="New Books"
+            seeAllTo="/category/books"
+            items={booksItems}
+          />
+        </main>
 
         <MobileNavBarHome
           active="Home"

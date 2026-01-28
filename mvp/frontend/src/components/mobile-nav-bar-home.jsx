@@ -6,6 +6,7 @@ export function MobileNavBarHome({
   onHome,
   onSearch,
   onProfile,
+  onMessage,
 }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 md:hidden">
@@ -51,9 +52,9 @@ export function MobileNavBarHome({
           </button>
 
           <ButtonMsg
-            onClick={onHome}
+            onClick={onMessage}
             className="
-              border border-blue-200/20
+              border border-blue-200/20 px-6 h-12
             "
           ></ButtonMsg>
         </div>

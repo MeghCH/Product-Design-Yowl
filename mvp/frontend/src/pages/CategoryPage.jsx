@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Logo } from "../components/logo";
-import { ButtonLog } from "../components/button_log";
+import { ButtonMsg } from "../components/button_message";
 import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
+import { ButtonProfile } from "../components/button_profile";
 
-import MobileNavBar from "../components/mobile-nav-bar";
+import MobileNavBar from "../components/mobile-nav-bar"; // ✅ navbar NOT logged
+import MobileNavBarHome from "../components/mobile-nav-bar-home"; // ✅ navbar logged
 import MobileTopFilter from "../components/mobile-top-filter";
 
 const API_BASE = "http://localhost:4000";
@@ -55,8 +57,9 @@ export function CategoryPage() {
 
   const [active, setActive] = useState("Home");
   const [mobileFilter, setMobileFilter] = useState(safeCategory);
-
   const [items, setItems] = useState([]);
+
+  const isLoggedIn = !!localStorage.getItem("userId");
 
   useEffect(() => {
     setMobileFilter(safeCategory);
@@ -126,7 +129,7 @@ export function CategoryPage() {
         <header className="w-full flex justify-between items-center px-8 py-4">
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(isLoggedIn ? "/home/log" : "/")}
             className="cursor-pointer"
             aria-label="Retour à l'accueil"
           >
@@ -139,7 +142,22 @@ export function CategoryPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <ButtonLog />
+            {isLoggedIn ? (
+              <>
+                <ButtonMsg type="button" aria-label="Messages" />
+                <ButtonProfile type="button" aria-label="Profile">
+                  Profile
+                </ButtonProfile>
+              </>
+            ) : (
+              <ButtonProfile
+                type="button"
+                aria-label="Login"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </ButtonProfile>
+            )}
           </div>
         </header>
       </div>
@@ -150,7 +168,7 @@ export function CategoryPage() {
           <div className="flex items-center gap-3">
             <span className="w-1.5 h-8 bg-yellow-500 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.5)]"></span>
             <h2 className="text-2xl font-black uppercase tracking-tighter text-yellow-400">
-              New {categoryDisplayName}s
+              New {categoryDisplayName}
             </h2>
           </div>
 
@@ -221,15 +239,25 @@ export function CategoryPage() {
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
         <main className="px-4 pt-6 pb-28 space-y-8">
-          <Section title={`New ${categoryDisplayName}s`} items={filledMobile} />
+          <Section title={`New ${categoryDisplayName}`} items={filledMobile} />
         </main>
 
-        <MobileNavBar
-          active="Home"
-          onHome={() => navigate("/")}
-          onSearch={() => console.log("open search")}
-          onLogin={() => navigate("/login")}
-        />
+        {isLoggedIn ? (
+          <MobileNavBarHome
+            active="Home"
+            onHome={() => navigate("/home/log")}
+            onSearch={() => console.log("open search")}
+            onProfile={() => navigate("/profile")}
+            onMessage={() => navigate("/messages")}
+          />
+        ) : (
+          <MobileNavBar
+            active="Home"
+            onHome={() => navigate("/")}
+            onSearch={() => console.log("open search")}
+            onLogin={() => navigate("/login")}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Button } from "./button";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const TAB_CONFIG = [
   { label: "Activity", path: "/profile" },
@@ -11,8 +12,28 @@ const TAB_CONFIG = [
   { label: "Books", path: "/profile/books?status=seen" },
 ];
 
-export function NavTabsProfils({ active, onChange }) {
+export function NavTabsProfils({ active: activeProp, onChange }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const active = useMemo(() => {
+    if (activeProp) return activeProp;
+
+    const path = location.pathname;
+
+    if (path === "/profile" || path.startsWith("/profile/")) {
+      if (path === "/profile") return "Activity";
+      if (path.startsWith("/profile/reviews")) return "Reviews";
+      if (path.startsWith("/profile/statistics")) return "Statistics";
+      if (path.startsWith("/profile/games")) return "Games";
+      if (path.startsWith("/profile/movies")) return "Movies";
+      if (path.startsWith("/profile/tv_shows")) return "TV Shows";
+      if (path.startsWith("/profile/books")) return "Books";
+      return "Activity";
+    }
+
+    return "Activity";
+  }, [activeProp, location.pathname]);
 
   return (
     <div
@@ -28,9 +49,10 @@ export function NavTabsProfils({ active, onChange }) {
         return (
           <Button
             key={label}
+            type="button"
             onClick={() => {
-              onChange?.(label); 
-              navigate(path); 
+              onChange?.(label);
+              navigate(path);
             }}
             className={[
               "h-full px-6 text-sm font-medium transition-colors rounded-none",

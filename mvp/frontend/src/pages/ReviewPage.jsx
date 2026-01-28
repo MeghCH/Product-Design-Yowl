@@ -22,7 +22,6 @@ export function ReviewPage() {
         console.log("Données brutes reçues :", itemData);
 
         if (itemData && !itemData.error) {
-          // On s'assure que l'objet a une propriété 'id' peu importe le nom en DB
           const normalizedItem = {
             ...itemData,
             id:
@@ -142,7 +141,6 @@ export function ReviewPage() {
           </div>
         </section>
 
-        {/* 2. SECTION AVIS */}
         <section className="space-y-8 pb-20">
           <div className="flex items-center gap-4">
             <div className="w-2 h-8 bg-yellow-500 rounded-full"></div>

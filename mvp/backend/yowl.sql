@@ -70,24 +70,24 @@ VALUES ('Test', 'test@test.com', 'test1234', 'calgar_avatar.png');
 -- 5. INSERTION DES MÉDIAS AVEC DESCRIPTIONS COMPLÈTES
 INSERT INTO Livre (title, author, description, picture) 
 VALUES (
-    'Alice au pays des merveilles', 
+    'Alice’s Adventures in Wonderland', 
     'Lewis Carroll', 
-    'Alice tombe dans un terrier de lapin et découvre un monde fantastique peuplé de créatures étranges et de règles absurdes.', 
+    'Alice falls down a rabbit hole and discovers a fantastical world filled with strange creatures and absurd rules.', 
     'alice.jpg'
 );
 
 INSERT INTO Film (title, director, description, picture) 
 VALUES (
-    'Pirates des Caraïbes', 
+    'Pirates of the Caribbean.', 
     'Gore Verbinski', 
-    'Le forgeron Will Turner fait équipe avec le pirate excentrique Jack Sparrow pour sauver son amour des pirates maudits.', 
+    'Blacksmith Will Turner teams up with the eccentric pirate Jack Sparrow to rescue his love from cursed pirates.', 
     'pirates.jpg'
 );
 
 INSERT INTO Serie (title, description, picture) 
 VALUES (
     'Breaking Bad', 
-    'Un professeur de chimie atteint d un cancer s associe à un ancien élève pour fabriquer et vendre de la méthamphétamine.', 
+    'A chemistry teacher diagnosed with cancer partners with a former student to produce and sell an illegal drug.', 
     'breaking.jpg'
 );
 
@@ -95,12 +95,12 @@ INSERT INTO Jeu_video (title, platform, description, picture)
 VALUES (
     'Crash Bandicoot: Twinsanity', 
     'PS2 / Xbox', 
-    'Crash et son ennemi juré le Dr. Neo Cortex doivent s unir pour sauver leur monde d une menace venue d une autre dimension.', 
+    'Crash and his arch-nemesis, Dr. Neo Cortex, must join forces to save their world from a threat coming from another dimension.', 
     'crash.jpg'
 );
 
 INSERT INTO Reviews (user_id, media_type, media_id, rating, comment)
-VALUES 1, 'livre', 1, 5, 'Chef-d\'oeuvre de la littérature fantastique !');
+VALUES (1, 'livre', 1, 5, 'Chef-d\'oeuvre de la littérature fantastique !');
 
 USE yowl_db;
 DELETE FROM Jeu_video;

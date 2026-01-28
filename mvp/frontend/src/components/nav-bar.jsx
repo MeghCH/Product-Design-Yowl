@@ -1,8 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { Button } from "./button";
 
 export function NavTabs({ active, onChange }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const isLoggedIn = !!localStorage.getItem("userId");
 
   const tabs = [
@@ -13,13 +15,17 @@ export function NavTabs({ active, onChange }) {
     { label: "Books", path: "/category/books" },
   ];
 
+  useEffect(() => {
+    const found = tabs.find((t) => t.path === location.pathname);
+    if (found && found.label !== active) onChange(found.label);
+  }, [location.pathname]);
+
   return (
     <div
       className="
         h-11 inline-flex items-center
         rounded-2xl
         bg-deepblue
-        px-2
         backdrop-blur-md
       "
     >

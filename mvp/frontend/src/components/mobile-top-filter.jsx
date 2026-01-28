@@ -1,11 +1,11 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function MobileTopFilter({
   items = ["Games", "Movies", "TV Shows", "Books"],
 }) {
-  const [active, setActive] = useState("Games");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isLoggedIn = !!localStorage.getItem("userId");
 
@@ -19,6 +19,22 @@ export default function MobileTopFilter({
     }),
     [isLoggedIn],
   );
+
+  const active = useMemo(() => {
+    const path = location.pathname;
+
+    for (const [label, p] of Object.entries(pathByLabel)) {
+      if (p === path) return label;
+    }
+
+    if (path.startsWith("/category/games")) return "Games";
+    if (path.startsWith("/category/movies")) return "Movies";
+    if (path.startsWith("/category/tv_shows")) return "TV Shows";
+    if (path.startsWith("/category/books")) return "Books";
+    if (path.startsWith("/home")) return "Home";
+
+    return "Games";
+  }, [location.pathname, pathByLabel]);
 
   return (
     <div className="md:hidden px-4 pt-6">
@@ -34,13 +50,12 @@ export default function MobileTopFilter({
                 className={[
                   "py-3 text-sm",
                   isActive
-                    ? "text-textyellow" // ✅ comme avant
+                    ? "text-textyellow"
                     : "text-blue-200 hover:text-blue-50",
                 ].join(" ")}
                 onClick={() => {
-                  setActive(label); // ✅ garde ton isActive
                   const path = pathByLabel[label];
-                  if (path) navigate(path); // ✅ navigate comme NavTabs
+                  if (path) navigate(path);
                 }}
               >
                 {label}

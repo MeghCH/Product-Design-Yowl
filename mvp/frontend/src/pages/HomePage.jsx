@@ -10,7 +10,6 @@ import MobileTopFilter from "../components/mobile-top-filter";
 
 const API_BASE = "http://localhost:4000";
 
-// ✅ Globs: indexe toutes les images dans src/assets
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
   import: "default",
@@ -71,6 +70,7 @@ function HomeSection({ title, seeAllTo, items }) {
                     src={item.img}
                     alt={item.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-800 flex items-center justify-center">
@@ -103,21 +103,55 @@ function HomeSection({ title, seeAllTo, items }) {
   );
 }
 
-function Section({ title }) {
+function MobileSection({ title, seeAllTo, items }) {
+  const filled = [
+    ...items,
+    ...Array.from({ length: Math.max(0, 3 - items.length) }, () => null),
+  ];
+
   return (
-    <section>
+    <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-yellow-400 font-semibold">{title}</h2>
-        <button className="text-blue-100/80 text-sm">See all &gt;</button>
+        {seeAllTo ? (
+          <Link to={seeAllTo} className="text-blue-100/80 text-sm">
+            See all &gt;
+          </Link>
+        ) : null}
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="aspect-[2/3] rounded-2xl bg-[#001D3D]/40 border border-white/5"
-          />
-        ))}
+      <div className="grid grid-cols-3 gap-4">
+        {filled.map((item, idx) =>
+          item ? (
+            <div key={item.id ?? idx} className="group cursor-pointer">
+              <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5">
+                {item.img ? (
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                    <span className="text-gray-600 text-xs">No image</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-2">
+                <h3 className="text-white text-xs font-semibold line-clamp-1">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+          ) : (
+            <div
+              key={`ph-${idx}`}
+              className="aspect-[2/3] rounded-2xl bg-[#001D3D]/40 border border-white/5"
+            />
+          ),
+        )}
       </div>
     </section>
   );
@@ -131,7 +165,7 @@ export function HomePage() {
   const [games, setGames] = useState([]);
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
-  const [books, setBooks] = useState([]); // ✅
+  const [books, setBooks] = useState([]);
 
   const imageIndex = useMemo(() => {
     return {
@@ -146,8 +180,6 @@ export function HomePage() {
     async function load() {
       const res = await fetch(`${API_BASE}/api/home`);
       const data = await res.json();
-
-      console.log("API /api/home:", data);
 
       setGames(Array.isArray(data.games) ? data.games : []);
       setMovies(Array.isArray(data.movies) ? data.movies : []);
@@ -181,6 +213,29 @@ export function HomePage() {
     title: x.title,
     img: imageIndex.books?.[x.picture] ?? null,
   }));
+
+  const mobileSection = useMemo(() => {
+    switch (mobileFilter) {
+      case "Games":
+        return { title: "New Games", items: gamesItems, to: "/category/games" };
+      case "Movies":
+        return {
+          title: "New Films",
+          items: moviesItems,
+          to: "/category/movies",
+        };
+      case "TV Shows":
+        return {
+          title: "New TV Shows",
+          items: tvShowItems,
+          to: "/category/tv_shows",
+        };
+      case "Books":
+        return { title: "New Books", items: booksItems, to: "/category/books" };
+      default:
+        return { title: "New Games", items: gamesItems, to: "/category/games" };
+    }
+  }, [mobileFilter, gamesItems, moviesItems, tvShowItems, booksItems]);
 
   return (
     <div className="relative min-h-screen bg-[#000814]">
@@ -235,14 +290,30 @@ export function HomePage() {
       <div className="md:hidden">
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
-        <main className="px-4 pt-6 pb-28">
-          <Section title={`New ${mobileFilter}`} />
-          <div className="h-8" />
-          <Section title="New Films" />
-          <div className="h-8" />
-          <Section title="New TV Shows" />
-          <div className="h-8" />
-          <Section title="New Books" />
+        <main className="px-4 pt-6 pb-28 space-y-8">
+          <MobileSection
+            title={mobileSection.title}
+            seeAllTo={mobileSection.to}
+            items={mobileSection.items}
+          />
+
+          <MobileSection
+            title="New Films"
+            seeAllTo="/category/movies"
+            items={moviesItems}
+          />
+
+          <MobileSection
+            title="New TV Shows"
+            seeAllTo="/category/tv_shows"
+            items={tvShowItems}
+          />
+
+          <MobileSection
+            title="New Books"
+            seeAllTo="/category/books"
+            items={booksItems}
+          />
         </main>
 
         <MobileNavBar
