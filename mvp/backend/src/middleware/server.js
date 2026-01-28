@@ -25,7 +25,7 @@ db.connect((err) => {
         console.error("❌ Erreur MySQL :", err.message);
     } else {
         console.log("✅ connecté à la DB");
-});
+}});
 
 // --- ROUTES ---
 
