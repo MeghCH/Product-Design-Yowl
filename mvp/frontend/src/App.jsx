@@ -5,16 +5,18 @@ import SignupPage from "./pages/SignupPage";
 import { ProfilePage } from "./pages/ProfilePageActivity";
 import { ReviewPage } from "./pages/ReviewPage";
 import HomePageLoged from "./pages/HomePageLoged";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   return (
-    <div className="App self-start w-full bg-deepblue min-h-screen">
+    <div className="App self-start w-full bg-[#000814] min-h-screen">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/home/log" element={<HomePageLoged />} />
+        <Route path="/category/:category" element={<CategoryPage />} />
 
         <Route path="/review/:type/:id" element={<ReviewPage />} />
 

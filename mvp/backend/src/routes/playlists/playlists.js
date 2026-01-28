@@ -1,6 +1,6 @@
 const express = require("express");
 const { authenticateToken } = require("../../middleware/auth");
-const db = require("../../db");
+const mysql = require('mysql2/promise');
 
 const router = express.Router();
 
@@ -11,12 +11,9 @@ function serverError(res, err) {
 
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const [rows] = await db.execute(
-      "SELECT id, name, created_at, user_id FROM playlists WHERE user_id = ? ORDER BY created_at DESC",
-      [Number(req.user.id)]
-    );
-
-    res.json(rows);
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+    const [playlists] = await connection.execute('SELECT id, name, created_at, user_id FROM playlists WHERE user_id = ? ORDER BY created_at DESC', [Number(req.user.id)]);
+    res.json(playlists);
   } catch (err) {
     return serverError(res, err);
   }
@@ -26,14 +23,12 @@ router.get("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [rows] = await db.execute(
-      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ? AND user_id = ?",
-      [Number(id), Number(req.user.id)]
-    );
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+    const [rows] = await connection.execute('SELECT id, name, created_at, user_id FROM playlists WHERE id = ? AND user_id = ?', [Number(id), Number(req.user.id)]);
+    const playlist = rows[0];
+    if (!playlist) return res.status(404).json({ msg: "Not found" });
 
-    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
-
-    res.json(rows[0]);
+    res.json(playlist);
   } catch (err) {
     return serverError(res, err);
   }
@@ -47,17 +42,11 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 
   try {
-    const [result] = await db.execute(
-      "INSERT INTO playlists (name, user_id) VALUES (?, ?)",
-      [name, Number(req.user.id)]
-    );
-
-    const [rows] = await db.execute(
-      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ?",
-      [result.insertId]
-    );
-
-    res.status(201).json(rows[0]);
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+    const [result] = await connection.execute('INSERT INTO playlists (name, user_id) VALUES (?, ?)', [name, Number(req.user.id)]);
+    const [rows] = await connection.execute('SELECT id, name, created_at, user_id FROM playlists WHERE id = ?', [result.insertId]);
+    const playlist = rows[0];
+    res.status(201).json(playlist);
   } catch (err) {
     return serverError(res, err);
   }
@@ -68,28 +57,16 @@ router.put("/:id", authenticateToken, async (req, res) => {
   const { name } = req.body;
 
   try {
-
-    const [existingRows] = await db.execute(
-      "SELECT id, name FROM playlists WHERE id = ? AND user_id = ?",
-      [Number(id), Number(req.user.id)]
-    );
-
-    if (existingRows.length === 0) return res.status(404).json({ msg: "Not found" });
-
-    const existingName = existingRows[0].name;
-    const newName = name ?? existingName;
-
-    await db.execute(
-      "UPDATE playlists SET name = ? WHERE id = ? AND user_id = ?",
-      [newName, Number(id), Number(req.user.id)]
-    );
-
-    const [rows] = await db.execute(
-      "SELECT id, name, created_at, user_id FROM playlists WHERE id = ?",
-      [Number(id)]
-    );
-
-    res.json(rows[0]);
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+    const [existingRows] = await connection.execute('SELECT * FROM playlists WHERE id = ? AND user_id = ?', [Number(id), Number(req.user.id)]);
+    const existing = existingRows[0];
+    if (!existing) return res.status(404).json({ msg: "Not found" });
+    
+    const newName = name ?? existing.name;
+    await connection.execute('UPDATE playlists SET name = ? WHERE id = ?', [newName, Number(id)]);
+    const [rows] = await connection.execute('SELECT id, name, created_at, user_id FROM playlists WHERE id = ?', [Number(id)]);
+    const updated = rows[0];
+    res.json(updated);
   } catch (err) {
     return serverError(res, err);
   }
@@ -99,11 +76,8 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await db.execute(
-      "DELETE FROM playlists WHERE id = ? AND user_id = ?",
-      [Number(id), Number(req.user.id)]
-    );
-
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+    const [result] = await connection.execute('DELETE FROM playlists WHERE id = ? AND user_id = ?', [Number(id), Number(req.user.id)]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ msg: "Not found" });
     }

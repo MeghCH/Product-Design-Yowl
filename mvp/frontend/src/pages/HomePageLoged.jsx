@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../components/logo";
-import { ButtonLog } from "../components/button_log";
+import { ButtonMsg } from "../components/button_message";
+import { ButtonProfile } from "../components/button_profile";
 import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import MobileNavBarHome from "../components/mobile-nav-bar-home";
@@ -23,9 +24,11 @@ export function HomePageLoged() {
             <NavTabs active={active} onChange={setActive} />
             <SearchBar />
           </div>
-
           <div className="flex items-center gap-3">
-            <ButtonLog />
+            <ButtonMsg type="button" aria-label="Quick action" />
+            <ButtonProfile type="button" aria-label="Profile">
+              Profile
+            </ButtonProfile>
           </div>
         </header>
       </div>

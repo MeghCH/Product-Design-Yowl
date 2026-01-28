@@ -1,50 +1,36 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const { authenticateToken } = require("../../middleware/auth");
-const db = require("../../db");
+const mysql = require('mysql2/promise');
 
 const router = express.Router();
-
-router.get("/", authenticateToken, async (req, res) => {
-  try {
-    const [rows] = await db.execute(
-      "SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?",
-      [req.user.id]
-    );
-
-    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
-
-    res.json(rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Internal server error" });
-  }
-});
-
-router.get("/todos", authenticateToken, async (req, res) => {
-  res.json([]);
-});
 
 router.get("/:identifier", authenticateToken, async (req, res) => {
   const { identifier } = req.params;
 
   try {
-    let query = "SELECT id, email, name, firstname, role, created_at FROM users WHERE ";
-    let params = [];
-
+    let where = {};
     if (!isNaN(identifier)) {
-      query += "id = ?";
-      params = [Number(identifier)];
+      where = { id: Number(identifier) };
     } else {
-      query += "email = ?";
-      params = [identifier];
+      where = { email: identifier };
     }
 
-    const [rows] = await db.execute(query, params);
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+let query = '';
+let params = [];
+if (where.id) {
+  query = 'SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?';
+  params = [where.id];
+} else {
+  query = 'SELECT id, email, name, firstname, role, created_at FROM users WHERE email = ?';
+  params = [where.email];
+}
+const [rows] = await connection.execute(query, params);
+const user = rows[0];
 
-    if (rows.length === 0) return res.status(404).json({ msg: "Not found" });
+    if (!user) return res.status(404).json({ msg: "Not found" });
 
-    res.json(rows[0]);
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Internal server error" });
@@ -68,33 +54,25 @@ router.put("/:id", authenticateToken, async (req, res) => {
       return res.status(400).json({ msg: "Mot de passe actuel obligatoire" });
     }
 
-    const [existingRows] = await db.execute(
-      "SELECT password_hash FROM users WHERE id = ?",
-      [Number(id)]
-    );
-    if (existingRows.length === 0) return res.status(404).json({ msg: "Not found" });
+    const connection = await mysql.createConnection({host: 'localhost', user: 'root', database: 'yowl'});
+const [existingRows] = await connection.execute('SELECT password FROM users WHERE id = ?', [Number(id)]);
+const existing = existingRows[0];
+    if (!existing) return res.status(404).json({ msg: "Not found" });
 
-    const isValid = await bcrypt.compare(currentPassword, existingRows[0].password_hash);
-    if (!isValid) {
-      return res.status(401).json({ msg: "Mot de passe actuel incorrect" });
-    }
+    const isValid = currentPassword === existing.password;
+if (!isValid) {
+  return res.status(401).json({ msg: "Mot de passe actuel incorrect" });
+}
 
-    let hashed = existingRows[0].password_hash;
-    if (typeof password === "string" && password.trim() !== "") {
-      hashed = await bcrypt.hash(password.trim(), 10);
-    }
+let newPassword = existing.password;
+if (typeof password === "string" && password.trim() !== "") {
+  newPassword = password.trim();
+}
 
-    await db.execute(
-      "UPDATE users SET email = ?, password_hash = ?, name = ?, firstname = ? WHERE id = ?",
-      [email, hashed, name, firstname, Number(id)]
-    );
-
-    const [updatedRows] = await db.execute(
-      "SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?",
-      [Number(id)]
-    );
-
-    res.json(updated);
+await connection.execute('UPDATE users SET email = ?, password = ?, name = ?, firstname = ? WHERE id = ?', [email, newPassword, name, firstname, Number(id)]);
+const [updatedRows] = await connection.execute('SELECT id, email, name, firstname, role, created_at FROM users WHERE id = ?', [Number(id)]);
+const updated = updatedRows[0];
+res.json(updated);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Internal server error" });
@@ -109,10 +87,8 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 
   try {
-    await db.execute("DELETE FROM commentaire WHERE user_id = ?", [Number(id)]);
-    await db.execute("DELETE FROM posts WHERE user_id = ?", [Number(id)]);
-    await db.execute("DELETE FROM playlists WHERE user_id = ?", [Number(id)]);
-    await db.execute("DELETE FROM users WHERE id = ?", [Number(id)]);
+    await connection.execute('DELETE FROM todos WHERE user_id = ?', [Number(id)]);
+await connection.execute('DELETE FROM users WHERE id = ?', [Number(id)]);
 
     res.json({ msg: `Successfully deleted record number: ${id}` });
   } catch (err) {
