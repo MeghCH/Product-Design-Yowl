@@ -2,10 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Logo } from "../components/logo";
-import { NavTabs } from "../components/nav-bar";
-import { SearchBar } from "../components/search_bar";
-import { ButtonLog } from "../components/button_log";
 
+import { Link } from "react-router-dom";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -47,7 +45,7 @@ export function SignupPage() {
         <div className="absolute top-0 left-0 w-full h-[55vh] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
 
         {/* Fond bleu mobile */}
-        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-color-deepblue" />
+        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-[#000814]" />
 
         <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
       </div>
@@ -55,12 +53,9 @@ export function SignupPage() {
       {/* Header desktop */}
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
         <header className="w-full px-10 py-6 flex items-center justify-between">
-          <Logo />
-          <div className="flex items-center gap-8">
-            <NavTabs active={active} onChange={setActive} />
-            <SearchBar />
-          </div>
-          <ButtonLog />
+          <Link to="/" className="cursor-pointer">
+            <Logo />
+          </Link>
         </header>
       </div>
 

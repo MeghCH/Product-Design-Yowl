@@ -6,6 +6,7 @@ import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import MobileNavBar from "../components/mobile-nav-bar";
 import MobileTopFilter from "../components/mobile-top-filter";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [active, setActive] = useState("Home");
@@ -17,7 +18,9 @@ export function HomePage() {
       {/* HEADER DESKTOP */}
       <div className="fixed inset-x-0 top-0 z-40 bg-transparent hidden md:block">
         <header className="w-full flex justify-between items-center px-8 py-4">
-          <Logo />
+          <Link to="/" className="cursor-pointer">
+            <Logo />
+          </Link>
 
           <div className="flex items-center gap-6">
             <NavTabs active={active} onChange={setActive} />

@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Logo } from "../components/logo";
-import { NavTabs } from "../components/nav-bar";
-import { SearchBar } from "../components/search_bar";
 import { ButtonLog } from "../components/button_log";
+import { Link } from "react-router-dom";
 
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
@@ -49,7 +48,6 @@ export function LoginPage() {
       />
       <div className="absolute inset-0 hidden md:block bg-black/55" />
       <div className="absolute inset-0 hidden md:block bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
-
       {/* Background mobile */}
       <div className="absolute inset-0 md:hidden">
         <div
@@ -60,34 +58,31 @@ export function LoginPage() {
         <div className="absolute top-0 left-0 w-full h-[55vh] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.85)_100%)]" />
 
         {/* fond bleu mobile */}
-        <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-[#000814]" />
-
-        <div className="absolute top-[52vh] left-0 w-full h-24 bg-linear-to-b from-transparent to-color-deepblue" />
+        <div className="absolute inset-x-0 bottom-0 h-[45vh] bg-[#000814]" />
+        <div className="absolute inset-x-0 bottom-[45vh] h-24 bg-linear-to-b from-transparent to-[#000814]" />
       </div>
-
       {/* Header desktop */}
+      import Link from "next/link";
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
         <header className="w-full px-10 py-6 flex items-center justify-between">
-          <Logo />
-          <div className="flex items-center gap-8">
-            <NavTabs active={active} onChange={setActive} />
-            <SearchBar />
-          </div>
-          <ButtonLog />
+          <Link to="/" className="cursor-pointer">
+            <Logo />
+          </Link>
         </header>
       </div>
-
       {/* Page */}
       <main className="relative z-10 min-h-screen md:px-10 md:pt-20 md:pt-24">
         <div className="min-h-screen flex items-end justify-center px-6 pb-10 pt-24 md:min-h-0 md:block md:px-0 md:pb-0 md:pt-0">
           <div className="relative w-full max-w-[420px] md:w-[420px] md:mt-8 md:mt-12 md:ml-6 md:ml-16">
             {/* Logo mobile */}
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 md:hidden z-20">
-              <img
-                src={badge}
-                alt="Goof Media"
-                className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)]"
-              />
+              <a href="/">
+                <img
+                  src={badge}
+                  alt="Goof Media"
+                  className="h-14 w-auto drop-shadow-[0_12px_25px_rgba(0,0,0,0.55)]"
+                />
+              </a>
             </div>
 
             {/* Formulaire */}
