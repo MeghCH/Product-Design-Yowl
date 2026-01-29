@@ -204,9 +204,6 @@ export function CategoryPage() {
                     <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {categoryDisplayName}
-                    </p>
                   </div>
                 </div>
               ) : (
@@ -215,18 +212,11 @@ export function CategoryPage() {
                   className="group cursor-pointer flex flex-col space-y-4"
                 >
                   <div className="relative aspect-[2/3] bg-[#001D3D]/40 rounded-2xl overflow-hidden border border-white/5 shadow-xl">
-                    <div className="w-full h-full bg-gray-800 rounded-2xl flex items-center justify-center">
-                      <span className="text-gray-600 text-sm">Placeholder</span>
-                    </div>
+                    <div className="w-full h-full bg-grey-800 rounded-2xl flex items-center justify-center"></div>
                   </div>
 
                   <div className="px-1">
-                    <h3 className="font-bold text-sm line-clamp-1 text-gray-400">
-                      Placeholder Title
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {categoryDisplayName}
-                    </p>
+                    <h3 className="font-bold text-sm line-clamp-1 text-blue-200"></h3>
                   </div>
                 </div>
               ),
