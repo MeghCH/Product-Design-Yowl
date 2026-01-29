@@ -8,6 +8,9 @@ import { ButtonProfile } from "../components/button_profile";
 import { SearchBar } from "../components/search_bar";
 import NavTabsReview from "../components/nav_tab_review";
 
+import fnacLogo from "../assets/fnac.png";
+import amazonLogo from "../assets/amazon.png";
+
 const API_BASE = "http://localhost:4000";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
@@ -54,6 +57,24 @@ function Stars({ value = 0, size = "text-xl" }) {
   );
 }
 
+function StarsUI({ value = 0, size = "text-3xl" }) {
+  const v = Math.max(0, Math.min(5, Number(value) || 0));
+  return (
+    <div className="flex items-center gap-2">
+      {[...Array(5)].map((_, i) => (
+        <span
+          key={i}
+          className={`${size} ${
+            i < v ? "text-yellow-400" : "text-blue-100/60"
+          }`}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function BadgeButton({ children }) {
   return (
     <button
@@ -62,6 +83,48 @@ function BadgeButton({ children }) {
     >
       {children}
     </button>
+  );
+}
+
+function BuyOn() {
+  return (
+    <div className="mt-6">
+      <p className="text-sm font-bold text-blue-100/60 mb-3">Buy on :</p>
+
+      <div className="flex items-center gap-3">
+        <a
+          href="https://www.fnac.com/"
+          target="_blank"
+          rel="noreferrer"
+          className="h-14 w-14 rounded-xl bg-white grid place-items-center border border-white/10 shadow hover:brightness-110 transition"
+          aria-label="Buy on Fnac"
+          title="Fnac"
+        >
+          <img
+            src={fnacLogo}
+            alt="Fnac"
+            className="h-9 w-9 object-contain"
+            loading="lazy"
+          />
+        </a>
+
+        <a
+          href="https://www.amazon.com/"
+          target="_blank"
+          rel="noreferrer"
+          className="h-14 w-14 rounded-xl bg-white grid place-items-center border border-white/10 shadow hover:brightness-110 transition"
+          aria-label="Buy on Amazon"
+          title="Amazon"
+        >
+          <img
+            src={amazonLogo}
+            alt="Amazon"
+            className="h-9 w-9 object-contain"
+            loading="lazy"
+          />
+        </a>
+      </div>
+    </div>
   );
 }
 
@@ -153,6 +216,8 @@ export function ReviewPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Reviews");
+
+  const [userRating] = useState(4);
 
   const imageIndex = useMemo(() => {
     return {
@@ -289,7 +354,7 @@ export function ReviewPage() {
 
   return (
     <div className="min-h-screen bg-[#000814] text-blue-100">
-      {/* ================= DESKTOP ================= */}
+      {/*DESKTOP*/}
       <div className="hidden md:block">
         <div className="sticky top-0 z-50">
           <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
@@ -367,6 +432,17 @@ export function ReviewPage() {
                     <BadgeButton>Watched</BadgeButton>
                     <BadgeButton>Watchlist</BadgeButton>
                     <BadgeButton>Recommend</BadgeButton>
+                  </div>
+                </div>
+
+                <div className="flex items-start justify-between gap-10">
+                  <BuyOn />
+
+                  <div className="text-right pt-6">
+                    <p className="text-sm font-bold text-blue-100/60 mb-2">
+                      Your rating :
+                    </p>
+                    <StarsUI value={userRating} size="text-3xl" />
                   </div>
                 </div>
 
