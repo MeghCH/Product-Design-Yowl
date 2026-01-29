@@ -34,17 +34,17 @@ function makeIndex(globMap) {
     const filename = path.split("/").pop();
     if (!filename) continue;
     index[filename] = url;
-    index[filename.toLowerCase()] = url; // tolérance casse
+    index[filename.toLowerCase()] = url;
   }
   return index;
 }
 
-// ✅ Section Desktop (cards cliquables)
+// Section Desktop
 function HomeSection({ title, seeAllTo, items }) {
-  const top = (items ?? []).slice(0, 3);
+  const top = (items ?? []).slice(0, 4);
   const filled = [
     ...top,
-    ...Array.from({ length: Math.max(0, 3 - top.length) }, () => null),
+    ...Array.from({ length: Math.max(0, 4 - top.length) }, () => null),
   ];
 
   return (
@@ -59,13 +59,13 @@ function HomeSection({ title, seeAllTo, items }) {
 
         <Link
           to={seeAllTo}
-          className="text-blue-100/80 text-sm hover:text-blue-100"
+          className="text-blue-200 text-sm hover:text-blue-100"
         >
           See all &gt;
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid grid-cols-4 gap-8">
         {filled.map((item, idx) =>
           item ? (
             <Link
@@ -89,7 +89,7 @@ function HomeSection({ title, seeAllTo, items }) {
 
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="bg-yellow-500 text-black px-4 py-2 rounded-full font-bold text-xs uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform">
-                    Voir l&apos;avis
+                    View the review
                   </span>
                 </div>
               </div>
@@ -112,7 +112,7 @@ function HomeSection({ title, seeAllTo, items }) {
   );
 }
 
-// ✅ Section Mobile (cards cliquables)
+// Mobile
 function MobileSection({ title, seeAllTo, items }) {
   const top = (items ?? []).slice(0, 3);
   const filled = [
@@ -132,7 +132,7 @@ function MobileSection({ title, seeAllTo, items }) {
 
         <Link
           to={seeAllTo}
-          className="text-blue-100/80 text-sm hover:text-blue-100"
+          className="text-blue-200 text-sm hover:text-blue-100"
         >
           See all &gt;
         </Link>
@@ -162,7 +162,7 @@ function MobileSection({ title, seeAllTo, items }) {
 
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="bg-yellow-500 text-black px-3 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest translate-y-4 group-hover:translate-y-0 transition-transform">
-                    Voir l&apos;avis
+                    View the review
                   </span>
                 </div>
               </div>
@@ -218,7 +218,6 @@ export function HomePageLoged() {
     load().catch(console.error);
   }, []);
 
-  // ✅ IMPORTANT : on ajoute `type` pour construire /review/:type/:id
   const gamesItems = games.map((x) => ({
     id: x.id,
     type: "games",
@@ -307,10 +306,10 @@ export function HomePageLoged() {
       </main>
 
       {/* MOBILE */}
-      <div className="md:hidden">
+      <div className="md:hidden min-h-screen bg-[#000814] pt-[calc(env(safe-area-inset-top)+32px)]">
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
-        <main className="px-4 pt-6 pb-28 space-y-10">
+        <main className="px-4 pt-6 pb-[calc(112px+env(safe-area-inset-bottom))] space-y-10">
           <MobileSection
             title="New Games"
             seeAllTo="/category/games"

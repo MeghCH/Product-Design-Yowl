@@ -2,12 +2,12 @@ DROP DATABASE IF EXISTS yowl_db;
 CREATE DATABASE yowl_db;
 USE yowl_db;
 
--- 1. Création de l'utilisateur système Calgar
+
 CREATE USER IF NOT EXISTS 'calgar'@'localhost' IDENTIFIED BY 'ultramar';
 GRANT ALL PRIVILEGES ON yowl_db.* TO 'calgar'@'localhost';
 FLUSH PRIVILEGES;
 
--- 2. Table des utilisateurs
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -16,7 +16,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Tables des Médias avec Descriptions
 CREATE TABLE Serie (
     id_serie INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -52,7 +51,6 @@ CREATE TABLE Jeu_video (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Table des avis/reviews
 CREATE TABLE Reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -67,7 +65,6 @@ CREATE TABLE Reviews (
 INSERT INTO users (username, email, password_hash, picture) 
 VALUES ('Test', 'test@test.com', 'test1234', 'calgar_avatar.png');
 
--- 5. INSERTION DES MÉDIAS AVEC DESCRIPTIONS COMPLÈTES
 INSERT INTO Livre (title, author, description, picture) 
 VALUES (
     'Alice’s Adventures in Wonderland', 
@@ -107,13 +104,9 @@ DELETE FROM Jeu_video;
 INSERT INTO Jeu_video (id_jeu, title, platform, description, picture) 
 VALUES (1, 'Crash Twinsanity', 'PS2', 'Crash et Cortex font équipe.', 'crash.jpg');
  
--- Test user (plain password)
 INSERT INTO users (username, email, password_hash)
 VALUES ('testuser', 'test@test.com', 'password123');
 
--- End of seed data
- 
--- Test user (plain password)
 INSERT INTO users (username, email, password_hash)
 VALUES ('testuser', 'test@test.com', 'password123');
 
@@ -139,5 +132,3 @@ INSERT IGNORE INTO user_media_list (user_id, media_type, media_id) VALUES
 (1,'jeu',1);
 
 
-
--- End of seed data

@@ -1,4 +1,3 @@
-// GET /api/home
 app.get("/api/home", async (req, res) => {
   try {
     const [games] = await db

@@ -2,9 +2,9 @@
 
 ### Figma link:
 
-**Desktop version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=57-470&t=dlxWCK7gQHqi0MEK-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A470&show-proto-sidebar=1
+**Desktop version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=134-748&t=IoiZUiW3qF1CAb0v-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A470
 
-**Mobile version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=44-363&t=OpLZq6SRHj2jM9FP-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A630&show-proto-sidebar=1
+**Mobile version:** https://www.figma.com/proto/1dDHq996Kk5qa3rWck6MTT/Yowl?node-id=44-363&t=fB4sr2TDGq1xFPMZ-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=57%3A630&show-proto-sidebar=1
 
 ## Description
 

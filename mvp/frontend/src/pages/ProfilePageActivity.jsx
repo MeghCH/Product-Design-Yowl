@@ -196,7 +196,7 @@ export function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#000814] text-blue-100">
-      {/* DESKTOP */}
+      {/*  DESKTOP  */}
       <div className="hidden md:block">
         <div className="sticky top-0 z-50">
           <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
@@ -266,7 +266,7 @@ export function ProfilePage() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-yellow-400 font-semibold">Recent likes</h2>
-                <button className="text-blue-100/70 text-sm hover:text-blue-100">
+                <button className="text-blue-200 text-sm hover:text-blue-100">
                   See all &gt;
                 </button>
               </div>
@@ -300,11 +300,11 @@ export function ProfilePage() {
             </div>
 
             <div className="pt-38">
-              <div className="h-44 w-full flex items-end gap-4">
+              <div className="h-44 w-full flex items-end gap-3">
                 {chart.map((d) => (
                   <div
                     key={d.label}
-                    className="flex-1 flex flex-col items-center gap-2"
+                    className="flex-1 flex flex-col items-center gap-3"
                   >
                     <div className="text-blue-100/70 text-xs">{d.value}</div>
                     <div
@@ -322,27 +322,27 @@ export function ProfilePage() {
         </main>
       </div>
 
-      {/* MOBILE */}
-      <div className="md:hidden">
+      {/* MOBILE  */}
+      <div className="md:hidden min-h-screen bg-[#000814] pt-[calc(env(safe-area-inset-top)+32px)]">
         <MobileTopFilter value={mobileCategory} onChange={setMobileCategory} />
 
-        <main className="px-4 pt-6 pb-28">
-          <section className="flex items-center gap-4">
+        <main className="px-5 pt-8 pb-[calc(140px+env(safe-area-inset-bottom))]">
+          <section className="flex items-start gap-5">
             <div className="flex flex-col items-center">
               <div className="relative">
-                <div className="h-24 w-24 rounded-full overflow-hidden border border-white/10 bg-[#001D3D]/40 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-blue-200">
+                <div className="h-28 w-28 rounded-full overflow-hidden border border-white/10 bg-[#001D3D]/40 flex items-center justify-center">
+                  <span className="text-3xl font-black text-blue-200">
                     {initials}
                   </span>
                 </div>
 
-                <div className="absolute -top-2 -right-2 h-10 w-10 rounded-full bg-[#0B2A52] border border-white/10 flex items-center justify-center">
-                  <div className="h-5 w-5 rounded bg-yellow-400" />
+                <div className="absolute -top-2 -right-2 h-11 w-11 rounded-full bg-[#0B2A52] border border-white/10 flex items-center justify-center">
+                  <div className="h-6 w-6 rounded bg-yellow-400" />
                 </div>
               </div>
 
               <button
-                className="mt-3 h-6 px-2 rounded-md bg-[#001D3D]/60 border border-white/10 text-blue-200 text-sm"
+                className="mt-4 h-8 px-4 rounded-lg bg-[#001D3D]/60 border border-white/10 text-blue-200 text-base font-semibold"
                 onClick={() => console.log("edit")}
               >
                 Edit
@@ -352,39 +352,43 @@ export function ProfilePage() {
             <div className="flex-1">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h1 className="text-2xl  text-blue-200 font-semibold leading-tight">
+                  <h1 className="text-3xl text-blue-200 font-black leading-tight">
                     {user?.username || "User"}
                   </h1>
-                  <p className="text-blue-200/70 text-sm">
+                  <p className="text-blue-200/75 text-base mt-1">
                     Joined on {new Date().toLocaleDateString()}
                   </p>
                 </div>
 
-                <ButtonLogOut onClick={handleLogout} />
+                <div className="pt-1">
+                  <ButtonLogOut onClick={handleLogout} />
+                </div>
               </div>
 
-              <div className="mt-5 flex items-center gap-10">
+              <div className="mt-6 flex items-center gap-10">
                 <div className="text-center">
-                  <div className="text-lg font-semibold">{followers}</div>
-                  <div className="text-blue-100/70 text-sm">Followers</div>
+                  <div className="text-2xl font-black">{followers}</div>
+                  <div className="text-blue-100/70 text-base">Followers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-semibold">{following}</div>
-                  <div className="text-blue-100/70 text-sm">Following</div>
+                  <div className="text-2xl font-black">{following}</div>
+                  <div className="text-blue-100/70 text-base">Following</div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="mt-6">
+          <section className="mt-10">
             <div className="flex items-center justify-between">
-              <h2 className="text-yellow-400 font-semibold text-lg">
+              <h2 className="text-yellow-400 font-black text-xl">
                 Recent likes
               </h2>
-              <button className="text-blue-100/70 text-sm">See all &gt;</button>
+              <button className="text-blue-200 text-base font-semibold">
+                See all &gt;
+              </button>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-4">
+            <div className="mt-5 grid grid-cols-3 gap-5">
               {(favoritesWithCover.length
                 ? favoritesWithCover
                 : [null, null, null]
@@ -393,7 +397,7 @@ export function ProfilePage() {
                 .map((item, idx) => (
                   <div
                     key={item?.id ?? idx}
-                    className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                    className="aspect-[2/3] rounded-3xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
                     title={item?.title || ""}
                   >
                     {item?.cover ? (
@@ -403,7 +407,7 @@ export function ProfilePage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-xs">
+                      <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-sm">
                         Cover
                       </div>
                     )}
@@ -411,8 +415,8 @@ export function ProfilePage() {
                 ))}
             </div>
 
-            <section className="mt-10 grid grid-cols-[1fr_1.2fr] gap-6 items-end">
-              <div className="space-y-3">
+            <section className="mt-12 grid grid-cols-[1fr_1.25fr] gap-7 items-end">
+              <div className="space-y-4">
                 {[
                   "Reviews",
                   "Statistics",
@@ -424,40 +428,40 @@ export function ProfilePage() {
                   <button
                     key={label}
                     type="button"
-                    className="w-full h-10 px-3 rounded-md bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/80"
+                    className="w-full h-12 px-4 rounded-sm bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/90"
                     onClick={() => goProfile(label)}
                   >
-                    <span className="text-sm">{label}</span>
-                    <span className="text-blue-100/70">{">"}</span>
+                    <span className="text-base font-semibold">{label}</span>
+                    <span className="text-blue-100/70 text-lg">{">"}</span>
                   </button>
                 ))}
               </div>
 
               <div className="pb-2">
-                <div className="h-44 w-full flex items-end gap-4">
+                <div className="h-48 w-full flex items-end gap-3">
                   {chart.map((d) => (
                     <div
                       key={d.label}
                       className="flex-1 flex flex-col items-center"
                     >
-                      <div className="text-blue-100/80 text-xs mb-2">
+                      <div className="text-blue-100/85 text-sm mb-3 font-semibold">
                         {d.value}
                       </div>
                       <div
                         className="w-full rounded-t-sm bg-[#1F6FEB]/60"
                         style={{
-                          height: `${Math.round((d.value / maxV) * 150)}px`,
+                          height: `${Math.round((d.value / maxV) * 170)}px`,
                         }}
                       />
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-3 flex items-center justify-between text-[11px]">
+                <div className="mt-4 flex items-center justify-between text-sm">
                   {chart.map((d) => (
                     <div
                       key={d.label}
-                      className="flex-1 text-center text-yellow-400"
+                      className="flex-1 text-center text-yellow-400 font-semibold"
                     >
                       {d.label}
                     </div>
@@ -468,7 +472,7 @@ export function ProfilePage() {
           </section>
         </main>
 
-        <div className="fixed bottom-4 left-0 right-0 px-4">
+        <div className="fixed left-0 right-0 px-4 bottom-[calc(env(safe-area-inset-bottom)+12px)]">
           <MobileNavBarLoged />
         </div>
       </div>
