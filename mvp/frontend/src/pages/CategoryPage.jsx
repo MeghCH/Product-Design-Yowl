@@ -7,9 +7,10 @@ import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import { ButtonProfile } from "../components/button_profile";
 
-import MobileNavBar from "../components/mobile-nav-bar"; // ✅ navbar NOT logged
-import MobileNavBarHome from "../components/mobile-nav-bar-home"; // ✅ navbar logged
+import MobileNavBar from "../components/mobile-nav-bar";
+import MobileNavBarHome from "../components/mobile-nav-bar-home";
 import MobileTopFilter from "../components/mobile-top-filter";
+import { ButtonLog } from "../components/button_log";
 
 const API_BASE = "http://localhost:4000";
 
@@ -150,13 +151,13 @@ export function CategoryPage() {
                 </ButtonProfile>
               </>
             ) : (
-              <ButtonProfile
+              <ButtonLog
                 type="button"
                 aria-label="Login"
                 onClick={() => navigate("/login")}
               >
                 Login
-              </ButtonProfile>
+              </ButtonLog>
             )}
           </div>
         </header>
