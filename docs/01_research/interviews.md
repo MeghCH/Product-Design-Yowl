@@ -6,7 +6,7 @@
 
 - **Valérie (23):** Grande École Program (PGE), 1st year
 
-- **Théo (20):** MSc, 1st year
+- **Théo (20):** PréMSc, 1st year
 
 - **Julien (25):** Grande École Program (PGE), 5th year
 

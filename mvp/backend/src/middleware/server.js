@@ -132,8 +132,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-// ✅ Recent likes (covers) pour ProfilePage
-// GET /user/:id/favorites
 app.get("/user/:id/favorites", async (req, res) => {
   try {
     const userId = Number(req.params.id);
@@ -163,7 +161,6 @@ app.get("/user/:id/favorites", async (req, res) => {
       [userId],
     );
 
-    // format simple pour le front
     res.json(
       rows.map((r) => ({
         id: `${r.media_type}-${r.media_id}`,
@@ -175,7 +172,7 @@ app.get("/user/:id/favorites", async (req, res) => {
       })),
     );
   } catch (err) {
-    console.error("❌ /user/:id/favorites error:", err);
+    console.error("/user/:id/favorites error:", err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -39,6 +39,7 @@ function makeIndex(globMap) {
   return index;
 }
 
+// ✅ Section Desktop (cards cliquables)
 function HomeSection({ title, seeAllTo, items }) {
   const top = (items ?? []).slice(0, 3);
   const filled = [
@@ -67,7 +68,11 @@ function HomeSection({ title, seeAllTo, items }) {
       <div className="grid grid-cols-3 gap-8">
         {filled.map((item, idx) =>
           item ? (
-            <div key={item.id ?? idx} className="group cursor-pointer">
+            <Link
+              key={item.id ?? idx}
+              to={`/review/${item.type}/${item.id}`}
+              className="group block"
+            >
               <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5 shadow-xl group-hover:border-yellow-500/50 transition-all duration-300">
                 {item.img ? (
                   <img
@@ -94,7 +99,7 @@ function HomeSection({ title, seeAllTo, items }) {
                   {item.title}
                 </h3>
               </div>
-            </div>
+            </Link>
           ) : (
             <div
               key={`ph-${idx}`}
@@ -107,6 +112,7 @@ function HomeSection({ title, seeAllTo, items }) {
   );
 }
 
+// ✅ Section Mobile (cards cliquables)
 function MobileSection({ title, seeAllTo, items }) {
   const top = (items ?? []).slice(0, 3);
   const filled = [
@@ -135,7 +141,11 @@ function MobileSection({ title, seeAllTo, items }) {
       <div className="grid grid-cols-3 gap-4">
         {filled.map((item, idx) =>
           item ? (
-            <div key={item.id ?? idx} className="group cursor-pointer">
+            <Link
+              key={item.id ?? idx}
+              to={`/review/${item.type}/${item.id}`}
+              className="group block"
+            >
               <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5 shadow-xl group-hover:border-yellow-500/50 transition-all duration-300">
                 {item.img ? (
                   <img
@@ -162,7 +172,7 @@ function MobileSection({ title, seeAllTo, items }) {
                   {item.title}
                 </h3>
               </div>
-            </div>
+            </Link>
           ) : (
             <div
               key={`ph-${idx}`}
@@ -208,8 +218,10 @@ export function HomePageLoged() {
     load().catch(console.error);
   }, []);
 
+  // ✅ IMPORTANT : on ajoute `type` pour construire /review/:type/:id
   const gamesItems = games.map((x) => ({
     id: x.id,
+    type: "games",
     title: x.title,
     img:
       imageIndex.games?.[x.picture] ??
@@ -219,6 +231,7 @@ export function HomePageLoged() {
 
   const moviesItems = movies.map((x) => ({
     id: x.id,
+    type: "movies",
     title: x.title,
     img:
       imageIndex.movies?.[x.picture] ??
@@ -228,6 +241,7 @@ export function HomePageLoged() {
 
   const tvShowItems = tvShows.map((x) => ({
     id: x.id,
+    type: "tv_shows",
     title: x.title,
     img:
       imageIndex.tv_shows?.[x.picture] ??
@@ -237,6 +251,7 @@ export function HomePageLoged() {
 
   const booksItems = books.map((x) => ({
     id: x.id,
+    type: "books",
     title: x.title,
     img:
       imageIndex.books?.[x.picture] ??
@@ -273,19 +288,16 @@ export function HomePageLoged() {
             seeAllTo="/category/games"
             items={gamesItems}
           />
-
           <HomeSection
             title="New Films"
             seeAllTo="/category/movies"
             items={moviesItems}
           />
-
           <HomeSection
             title="New TV Shows"
             seeAllTo="/category/tv_shows"
             items={tvShowItems}
           />
-
           <HomeSection
             title="New Books"
             seeAllTo="/category/books"
@@ -294,7 +306,7 @@ export function HomePageLoged() {
         </div>
       </main>
 
-      {/* MOBILE  */}
+      {/* MOBILE */}
       <div className="md:hidden">
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
@@ -304,19 +316,16 @@ export function HomePageLoged() {
             seeAllTo="/category/games"
             items={gamesItems}
           />
-
           <MobileSection
             title="New Films"
             seeAllTo="/category/movies"
             items={moviesItems}
           />
-
           <MobileSection
             title="New TV Shows"
             seeAllTo="/category/tv_shows"
             items={tvShowItems}
           />
-
           <MobileSection
             title="New Books"
             seeAllTo="/category/books"
