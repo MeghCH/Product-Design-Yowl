@@ -128,96 +128,51 @@ function BuyOn() {
   );
 }
 
-/*  MOBILE */
-function MobileReviewHeader({ title = "Reviews", onBack, count = 0 }) {
+/* ✅ RELATED CARD (same design vibe) */
+function RelatedCard({ rel, cover, onClick }) {
   return (
-    <div className="sticky top-0 z-50 bg-[#000814]/80 backdrop-blur-md border-b border-white/5">
-      <div className="px-4 pt-[calc(env(safe-area-inset-top)+48px)] pb-3">
-        <div className="relative flex items-center justify-center">
-          <button
-            type="button"
-            onClick={onBack}
-            className="absolute left-0 h-10 w-10 grid place-items-center text-blue-100/80"
-            aria-label="Back"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-7 w-7"
-            >
-              <path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z" />
-            </svg>
-          </button>
-
-          <h1 className="text-xl font-semibold text-blue-100">{title}</h1>
-        </div>
-
-        <div className="mt-3 flex items-center justify-center">
-          <p className="text-[11px] text-blue-100/55 font-semibold">
-            {count} Reviews
-          </p>
-        </div>
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-left rounded-3xl border border-white/10 bg-[#001D3D]/25 hover:border-yellow-400/25 transition overflow-hidden shadow-[0_16px_50px_rgba(0,0,0,0.35)]"
+      title={rel?.title || rel?.name || "Related"}
+    >
+      <div className="w-[240px] md:w-[260px] aspect-[2/3] bg-[#000814]/35">
+        {cover ? (
+          <img
+            src={cover}
+            alt={rel?.title || rel?.name || "Related"}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full grid place-items-center text-blue-200/40 text-sm">
+            No cover
+          </div>
+        )}
       </div>
-    </div>
-  );
-}
 
-function MobileReviewCard({ rev }) {
-  const initial = rev?.username ? rev.username[0].toUpperCase() : "?";
-  const date = rev?.created_at
-    ? new Date(rev.created_at).toLocaleDateString()
-    : "";
-
-  return (
-    <div className="px-4">
-      <div className="rounded-3xl border border-white/10 bg-[#001D3D]/20 p-4">
-        <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-full bg-[#0A2144]/70 border border-white/10 grid place-items-center font-bold text-blue-50">
-            {initial}
-          </div>
-
-          <div className="flex-1">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <Stars value={rev?.rating || 0} size="text-lg" />
-                <button
-                  type="button"
-                  className="text-blue-100/60 hover:text-yellow-300 transition"
-                  aria-label="Like"
-                >
-                  ♡
-                </button>
-              </div>
-
-              <div className="text-right">
-                <p className="text-[10px] text-blue-100/45 font-bold">
-                  Watched on
-                </p>
-                <p className="text-[10px] text-blue-100/65 font-bold">{date}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p className="mt-3 text-[12px] leading-relaxed text-blue-100/70">
-          {rev?.comment}
+      <div className="p-4">
+        <p className="font-black text-blue-50 line-clamp-1">
+          {rel?.title || rel?.name || "Untitled"}
+        </p>
+        <p className="text-xs text-blue-100/55 mt-1 line-clamp-1">
+          {rel?.subtitle || rel?.author || rel?.genre || ""}
         </p>
       </div>
-    </div>
+    </button>
   );
 }
 
-export function ReviewPage() {
+export function RelatedPage() {
   const { type, id } = useParams();
   const navigate = useNavigate();
 
   const [item, setItem] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Reviews");
+  const [activeTab, setActiveTab] = useState("Related");
 
-  /* ✅ ADDED (display-only rating like the screenshot) */
   const [userRating] = useState(4);
 
   const imageIndex = useMemo(() => {
@@ -237,6 +192,21 @@ export function ReviewPage() {
     return idx?.[pic] ?? idx?.[pic.toLowerCase()] ?? null;
   }, [item, type, imageIndex]);
 
+  const resolveCoverFor = (mediaType, mediaObj) => {
+    const t = mediaType || type;
+    const pic = (
+      mediaObj?.picture ||
+      mediaObj?.image_url ||
+      mediaObj?.cover ||
+      ""
+    )
+      .toString()
+      .trim();
+    if (!pic) return null;
+    const idx = imageIndex[t];
+    return idx?.[pic] ?? idx?.[pic.toLowerCase()] ?? null;
+  };
+
   useEffect(() => {
     let cancelled = false;
 
@@ -250,7 +220,7 @@ export function ReviewPage() {
     async function load() {
       setLoading(true);
       setItem(null);
-      setReviews([]);
+      setRelated([]);
 
       try {
         const candidates = candidatesByType[type] ?? [type];
@@ -283,36 +253,42 @@ export function ReviewPage() {
 
         setItem(foundItem);
 
-        let foundReviews = [];
-        const reviewCandidates = [
-          `${API_BASE}/reviews/${type}/${id}`,
-          `${API_BASE}/media-reviews/${type}/${id}`,
+        // ✅ RELATED fetch (same logic style as reviews: try multiple endpoints)
+        let foundRelated = [];
+        const relatedCandidates = [
+          `${API_BASE}/related/${type}/${id}`,
+          `${API_BASE}/media-related/${type}/${id}`,
+          `${API_BASE}/same-universe/${type}/${id}`,
         ];
 
-        for (const url of reviewCandidates) {
+        for (const url of relatedCandidates) {
           try {
             const r = await fetch(url);
             if (!r.ok) continue;
             const json = await r.json();
 
             if (Array.isArray(json)) {
-              foundReviews = json;
+              foundRelated = json;
               break;
             }
-            if (Array.isArray(json?.reviews)) {
-              foundReviews = json.reviews;
+            if (Array.isArray(json?.related)) {
+              foundRelated = json.related;
+              break;
+            }
+            if (Array.isArray(json?.items)) {
+              foundRelated = json.items;
               break;
             }
           } catch {}
         }
 
         if (cancelled) return;
-        setReviews(foundReviews);
+        setRelated(foundRelated);
       } catch (err) {
         console.error("Erreur Fetch:", err);
         if (!cancelled) {
           setItem(null);
-          setReviews([]);
+          setRelated([]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -355,7 +331,7 @@ export function ReviewPage() {
 
   return (
     <div className="min-h-screen bg-[#000814] text-blue-100">
-      {/* DESKTOP*/}
+      {/*DESKTOP*/}
       <div className="hidden md:block">
         <div className="sticky top-0 z-50">
           <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
@@ -436,7 +412,6 @@ export function ReviewPage() {
                   </div>
                 </div>
 
-                {/* ✅ ADDED (Buy on + Your rating like your screenshot) */}
                 <div className="flex items-start justify-between gap-10">
                   <BuyOn />
 
@@ -455,159 +430,121 @@ export function ReviewPage() {
             </div>
           </section>
 
-          <section className="mt-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-            <div className="rounded-[28px] border border-white/10 bg-[#001D3D]/35 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-8">
-              <div className="flex items-end justify-between">
-                <div>
-                  <h2 className="text-xl font-black tracking-tight text-blue-50">
-                    Reviews
-                  </h2>
-                  <p className="text-xs text-blue-200 mt-1 font-semibold">
-                    {reviews.length} reviews
+          {/* ✅ HERE: RELATED instead of REVIEWS (same structure container spacing) */}
+          <section className="mt-12">
+            <h2 className="text-2xl font-black tracking-tight text-yellow-400">
+              Same universe
+            </h2>
+
+            <div className="mt-6 rounded-[28px] border border-white/10 bg-[#001D3D]/20 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-6">
+              {related.length > 0 ? (
+                <div className="flex gap-6 overflow-x-auto pb-2 pr-2">
+                  {related.map((rel) => {
+                    const relType =
+                      rel?.type || rel?.media_type || rel?.category || type;
+
+                    const relId =
+                      rel?.id ||
+                      rel?.id_jeu ||
+                      rel?.id_film ||
+                      rel?.id_serie ||
+                      rel?.id_livre;
+
+                    const cover = resolveCoverFor(relType, rel);
+
+                    return (
+                      <RelatedCard
+                        key={`${relType}-${relId ?? rel?.title ?? Math.random()}`}
+                        rel={rel}
+                        cover={cover}
+                        onClick={() => {
+                          if (!relId) return;
+                          navigate(`/media/${relType}/${relId}`);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="rounded-3xl border border-dashed border-white/15 bg-[#000814]/25 p-10 text-center">
+                  <p className="text-blue-100/45 italic">
+                    No related media found.
                   </p>
                 </div>
-                <div className="h-px flex-1 bg-white/10 mx-6 mb-3 hidden md:block" />
-              </div>
-
-              <div className="mt-6 space-y-6">
-                {reviews.length > 0 ? (
-                  reviews.map((rev) => (
-                    <div
-                      key={rev.id}
-                      className="rounded-3xl border border-white/10 bg-[#000814]/35 p-6 hover:border-yellow-400/25 transition"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="h-11 w-11 rounded-2xl bg-blue-600/80 border border-white/10 grid place-items-center font-black">
-                          {rev.username ? rev.username[0].toUpperCase() : "?"}
-                        </div>
-
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-3">
-                            <p className="font-bold text-blue-50">
-                              {rev.username || "Anonymous"}
-                            </p>
-                            <p className="text-[10px] uppercase font-bold tracking-widest text-blue-100/40">
-                              {rev.created_at
-                                ? new Date(rev.created_at).toLocaleDateString()
-                                : ""}
-                            </p>
-                          </div>
-
-                          <div className="mt-2 flex items-center gap-3">
-                            <Stars value={rev.rating || 0} size="text-lg" />
-                            <button
-                              type="button"
-                              className="text-blue-100/40 hover:text-yellow-300 transition"
-                              title="Like"
-                            >
-                              ♡
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <p className="mt-4 text-blue-100/75 leading-relaxed italic">
-                        “{rev.comment}”
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-3xl border border-dashed border-white/15 bg-[#000814]/25 p-10 text-center">
-                    <p className="text-blue-100/45 italic">
-                      No reviews have been posted yet.
-                    </p>
-                  </div>
-                )}
-              </div>
+              )}
             </div>
-
-            <aside className="rounded-[28px] border border-white/10 bg-[#001D3D]/35 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-8 h-fit">
-              <h3 className="text-lg font-black text-blue-50">Add a review</h3>
-
-              <div className="mt-6 space-y-4">
-                <div className="rounded-2xl border border-white/10 bg-[#000814]/35 p-4">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-blue-100/40 mb-3">
-                    Your rating
-                  </p>
-                  <Stars value={0} size="text-2xl" />
-                </div>
-
-                <textarea
-                  placeholder="Write here..."
-                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-[#000814]/35 px-4 py-3 text-sm text-blue-50 placeholder:text-blue-100/35 focus:outline-none focus:ring-2 focus:ring-yellow-400/30"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => navigate("/login")}
-                  className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition"
-                >
-                  Send
-                </button>
-              </div>
-            </aside>
           </section>
         </main>
       </div>
 
-      {/*  MOBILE  */}
+      {/* MOBILE (simple, same vibe) */}
       <div className="md:hidden">
-        <MobileReviewHeader
-          title="Reviews"
-          count={reviews.length}
-          onBack={() => navigate(-1)}
-        />
-
-        <main className="pt-4 pb-52 space-y-4">
-          {reviews.length > 0 ? (
-            <div className="space-y-4">
-              {reviews.map((rev) => (
-                <MobileReviewCard key={rev.id} rev={rev} />
-              ))}
-            </div>
-          ) : (
-            <div className="px-4">
-              <div className="rounded-3xl border border-dashed border-white/15 bg-[#001D3D]/15 p-8 text-center">
-                <p className="text-blue-100/55 italic text-sm">
-                  No reviews have been posted yet.
-                </p>
-              </div>
-            </div>
-          )}
-        </main>
-
-        <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#000814] to-transparent" />
-
-          <div className="rounded-[20px] border border-white/10 bg-[#001D3D]/35 backdrop-blur-md shadow-[0_20px_60px_rgba(0,0,0,0.55)] p-5">
-            <h3 className="text-sm font-bold text-blue-200">Add a review</h3>
-
-            <div className="mt-4 space-y-3">
-              <div className="rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-blue-100/40 mb-2">
-                  Your rating
-                </p>
-                <Stars value={0} size="text-2xl" />
-              </div>
-
-              <textarea
-                placeholder="Write here..."
-                className="w-full min-h-[110px] rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-700"
-              />
-
-              <button
-                type="button"
-                onClick={() => navigate("/login")}
-                className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition"
+        <div className="sticky top-0 z-50 bg-[#000814]/80 backdrop-blur-md border-b border-white/5">
+          <div className="px-4 pt-[calc(env(safe-area-inset-top)+16px)] pb-3 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="h-10 w-10 grid place-items-center text-blue-100/80"
+              aria-label="Back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-7 w-7"
               >
-                Send
-              </button>
-            </div>
+                <path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z" />
+              </svg>
+            </button>
+            <p className="font-bold text-blue-100">Related</p>
+            <div className="w-10" />
           </div>
         </div>
+
+        <main className="px-4 py-6 space-y-6">
+          <div className="rounded-[28px] border border-white/10 bg-[#001D3D]/20 p-5">
+            <p className="text-lg font-black text-yellow-400">Same universe</p>
+
+            <div className="mt-4 flex gap-4 overflow-x-auto pb-2">
+              {related.length > 0 ? (
+                related.map((rel) => {
+                  const relType =
+                    rel?.type || rel?.media_type || rel?.category || type;
+
+                  const relId =
+                    rel?.id ||
+                    rel?.id_jeu ||
+                    rel?.id_film ||
+                    rel?.id_serie ||
+                    rel?.id_livre;
+
+                  const cover = resolveCoverFor(relType, rel);
+
+                  return (
+                    <RelatedCard
+                      key={`${relType}-${relId ?? rel?.title ?? Math.random()}`}
+                      rel={rel}
+                      cover={cover}
+                      onClick={() => {
+                        if (!relId) return;
+                        navigate(`/media/${relType}/${relId}`);
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <div className="w-full rounded-3xl border border-dashed border-white/15 bg-[#000814]/25 p-8 text-center">
+                  <p className="text-blue-100/45 italic text-sm">
+                    No related media found.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );
 }
 
-export default ReviewPage;
+export default RelatedPage;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
@@ -80,7 +80,17 @@ export function ProfilePage() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [activeTop, setActiveTop] = useState("Home");
+  const [activeTop, setActiveTop] = useState("");
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path === "/home/log") setActiveTop("Home");
+    else if (path.startsWith("/category")) setActiveTop("Categories");
+    else if (path.startsWith("/profile")) setActiveTop("Profile");
+    else setActiveTop("");
+  }, [location.pathname]);
+
   const [activeProfileTab, setActiveProfileTab] = useState("Activity");
   const [mobileCategory, setMobileCategory] = useState("Games");
 
