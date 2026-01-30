@@ -94,11 +94,16 @@ function ClickableStars({ value = 0, onChange, size = "text-3xl" }) {
   );
 }
 
-function BadgeButton({ children }) {
+function BadgeButton({ children, onClick, active }) {
   return (
     <button
       type="button"
-      className="h-9 px-4 rounded-xl bg-[#0A2144]/70 border border-white/10 text-blue-100/90 text-xs font-semibold hover:border-yellow-400/40 hover:text-yellow-200 transition"
+      onClick={onClick}
+      className={`h-9 px-4 rounded-xl border text-xs font-semibold transition ${
+        active
+          ? "bg-yellow-400/20 border-yellow-400/60 text-yellow-300"
+          : "bg-[#0A2144]/70 border-white/10 text-blue-100/90 hover:border-yellow-400/40 hover:text-yellow-200"
+      }`}
     >
       {children}
     </button>
@@ -182,7 +187,7 @@ function MobileReviewHeader({ title = "Reviews", onBack, count = 0 }) {
   );
 }
 
-function MobileReviewCard({ rev }) {
+function MobileReviewCard({ rev, currentUserId, onDelete }) {
   const initial = rev?.username ? rev.username[0].toUpperCase() : "?";
   const date = rev?.created_at
     ? new Date(rev.created_at).toLocaleDateString()
@@ -209,11 +214,23 @@ function MobileReviewCard({ rev }) {
                 </button>
               </div>
 
-              <div className="text-right">
-                <p className="text-[10px] text-blue-100/45 font-bold">
-                  Watched on
-                </p>
-                <p className="text-[10px] text-blue-100/65 font-bold">{date}</p>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="text-[10px] text-blue-100/45 font-bold">
+                    Watched on
+                  </p>
+                  <p className="text-[10px] text-blue-100/65 font-bold">{date}</p>
+                </div>
+                {rev?.user_id === currentUserId && (
+                  <button
+                    type="button"
+                    onClick={() => onDelete(rev.id)}
+                    className="text-red-400/60 hover:text-red-400 transition text-sm"
+                    title="Supprimer"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -239,8 +256,11 @@ export function ReviewPage() {
   const [userRating, setUserRating] = useState(0);
   const [userComment, setUserComment] = useState("");
   const [isPosting, setIsPosting] = useState(false);
+  const [userReviewId, setUserReviewId] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
+  const currentUserId = Number(localStorage.getItem("userId"));
 
   const imageIndex = useMemo(() => {
     return {
@@ -354,6 +374,101 @@ export function ReviewPage() {
     };
   }, [type, id]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const typeToBackend = {
+      jeu: "jeu",
+      film: "film",
+      serie: "serie",
+      livre: "livre",
+      games: "jeu",
+      movies: "film",
+      tv_shows: "serie",
+      books: "livre",
+    };
+    const backendMediaType = typeToBackend[type] || type;
+
+    fetch(`${API_BASE}/reviews/user/${backendMediaType}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.rating) {
+          setUserRating(data.rating);
+          setUserReviewId(data.id);
+        }
+      })
+      .catch((err) => console.error("Error fetching user review:", err));
+  }, [type, id]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const typeToBackend = {
+      jeu: "jeu",
+      film: "film",
+      serie: "serie",
+      livre: "livre",
+      games: "jeu",
+      movies: "film",
+      tv_shows: "serie",
+      books: "livre",
+    };
+    const backendMediaType = typeToBackend[type] || type;
+
+    fetch(`${API_BASE}/favorites/check/${backendMediaType}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.liked === "boolean") {
+          setIsLiked(data.liked);
+        }
+      })
+      .catch((err) => console.error("Error checking like status:", err));
+  }, [type, id]);
+
+  const handleToggleLike = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const typeToBackend = {
+      jeu: "jeu",
+      film: "film",
+      serie: "serie",
+      livre: "livre",
+      games: "jeu",
+      movies: "film",
+      tv_shows: "serie",
+      books: "livre",
+    };
+    const backendMediaType = typeToBackend[type] || type;
+
+    try {
+      const response = await fetch(`${API_BASE}/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ mediaType: backendMediaType, mediaId: id }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setIsLiked(data.liked);
+      }
+    } catch (err) {
+      console.error("Error toggling like:", err);
+    }
+  };
+
   const handlePostReview = async () => {
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token);
@@ -423,12 +538,41 @@ export function ReviewPage() {
 
       setReviews([newReview, ...reviews]);
       setUserComment("");
+      setUserReviewId(newReview.id);
       alert("Review posted successfully!");
     } catch (err) {
       console.error("Error posting review:", err);
       alert("Error posting review: " + err.message);
     } finally {
       setIsPosting(false);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    if (!confirm("Are you sure you want to delete this review?")) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/reviews/${reviewId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.msg || "Erreur lors de la suppression");
+      }
+
+      setReviews(reviews.filter((r) => r.id !== reviewId));
+      if (reviewId === userReviewId) {
+        setUserRating(0);
+        setUserReviewId(null);
+      }
+    } catch (err) {
+      console.error("Error deleting review:", err);
+      alert("Erreur: " + err.message);
     }
   };
 
@@ -554,7 +698,9 @@ export function ReviewPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-3">
-                    <BadgeButton>♡ Like</BadgeButton>
+                    <BadgeButton onClick={handleToggleLike} active={isLiked}>
+                      {isLiked ? "♥ Liked" : "♡ Like"}
+                    </BadgeButton>
                     <BadgeButton>Watched</BadgeButton>
                     <BadgeButton>Watchlist</BadgeButton>
                     <BadgeButton>Recommend</BadgeButton>
@@ -610,11 +756,23 @@ export function ReviewPage() {
                             <p className="font-bold text-blue-200">
                               {rev.username || "Anonymous"}
                             </p>
-                            <p className="text-[10px] uppercase font-bold tracking-widest text-blue-100/40">
-                              {rev.created_at
-                                ? new Date(rev.created_at).toLocaleDateString()
-                                : ""}
-                            </p>
+                            <div className="flex items-center gap-3">
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-blue-100/40">
+                                {rev.created_at
+                                  ? new Date(rev.created_at).toLocaleDateString()
+                                  : ""}
+                              </p>
+                              {rev.user_id === currentUserId && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteReview(rev.id)}
+                                  className="text-red-400/60 hover:text-red-400 transition text-sm"
+                                  title="Supprimer"
+                                >
+                                  ✕
+                                </button>
+                              )}
+                            </div>
                           </div>
 
                           <div className="mt-2 flex items-center gap-3">
@@ -631,7 +789,7 @@ export function ReviewPage() {
                       </div>
 
                       <p className="mt-4 text-blue-100/75 leading-relaxed italic">
-                        “{rev.comment}”
+                        "{rev.comment}"
                       </p>
                     </div>
                   ))
@@ -702,7 +860,12 @@ export function ReviewPage() {
           {reviews.length > 0 ? (
             <div className="space-y-4">
               {reviews.map((rev) => (
-                <MobileReviewCard key={rev.id} rev={rev} />
+                <MobileReviewCard
+                  key={rev.id}
+                  rev={rev}
+                  currentUserId={currentUserId}
+                  onDelete={handleDeleteReview}
+                />
               ))}
             </div>
           ) : (

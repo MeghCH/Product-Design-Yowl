@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../components/logo";
 import { Link } from "react-router-dom";
+import API_BASE from "../config";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -15,9 +16,35 @@ export function SignupPage() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup:", { firstName, lastName, email, password });
+    setIsLoading(true);
+
+    const username = `${firstName} ${lastName}`.trim();
+
+    try {
+      const response = await fetch(`${API_BASE}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, username }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || "Registration failed");
+      }
+
+      localStorage.setItem("userId", String(data.user.id));
+      localStorage.setItem("token", data.token);
+      navigate("/profile");
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -161,6 +188,7 @@ export function SignupPage() {
                 <div className="pt-2">
                   <button
                     type="submit"
+                    disabled={isLoading}
                     className="
                       h-11 px-8 rounded-2xl
                       bg-yellow-500 text-blue-800
@@ -168,9 +196,10 @@ export function SignupPage() {
                       transition-colors duration-200
                       hover:bg-yellow-300
                       focus:outline-none focus:ring-2 focus:ring-yellow-300/60
+                      disabled:opacity-50 disabled:cursor-not-allowed
                     "
                   >
-                    Create account
+                    {isLoading ? "Creating..." : "Create account"}
                   </button>
                 </div>
 

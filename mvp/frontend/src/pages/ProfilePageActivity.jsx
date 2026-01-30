@@ -229,12 +229,18 @@ export function ProfilePage() {
         <main className="max-w-6xl mx-auto px-8 py-10 space-y-10">
           <section className="flex items-center justify-between">
             <div className="flex items-center gap-10">
-              <div className="relative">
+              <div className="relative flex flex-col items-center">
                 <div className="h-45 w-45 rounded-full bg-linear-to-br from-blue-300/40 to-blue-100/10 border border-white/10 flex items-center justify-center overflow-hidden">
                   <span className="text-4xl font-bold text-blue-50">
                     {initials}
                   </span>
                 </div>
+                <button
+                  className="mt-3 h-8 px-4 rounded-lg bg-[#001D3D]/60 border border-white/10 text-blue-200 text-sm font-semibold hover:bg-[#001D3D]/80 transition-colors"
+                  onClick={() => console.log("edit")}
+                >
+                  Edit
+                </button>
               </div>
 
               <div className="flex items-center gap-10">
