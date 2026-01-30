@@ -8,9 +8,6 @@ import HomePageLoged from "./pages/HomePageLoged";
 import CategoryPage from "./pages/CategoryPage";
 import ProfileMediaPage from "./pages/ProfileMediaPage";
 
-/* ✅ ADD THIS IMPORT */
-import RelatedPage from "./pages/RelatedPage";
-
 function App() {
   return (
     <div className="App self-start w-full bg-[#000814] min-h-screen">

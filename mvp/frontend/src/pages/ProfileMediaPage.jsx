@@ -54,7 +54,7 @@ function MobilePageHeader({ title, subtitle, onBack }) {
             </svg>
           </button>
 
-          <h1 className="text-xl font-semibold text-blue-100">{title}</h1>
+          <h1 className="text-xl font-semibold text-blue-200">{title}</h1>
         </div>
 
         {subtitle ? (
@@ -143,7 +143,7 @@ export default function ProfileMediaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#000814] text-blue-100">
+    <div className="min-h-screen bg-[#000814] text-blue-200">
       {/* DESKTOP header */}
       <div className="sticky top-0 z-50 hidden md:block">
         <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">

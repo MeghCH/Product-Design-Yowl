@@ -11,8 +11,7 @@ import MobileNavBar from "../components/mobile-nav-bar";
 import MobileNavBarHome from "../components/mobile-nav-bar-home";
 import MobileTopFilter from "../components/mobile-top-filter";
 import { ButtonLog } from "../components/button_log";
-
-const API_BASE = "http://localhost:4000";
+import API_BASE from "../config";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
@@ -47,6 +46,13 @@ const categoryToApiType = {
   movies: "Film",
   books: "Livre",
   tv_shows: "Serie",
+};
+
+const categoryToReviewType = {
+  games: "game",
+  movies: "movie",
+  books: "book",
+  tv_shows: "TV shows",
 };
 
 export function CategoryPage() {
@@ -179,6 +185,11 @@ export function CategoryPage() {
                 <div
                   key={item.id ?? i}
                   className="group cursor-pointer flex flex-col space-y-4"
+                  onClick={() =>
+                    navigate(
+                      `/review/${categoryToReviewType[safeCategory]}/${item.id}`,
+                    )
+                  }
                 >
                   <div className="relative aspect-[2/3] bg-[#001D3D]/40 rounded-2xl overflow-hidden border border-white/5 group-hover:border-yellow-500/50 transition-all duration-300 shadow-xl">
                     {item.img ? (
@@ -230,7 +241,13 @@ export function CategoryPage() {
         <MobileTopFilter value={mobileFilter} onChange={setMobileFilter} />
 
         <main className="px-4 pt-6 pb-[calc(112px+env(safe-area-inset-bottom))] space-y-8">
-          <Section title={`New ${categoryDisplayName}`} items={filledMobile} />
+          <Section
+            title={`New ${categoryDisplayName}`}
+            items={filledMobile}
+            onItemClick={(id) =>
+              navigate(`/review/${categoryToReviewType[safeCategory]}/${id}`)
+            }
+          />
         </main>
 
         {isLoggedIn ? (
@@ -254,7 +271,7 @@ export function CategoryPage() {
   );
 }
 
-function Section({ title, items = [] }) {
+function Section({ title, items = [], onItemClick }) {
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -266,7 +283,8 @@ function Section({ title, items = [] }) {
           item ? (
             <div
               key={item.id ?? i}
-              className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5"
+              className="aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5 cursor-pointer"
+              onClick={() => onItemClick && onItemClick(item.id)}
             >
               {item.img ? (
                 <img

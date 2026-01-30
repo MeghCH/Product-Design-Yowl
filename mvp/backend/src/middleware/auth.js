@@ -8,7 +8,8 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ msg: "Access token required" });
   }
 
-  jwt.verify(token, process.env.SECRET, (err, user) => {
+  const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+  jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(403).json({ msg: "Invalid token" });
     }

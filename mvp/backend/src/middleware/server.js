@@ -83,17 +83,18 @@ app.get("/media/:type", (req, res) => {
 
 app.get("/media-details/:type/:id", (req, res) => {
   const { type, id } = req.params;
-  const idMap = {
-    Film: "id_film",
-    Serie: "id_serie",
-    Livre: "id_livre",
-    Jeu_video: "id_jeu",
+
+  const typeMap = {
+    jeu: { table: "Jeu_video", idColumn: "id_jeu" },
+    film: { table: "Film", idColumn: "id_film" },
+    serie: { table: "Serie", idColumn: "id_serie" },
+    livre: { table: "Livre", idColumn: "id_livre" },
   };
-  const idColumn = idMap[type];
 
-  if (!idColumn) return res.status(400).json({ error: "Type invalide" });
+  const typeInfo = typeMap[type.toLowerCase()];
+  if (!typeInfo) return res.status(400).json({ error: "Type invalide" });
 
-  const sql = `SELECT *, ${idColumn} as id FROM ${type} WHERE ${idColumn} = ?`;
+  const sql = `SELECT *, ${typeInfo.idColumn} as id FROM ${typeInfo.table} WHERE ${typeInfo.idColumn} = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) return res.status(500).json(err);
     if (result.length === 0)
@@ -107,7 +108,7 @@ app.get("/reviews/:type/:id", (req, res) => {
 
   const sql = `
         SELECT r.*, u.username 
-        FROM reviews r 
+        FROM Reviews r 
         JOIN users u ON r.user_id = u.id 
         WHERE r.media_type = ? AND r.media_id = ? 
         ORDER BY r.created_at DESC`;

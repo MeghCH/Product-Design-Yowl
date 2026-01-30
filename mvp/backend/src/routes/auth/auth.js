@@ -16,8 +16,9 @@ router.post("/login", async (req, res) => {
   try {
     const connection = await mysql.createConnection({
       host: "localhost",
-      user: "root",
-      database: "yowl",
+      user: "vscode",
+      password: "root",
+      database: "yowl_db",
     });
     const [rows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",
@@ -26,22 +27,25 @@ router.post("/login", async (req, res) => {
     const user = rows[0];
 
     if (!user) {
+      await connection.end();
       return res.status(401).json({ msg: "Email ou mot de passe incorrect" });
     }
 
     const isValid = password === (user.password_hash || user.password);
 
     if (!isValid) {
+      await connection.end();
       return res.status(401).json({ msg: "Email ou mot de passe incorrect" });
     }
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    await connection.end();
     res.json({
       token,
       user: { id: user.id, email: user.email, username: user.username },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err);
     res.status(500).json({ msg: "Internal server error" });
   }
 });
@@ -58,8 +62,9 @@ router.post("/register", async (req, res) => {
   try {
     const connection = await mysql.createConnection({
       host: "localhost",
-      user: "root",
-      database: "yowl",
+      user: "vscode",
+      password: "root",
+      database: "yowl_db",
     });
     const [existingRows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",
@@ -92,8 +97,9 @@ router.post("/register-test", async (req, res) => {
   try {
     const connection = await mysql.createConnection({
       host: "localhost",
-      user: "root",
-      database: "yowl",
+      user: "vscode",
+      password: "root",
+      database: "yowl_db",
     });
     const [rows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",

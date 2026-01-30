@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
 import { SearchBar } from "../components/search_bar";
@@ -10,8 +9,7 @@ import { ButtonProfile } from "../components/button_profile";
 import ButtonLogOut from "../components/button_logout";
 import MobileNavBarLoged from "../components/mobile-nav-bar-loged";
 import MobileTopFilter from "../components/mobile-top-filter";
-
-const API_BASE = "http://localhost:4000";
+import API_BASE from "../config";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
@@ -171,7 +169,7 @@ export function ProfilePage() {
   const chart = useMemo(
     () => [
       { label: "Games", value: 20 },
-      { label: "Films", value: 50 },
+      { label: "Movies", value: 50 },
       { label: "Shows", value: 70 },
       { label: "Books", value: 10 },
     ],
@@ -198,14 +196,14 @@ export function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#000814] text-blue-100 flex items-center justify-center">
+      <div className="min-h-screen bg-[#000814] text-blue-200 flex items-center justify-center">
         Chargement du Codex...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#000814] text-blue-100">
+    <div className="min-h-screen bg-[#000814] text-blue-200">
       {/*  DESKTOP  */}
       <div className="hidden md:block">
         <div className="sticky top-0 z-50">
@@ -277,7 +275,7 @@ export function ProfilePage() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-yellow-400 font-semibold">Recent likes</h2>
                 <button className="text-blue-200 text-sm hover:text-blue-100">
-                  See all &gt;
+                  See all {">"}
                 </button>
               </div>
 
@@ -394,7 +392,7 @@ export function ProfilePage() {
                 Recent likes
               </h2>
               <button className="text-blue-200 text-base font-semibold">
-                See all &gt;
+                See all {">"}
               </button>
             </div>
 

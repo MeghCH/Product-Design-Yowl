@@ -6,8 +6,8 @@ const router = express.Router();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "calgar",
-  password: process.env.DB_PASSWORD || "ultramar",
+  user: process.env.DB_USER || "vscode",
+  password: process.env.DB_PASS || "root",
   database: process.env.DB_NAME || "yowl_db",
   waitForConnections: true,
   connectionLimit: 10,
@@ -40,7 +40,6 @@ router.get("/:mediaType/:mediaId", async (req, res) => {
   }
 });
 
-// POST a new review (requires authentication)
 router.post("/", authenticateToken, async (req, res) => {
   const { mediaType, mediaId, rating, comment } = req.body;
 
@@ -55,28 +54,32 @@ router.post("/", authenticateToken, async (req, res) => {
   try {
     const connection = await pool.getConnection();
 
-    // Check if review already exists
     const [existing] = await connection.query(
       `SELECT id FROM Reviews WHERE user_id = ? AND media_type = ? AND media_id = ?`,
       [req.user.id, mediaType, mediaId],
     );
 
     if (existing.length > 0) {
-      // Update existing review
       await connection.query(
         `UPDATE Reviews SET rating = ?, comment = ? WHERE user_id = ? AND media_type = ? AND media_id = ?`,
         [rating, comment || null, req.user.id, mediaType, mediaId],
       );
     } else {
-      // Create new review
       await connection.query(
         `INSERT INTO Reviews (user_id, media_type, media_id, rating, comment) VALUES (?, ?, ?, ?, ?)`,
         [req.user.id, mediaType, mediaId, rating, comment || null],
       );
     }
 
+    const [reviews] = await connection.query(
+      `SELECT r.*, u.username FROM Reviews r 
+       JOIN users u ON r.user_id = u.id 
+       WHERE r.user_id = ? AND r.media_type = ? AND r.media_id = ?`,
+      [req.user.id, mediaType, mediaId],
+    );
+
     connection.release();
-    res.status(201).json({ msg: "Review saved successfully" });
+    res.status(201).json(reviews[0] || { msg: "Review saved successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Internal server error" });

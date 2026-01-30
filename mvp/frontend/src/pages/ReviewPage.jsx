@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
 import { ButtonMsg } from "../components/button_message";
 import { ButtonProfile } from "../components/button_profile";
 import { SearchBar } from "../components/search_bar";
 import NavTabsReview from "../components/nav_tab_review";
+import API_BASE from "../config";
 
 import fnacLogo from "../assets/fnac.png";
 import amazonLogo from "../assets/amazon.png";
-
-const API_BASE = "http://localhost:4000";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
@@ -70,6 +68,27 @@ function StarsUI({ value = 0, size = "text-3xl" }) {
         >
           ★
         </span>
+      ))}
+    </div>
+  );
+}
+
+function ClickableStars({ value = 0, onChange, size = "text-3xl" }) {
+  const v = Math.max(0, Math.min(5, Number(value) || 0));
+  return (
+    <div className="flex items-center gap-2">
+      {[...Array(5)].map((_, i) => (
+        <button
+          key={i}
+          type="button"
+          onClick={() => onChange(i + 1)}
+          className={`${size} cursor-pointer transition hover:scale-110 ${
+            i < v ? "text-yellow-400" : "text-blue-100/60"
+          }`}
+          title={`Rate ${i + 1} star${i !== 0 ? "s" : ""}`}
+        >
+          ★
+        </button>
       ))}
     </div>
   );
@@ -217,8 +236,11 @@ export function ReviewPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Reviews");
 
-  /* ✅ ADDED (display-only rating like the screenshot) */
-  const [userRating] = useState(4);
+  const [userRating, setUserRating] = useState(0);
+  const [userComment, setUserComment] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
+
+  const isLoggedIn = !!localStorage.getItem("token");
 
   const imageIndex = useMemo(() => {
     return {
@@ -233,7 +255,16 @@ export function ReviewPage() {
     if (!item) return null;
     const pic = (item.picture || item.image_url || "").trim();
     if (!pic) return null;
-    const idx = imageIndex[type];
+
+    const typeToImageKey = {
+      jeu: "games",
+      film: "movies",
+      serie: "tv_shows",
+      livre: "books",
+    };
+
+    const imageKey = typeToImageKey[type] || type;
+    const idx = imageIndex[imageKey];
     return idx?.[pic] ?? idx?.[pic.toLowerCase()] ?? null;
   }, [item, type, imageIndex]);
 
@@ -253,35 +284,33 @@ export function ReviewPage() {
       setReviews([]);
 
       try {
-        const candidates = candidatesByType[type] ?? [type];
-        let foundItem = null;
+        const typeMap = {
+          jeu: "jeu",
+          film: "film",
+          serie: "serie",
+          livre: "livre",
+        };
 
-        for (const apiType of candidates) {
-          const res = await fetch(`${API_BASE}/media-details/${apiType}/${id}`);
-          const data = await res.json();
-          if (cancelled) return;
+        const apiType = typeMap[type] || type;
+        const res = await fetch(`${API_BASE}/media-details/${apiType}/${id}`);
+        const data = await res.json();
+        if (cancelled) return;
 
-          if (data && !data.error) {
-            foundItem = {
-              ...data,
-              id:
-                data.id ||
-                data.id_jeu ||
-                data.id_film ||
-                data.id_serie ||
-                data.id_livre ||
-                id,
-            };
-            break;
-          }
-        }
-
-        if (!foundItem) {
+        if (data && !data.error) {
+          const foundItem = {
+            ...data,
+            id:
+              data.id ||
+              data.id_jeu ||
+              data.id_film ||
+              data.id_serie ||
+              data.id_livre ||
+              id,
+          };
+          setItem(foundItem);
+        } else {
           setItem(null);
-          return;
         }
-
-        setItem(foundItem);
 
         let foundReviews = [];
         const reviewCandidates = [
@@ -325,6 +354,84 @@ export function ReviewPage() {
     };
   }, [type, id]);
 
+  const handlePostReview = async () => {
+    const token = localStorage.getItem("token");
+    console.log("Token from localStorage:", token);
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (!userRating || !userComment.trim()) {
+      alert("Please add a rating and comment");
+      return;
+    }
+
+    const typeToBackend = {
+      jeu: "jeu",
+      film: "film",
+      serie: "serie",
+      livre: "livre",
+      games: "jeu",
+      movies: "film",
+      tv_shows: "serie",
+      books: "livre",
+    };
+    const backendMediaType = typeToBackend[type] || type;
+
+    setIsPosting(true);
+    try {
+      console.log("Posting review to:", `${API_BASE}/reviews`);
+      console.log("Headers:", {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      });
+      console.log("Body:", {
+        mediaType: backendMediaType,
+        mediaId: id,
+        rating: userRating,
+      });
+
+      const response = await fetch(`${API_BASE}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          mediaType: backendMediaType,
+          mediaId: id,
+          rating: userRating,
+          comment: userComment,
+        }),
+      });
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      const responseData = await response.json();
+      console.log("Response data:", responseData);
+
+      if (!response.ok) {
+        throw new Error(
+          `Server error: ${responseData.msg || response.statusText}`,
+        );
+      }
+
+      const newReview = responseData;
+
+      setReviews([newReview, ...reviews]);
+      setUserComment("");
+      alert("Review posted successfully!");
+    } catch (err) {
+      console.error("Error posting review:", err);
+      alert("Error posting review: " + err.message);
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#000814] flex flex-col items-center justify-center space-y-4">
@@ -353,8 +460,19 @@ export function ReviewPage() {
     );
   }
 
+  const typeToEnglish = {
+    jeu: "Game",
+    film: "Movie",
+    serie: "TV Show",
+    livre: "Book",
+    games: "Game",
+    movies: "Movie",
+    tv_shows: "TV Show",
+    books: "Book",
+  };
+
   return (
-    <div className="min-h-screen bg-[#000814] text-blue-100">
+    <div className="min-h-screen bg-[#000814] text-blue-200">
       {/* DESKTOP*/}
       <div className="hidden md:block">
         <div className="sticky top-0 z-50">
@@ -378,7 +496,7 @@ export function ReviewPage() {
         </div>
 
         <main className="relative mx-auto max-w-7xl px-6 py-10">
-          <section className="rounded-[28px] border border-white/10 bg-gradient-to-b from-[#001D3D]/70 to-[#000814]/70 shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden">
+          <section className="rounded-[28px] border border-white/10 bg-linear-to-b from-[#001D3D]/70 to-[#000814]/70 shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden">
             <div className="p-8 md:p-10 grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10">
               <div className="flex justify-center lg:justify-start">
                 <div className="w-[260px] md:w-[300px] aspect-[2/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#001D3D]/40">
@@ -400,20 +518,27 @@ export function ReviewPage() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex items-center rounded-full border border-yellow-400/20 bg-yellow-400/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-yellow-300">
-                    {(type || "").replace("_", " ")}
+                    {typeToEnglish[type] ??
+                      String(type || "").replaceAll("_", " ")}
                   </span>
+
                   <span className="h-px flex-1 bg-blue-200/30" />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-4">
                   <h1 className="text-4xl md:text-4xl font-black tracking-tight text-blue-200">
                     {item.title}
                   </h1>
-                  <p className="text-blue-200 leading-relaxed max-w-3xl">
-                    {item.description ||
-                      item.synopsis ||
-                      "No description available."}
-                  </p>
+                  <div>
+                    <p className="text-sm font-bold text-blue-100/60 mb-2">
+                      Summary
+                    </p>
+                    <p className="text-blue-200 leading-relaxed">
+                      {item.description ||
+                        item.synopsis ||
+                        "No description available."}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 items-start">
@@ -436,7 +561,6 @@ export function ReviewPage() {
                   </div>
                 </div>
 
-                {/* ✅ ADDED (Buy on + Your rating like your screenshot) */}
                 <div className="flex items-start justify-between gap-10">
                   <BuyOn />
 
@@ -483,7 +607,7 @@ export function ReviewPage() {
 
                         <div className="flex-1">
                           <div className="flex items-center justify-between gap-3">
-                            <p className="font-bold text-blue-50">
+                            <p className="font-bold text-blue-200">
                               {rev.username || "Anonymous"}
                             </p>
                             <p className="text-[10px] uppercase font-bold tracking-widest text-blue-100/40">
@@ -522,27 +646,43 @@ export function ReviewPage() {
             </div>
 
             <aside className="rounded-[28px] border border-white/10 bg-[#001D3D]/35 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-8 h-fit">
-              <h3 className="text-lg font-black text-blue-50">Add a review</h3>
+              <h3 className="text-lg font-black text-blue-200">Add a review</h3>
 
               <div className="mt-6 space-y-4">
                 <div className="rounded-2xl border border-white/10 bg-[#000814]/35 p-4">
                   <p className="text-[11px] font-bold uppercase tracking-widest text-blue-100/40 mb-3">
                     Your rating
                   </p>
-                  <Stars value={0} size="text-2xl" />
+                  <ClickableStars
+                    value={userRating}
+                    onChange={setUserRating}
+                    size="text-2xl"
+                  />
                 </div>
 
                 <textarea
+                  value={userComment}
+                  onChange={(e) => setUserComment(e.target.value)}
                   placeholder="Write here..."
-                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-[#000814]/35 px-4 py-3 text-sm text-blue-50 placeholder:text-blue-100/35 focus:outline-none focus:ring-2 focus:ring-yellow-400/30"
+                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-[#000814]/35 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-100/35 focus:outline-none focus:ring-2 focus:ring-blue-800"
                 />
 
                 <button
                   type="button"
-                  onClick={() => navigate("/login")}
-                  className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition"
+                  onClick={handlePostReview}
+                  disabled={
+                    !isLoggedIn ||
+                    isPosting ||
+                    !userRating ||
+                    !userComment.trim()
+                  }
+                  className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send
+                  {!isLoggedIn
+                    ? "Login to Review"
+                    : isPosting
+                      ? "Sending..."
+                      : "Send"}
                 </button>
               </div>
             </aside>
@@ -577,7 +717,7 @@ export function ReviewPage() {
         </main>
 
         <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#000814] to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-[#000814] to-transparent" />
 
           <div className="rounded-[20px] border border-white/10 bg-[#001D3D]/35 backdrop-blur-md shadow-[0_20px_60px_rgba(0,0,0,0.55)] p-5">
             <h3 className="text-sm font-bold text-blue-200">Add a review</h3>
@@ -587,20 +727,29 @@ export function ReviewPage() {
                 <p className="text-[11px] font-bold uppercase tracking-widest text-blue-100/40 mb-2">
                   Your rating
                 </p>
-                <Stars value={0} size="text-2xl" />
+                <ClickableStars
+                  value={userRating}
+                  onChange={setUserRating}
+                  size="text-2xl"
+                />
               </div>
 
               <textarea
+                value={userComment}
+                onChange={(e) => setUserComment(e.target.value)}
                 placeholder="Write here..."
-                className="w-full min-h-[110px] rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-700"
+                className="w-full min-h-[110px] rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-800"
               />
 
               <button
                 type="button"
-                onClick={() => navigate("/login")}
-                className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition"
+                onClick={handlePostReview}
+                disabled={
+                  !isLoggedIn || isPosting || !userRating || !userComment.trim()
+                }
+                className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send
+                {!isLoggedIn ? "Login" : isPosting ? "..." : "Send"}
               </button>
             </div>
           </div>

@@ -17,7 +17,7 @@ export function NavTabs({ active, onChange }) {
 
   useEffect(() => {
     const found = tabs.find((t) => t.path === location.pathname);
-    if (found && found.label !== active) onChange(found.label);
+    if (found && found.label !== active && onChange) onChange(found.label);
   }, [location.pathname]);
 
   return (
@@ -36,7 +36,7 @@ export function NavTabs({ active, onChange }) {
           <Button
             key={label}
             onClick={() => {
-              onChange(label);
+              if (onChange) onChange(label);
               navigate(path);
             }}
             className={[

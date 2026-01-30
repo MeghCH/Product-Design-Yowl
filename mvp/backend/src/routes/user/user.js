@@ -98,6 +98,76 @@ router.put("/:id", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/:id/favorites", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const connection = await mysql.createConnection({
+      host: "localhost",
+      user: "vscode",
+      password: "root",
+      database: "yowl_db",
+    });
+
+    const [reviews] = await connection.execute(
+      `SELECT r.id, r.media_type, r.media_id, r.rating, r.created_at
+       FROM Reviews r
+       WHERE r.user_id = ?
+       ORDER BY r.created_at DESC
+       LIMIT 10`,
+      [Number(id)],
+    );
+
+    const favorites = [];
+
+    for (const review of reviews) {
+      let mediaInfo = null;
+
+      if (review.media_type === "film") {
+        const [rows] = await connection.execute(
+          "SELECT id_film as id, title, picture FROM Film WHERE id_film = ?",
+          [review.media_id],
+        );
+        mediaInfo = rows[0];
+      } else if (review.media_type === "jeu") {
+        const [rows] = await connection.execute(
+          "SELECT id_jeu as id, title, picture FROM Jeu_video WHERE id_jeu = ?",
+          [review.media_id],
+        );
+        mediaInfo = rows[0];
+      } else if (review.media_type === "serie") {
+        const [rows] = await connection.execute(
+          "SELECT id_serie as id, title, picture FROM Serie WHERE id_serie = ?",
+          [review.media_id],
+        );
+        mediaInfo = rows[0];
+      } else if (review.media_type === "livre") {
+        const [rows] = await connection.execute(
+          "SELECT id_livre as id, title, picture FROM Livre WHERE id_livre = ?",
+          [review.media_id],
+        );
+        mediaInfo = rows[0];
+      }
+
+      if (mediaInfo) {
+        favorites.push({
+          id: review.id,
+          title: mediaInfo.title,
+          picture: mediaInfo.picture,
+          media_type: review.media_type,
+          rating: review.rating,
+        });
+      }
+    }
+
+    await connection.end();
+    res.json(favorites);
+  } catch (err) {
+    console.error("Favorites error:", err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+});
+
 router.delete("/:id", authenticateToken, async (req, res) => {
   const { id } = req.params;
 

@@ -8,8 +8,7 @@ import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import MobileNavBarHome from "../components/mobile-nav-bar-home";
 import MobileTopFilter from "../components/mobile-top-filter";
-
-const API_BASE = "http://localhost:4000";
+import API_BASE from "../config";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
@@ -95,7 +94,7 @@ function HomeSection({ title, seeAllTo, items }) {
               </div>
 
               <div className="mt-3 px-1">
-                <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors text-white">
+                <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors text-blue-200">
                   {item.title}
                 </h3>
               </div>
@@ -168,7 +167,7 @@ function MobileSection({ title, seeAllTo, items }) {
               </div>
 
               <div className="mt-2 px-1">
-                <h3 className="font-bold text-xs line-clamp-1 group-hover:text-yellow-500 transition-colors text-white">
+                <h3 className="font-bold text-xs line-clamp-1 group-hover:text-yellow-500 transition-colors text-blue-200">
                   {item.title}
                 </h3>
               </div>
@@ -220,7 +219,7 @@ export function HomePageLoged() {
 
   const gamesItems = games.map((x) => ({
     id: x.id,
-    type: "games",
+    type: "jeu",
     title: x.title,
     img:
       imageIndex.games?.[x.picture] ??
@@ -230,7 +229,7 @@ export function HomePageLoged() {
 
   const moviesItems = movies.map((x) => ({
     id: x.id,
-    type: "movies",
+    type: "film",
     title: x.title,
     img:
       imageIndex.movies?.[x.picture] ??
@@ -240,7 +239,7 @@ export function HomePageLoged() {
 
   const tvShowItems = tvShows.map((x) => ({
     id: x.id,
-    type: "tv_shows",
+    type: "serie",
     title: x.title,
     img:
       imageIndex.tv_shows?.[x.picture] ??
@@ -250,7 +249,7 @@ export function HomePageLoged() {
 
   const booksItems = books.map((x) => ({
     id: x.id,
-    type: "books",
+    type: "livre",
     title: x.title,
     img:
       imageIndex.books?.[x.picture] ??

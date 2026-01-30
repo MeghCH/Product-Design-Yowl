@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { Logo } from "../components/logo";
-import { ButtonLog } from "../components/button_log";
 import { Link } from "react-router-dom";
-
+import API_BASE from "../config";
 import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
@@ -18,24 +16,53 @@ export function LoginPage() {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
 
+    console.log("Attempting login with:", { email, password: "***" });
+
     try {
-      const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      console.log("Response status:", response.status);
 
-      if (response.ok && data.user) {
-        localStorage.setItem("userId", data.user.id);
+      const text = await response.text();
+      console.log("Response text:", text);
 
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        alert("Réponse invalide du serveur");
+        return;
+      }
+
+      console.log("response.ok:", response.ok);
+      console.log("data.user:", data.user);
+      console.log("data.token:", data.token);
+
+      if (response.ok && data.user && data.token) {
+        try {
+          localStorage.setItem("userId", String(data.user.id));
+          localStorage.setItem("token", data.token);
+          console.log(
+            "Token saved successfully:",
+            localStorage.getItem("token"),
+          );
+        } catch (storageErr) {
+          console.error("localStorage error:", storageErr);
+          alert("Erreur de stockage: " + storageErr.message);
+          return;
+        }
         navigate("/profile");
       } else {
-        alert("Erreur: " + data.message);
+        const errorMsg = data.msg || data.message || "Identifiants incorrects";
+        alert("Erreur: " + errorMsg);
       }
     } catch (err) {
-      console.error("Erreur lors de la redirection:", err);
+      console.error("Fetch error:", err);
+      alert("Erreur réseau: " + err.message);
     }
   };
 
@@ -62,7 +89,6 @@ export function LoginPage() {
         <div className="absolute inset-x-0 bottom-[45vh] h-24 bg-linear-to-b from-transparent to-[#000814]" />
       </div>
       {/* Header desktop */}
-      import Link from "next/link";
       <div className="relative z-10 fixed inset-x-0 top-0 hidden md:block">
         <header className="w-full px-10 py-6 flex items-center justify-between">
           <Link to="/" className="cursor-pointer">
@@ -139,9 +165,12 @@ export function LoginPage() {
                 />
 
                 <div className="pt-2">
-                  <ButtonLog type="submit" onClick={handleSubmit}>
+                  <button
+                    type="submit"
+                    className="w-full h-11 px-8 rounded-2xl bg-yellow-500 text-blue-800 font-medium transition-colors duration-200 hover:bg-yellow-300"
+                  >
                     Sign in
-                  </ButtonLog>
+                  </button>
                 </div>
 
                 <div className="pt-3 space-y-1 text-sm">

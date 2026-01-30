@@ -2,133 +2,126 @@ DROP DATABASE IF EXISTS yowl_db;
 CREATE DATABASE yowl_db;
 USE yowl_db;
 
-
-CREATE USER IF NOT EXISTS 'calgar'@'localhost' IDENTIFIED BY 'ultramar';
-GRANT ALL PRIVILEGES ON yowl_db.* TO 'calgar'@'localhost';
-FLUSH PRIVILEGES;
-
-
+-- Table des utilisateurs
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    picture VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Serie (
-    id_serie INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL,
-    picture VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE Livre (
-    id_livre INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    author VARCHAR(100),
-    description TEXT NOT NULL,
-    picture VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE Film (
-    id_film INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    director VARCHAR(100),
-    description TEXT NOT NULL,
-    picture VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
+-- Table des Jeux Vidéo
 CREATE TABLE Jeu_video (
     id_jeu INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     platform VARCHAR(100),
-    description TEXT NOT NULL,
-    picture VARCHAR(255) NOT NULL,
+    description TEXT,
+    picture VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table des Films
+CREATE TABLE Film (
+    id_film INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    director VARCHAR(100),
+    description TEXT,
+    picture VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des Séries
+CREATE TABLE Serie (
+    id_serie INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    picture VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des Livres
+CREATE TABLE Livre (
+    id_livre INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100),
+    description TEXT,
+    picture VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des Reviews/Avis
 CREATE TABLE Reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     media_type ENUM('film', 'serie', 'livre', 'jeu') NOT NULL,
     media_id INT NOT NULL,
-    rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    rating INT,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_review (user_id, media_type, media_id)
-);
-INSERT INTO users (username, email, password_hash, picture) 
-VALUES ('Test', 'test@test.com', 'test1234', 'calgar_avatar.png');
-
-INSERT INTO Livre (title, author, description, picture) 
-VALUES (
-    'Alice’s Adventures in Wonderland', 
-    'Lewis Carroll', 
-    'Alice falls down a rabbit hole and discovers a fantastical world filled with strange creatures and absurd rules.', 
-    'alice.jpg'
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO Film (title, director, description, picture) 
-VALUES (
-    'Pirates of the Caribbean.', 
-    'Gore Verbinski', 
-    'Blacksmith Will Turner teams up with the eccentric pirate Jack Sparrow to rescue his love from cursed pirates.', 
-    'pirates.jpg'
+-- Table user_media_list
+CREATE TABLE user_media_list (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    media_type ENUM('film','serie','livre','jeu') NOT NULL,
+    media_id INT NOT NULL,
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO Serie (title, description, picture) 
-VALUES (
-    'Breaking Bad', 
-    'A chemistry teacher diagnosed with cancer partners with a former student to produce and sell an illegal drug.', 
-    'breaking.jpg'
+-- Table des Posts
+CREATE TABLE posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO Jeu_video (title, platform, description, picture) 
-VALUES (
-    'Crash Bandicoot: Twinsanity', 
-    'PS2 / Xbox', 
-    'Crash and his arch-nemesis, Dr. Neo Cortex, must join forces to save their world from a threat coming from another dimension.', 
-    'crash.jpg'
+-- Table des Commentaires
+CREATE TABLE commentaire (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO Reviews (user_id, media_type, media_id, rating, comment)
-VALUES (1, 'livre', 1, 5, 'Chef-d\'oeuvre de la littérature fantastique !');
-
-USE yowl_db;
-DELETE FROM Jeu_video;
-INSERT INTO Jeu_video (id_jeu, title, platform, description, picture) 
-VALUES (1, 'Crash Twinsanity', 'PS2', 'Crash et Cortex font équipe.', 'crash.jpg');
- 
-INSERT INTO users (username, email, password_hash)
-VALUES ('testuser', 'test@test.com', 'password123');
-
-INSERT INTO users (username, email, password_hash)
-VALUES ('testuser', 'test@test.com', 'password123');
-
-INSERT INTO user_media_list (user_id, media_type, media_id, status)
-VALUES
-(1, 'serie', 1, 'seen'),
-(1, 'livre', 1, 'to_see');
-
-CREATE TABLE IF NOT EXISTS user_media_list (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  media_type ENUM('film','serie','livre','jeu') NOT NULL,
-  media_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uniq_like (user_id, media_type, media_id),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+-- Table des Playlists
+CREATE TABLE playlist (
+    id_playlist INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT IGNORE INTO user_media_list (user_id, media_type, media_id) VALUES
-(1,'film',1),
-(1,'serie',1),
-(1,'livre',1),
-(1,'jeu',1);
+-- ==================== SEED DATA ====================
 
+-- Utilisateurs
+INSERT INTO users (username, email, password_hash) VALUES 
+('testuser', 'test@test.com', 'password123');
+
+-- Jeux Vidéo
+INSERT INTO Jeu_video (title, platform, description, picture) VALUES 
+('Crash Bandicoot: Twinsanity', 'PS2/Xbox', 'Crash and his arch-nemesis, Dr. Neo Cortex, must join forces to save their world from a threat coming from another dimension.', 'crash.jpg');
+
+-- Films
+INSERT INTO Film (title, director, description, picture) VALUES 
+('Pirates of the Caribbean', 'Gore Verbinski', 'Blacksmith Will Turner teams up with the eccentric pirate Jack Sparrow to rescue his love from cursed pirates.', 'pirates.jpg');
+
+-- Séries
+INSERT INTO Serie (title, description, picture) VALUES 
+('Breaking Bad', 'A chemistry teacher diagnosed with cancer partners with a former student to produce and sell an illegal drug.', 'breaking.jpg');
+
+-- Livres
+INSERT INTO Livre (title, author, description, picture) VALUES 
+('Alice''s Adventures in Wonderland', 'Lewis Carroll', 'Alice falls down a rabbit hole and discovers a fantastical world filled with strange creatures and absurd rules.', 'alice.jpg');
 

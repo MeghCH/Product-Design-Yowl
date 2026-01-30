@@ -7,8 +7,7 @@ import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import MobileNavBar from "../components/mobile-nav-bar";
 import MobileTopFilter from "../components/mobile-top-filter";
-
-const API_BASE = "http://localhost:4000";
+import API_BASE from "../config";
 
 const gamesImgs = import.meta.glob("../assets/Games/*", {
   eager: true,
@@ -36,10 +35,10 @@ function makeIndex(globMap) {
   return index;
 }
 
-function HomeSection({ title, seeAllTo, items }) {
+function HomeSection({ title, seeAllTo, items, mediaType }) {
   const filled = [
     ...items,
-    ...Array.from({ length: Math.max(0, 5 - items.length) }, () => null),
+    ...Array.from({ length: Math.max(0, 4 - items.length) }, () => null),
   ];
 
   return (
@@ -60,10 +59,14 @@ function HomeSection({ title, seeAllTo, items }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-5 gap-8">
+      <div className="grid grid-cols-4 gap-8">
         {filled.map((item, idx) =>
           item ? (
-            <div key={item.id ?? idx} className="group cursor-pointer">
+            <Link
+              key={item.id ?? idx}
+              to={`/review/${mediaType}/${item.id}`}
+              className="group cursor-pointer"
+            >
               <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/5 shadow-xl group-hover:border-yellow-500/50 transition-all duration-300">
                 {item.img ? (
                   <img
@@ -86,11 +89,11 @@ function HomeSection({ title, seeAllTo, items }) {
               </div>
 
               <div className="mt-3 px-1">
-                <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors text-white">
+                <h3 className="font-bold text-sm line-clamp-1 group-hover:text-yellow-500 transition-colors text-blue-200">
                   {item.title}
                 </h3>
               </div>
-            </div>
+            </Link>
           ) : (
             <div
               key={`ph-${idx}`}
@@ -140,7 +143,7 @@ function MobileSection({ title, seeAllTo, items }) {
               </div>
 
               <div className="mt-2">
-                <h3 className="text-white text-xs font-semibold line-clamp-1">
+                <h3 className="text-blue-200 text-xs font-semibold line-clamp-1">
                   {item.title}
                 </h3>
               </div>
@@ -264,21 +267,25 @@ export function HomePage() {
             title="New Games"
             seeAllTo="/category/games"
             items={gamesItems}
+            mediaType="jeu"
           />
           <HomeSection
             title="New Films"
             seeAllTo="/category/movies"
             items={moviesItems}
+            mediaType="film"
           />
           <HomeSection
             title="New TV Shows"
             seeAllTo="/category/tv_shows"
             items={tvShowItems}
+            mediaType="serie"
           />
           <HomeSection
             title="New Books"
             seeAllTo="/category/books"
             items={booksItems}
+            mediaType="livre"
           />
         </div>
       </main>
