@@ -1,0 +1,4 @@
+nohup: ignoring input
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+Server running on http://0.0.0.0:4000
+Connecté à la DB
