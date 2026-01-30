@@ -7,10 +7,7 @@ import bg from "./Fallout baniere.jpg";
 import badge from "../assets/Goof-media.png";
 
 export function SignupPage() {
-  const [active, setActive] = useState("Home");
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,8 +18,6 @@ export function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const username = `${firstName} ${lastName}`.trim();
 
     try {
       const response = await fetch(`${API_BASE}/register`, {
@@ -115,27 +110,9 @@ export function SignupPage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                   type="text"
-                  placeholder="Last name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="
-                    h-11 w-full rounded-2xl
-                    bg-[#001D3D]/80
-                    px-5
-                    text-sm text-blue-200
-                    placeholder:text-blue-200/40
-                    outline-none
-                    focus:ring-1 focus:ring-blue-800
-                    shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
-                  "
-                  required
-                />
-
-                <input
-                  type="text"
-                  placeholder="First name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="
                     h-11 w-full rounded-2xl
                     bg-[#001D3D]/80

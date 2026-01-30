@@ -343,6 +343,21 @@ app.get("/favorites/check/:type/:id", (req, res) => {
   );
 });
 
+app.get("/user/:id", (req, res) => {
+  const userId = Number(req.params.id);
+  if (!userId) return res.status(400).json({ error: "Invalid user id" });
+
+  db.query(
+    "SELECT id, username, email, picture, created_at FROM users WHERE id = ?",
+    [userId],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (result.length === 0) return res.status(404).json({ error: "User not found" });
+      res.json(result[0]);
+    }
+  );
+});
+
 app.get("/user/:id/favorites", async (req, res) => {
   try {
     const userId = Number(req.params.id);

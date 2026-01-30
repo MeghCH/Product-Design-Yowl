@@ -7,7 +7,6 @@ import { ButtonProfile } from "../components/button_profile";
 import { SearchBar } from "../components/search_bar";
 import NavTabsReview from "../components/nav_tab_review";
 import API_BASE from "../config";
-
 import fnacLogo from "../assets/fnac.png";
 import amazonLogo from "../assets/amazon.png";
 
@@ -219,7 +218,9 @@ function MobileReviewCard({ rev, currentUserId, onDelete }) {
                   <p className="text-[10px] text-blue-100/45 font-bold">
                     Watched on
                   </p>
-                  <p className="text-[10px] text-blue-100/65 font-bold">{date}</p>
+                  <p className="text-[10px] text-blue-100/65 font-bold">
+                    {date}
+                  </p>
                 </div>
                 {rev?.user_id === currentUserId && (
                   <button
@@ -759,7 +760,9 @@ export function ReviewPage() {
                             <div className="flex items-center gap-3">
                               <p className="text-[10px] uppercase font-bold tracking-widest text-blue-100/40">
                                 {rev.created_at
-                                  ? new Date(rev.created_at).toLocaleDateString()
+                                  ? new Date(
+                                      rev.created_at,
+                                    ).toLocaleDateString()
                                   : ""}
                               </p>
                               {rev.user_id === currentUserId && (

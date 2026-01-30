@@ -5,7 +5,6 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-
 import { Logo } from "../components/logo";
 import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";

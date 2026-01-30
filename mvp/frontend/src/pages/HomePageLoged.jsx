@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { Logo } from "../components/logo";
 import { ButtonMsg } from "../components/button_message";
 import { ButtonProfile } from "../components/button_profile";

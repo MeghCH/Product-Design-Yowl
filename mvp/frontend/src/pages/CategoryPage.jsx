@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { Logo } from "../components/logo";
 import { ButtonMsg } from "../components/button_message";
 import { SearchBar } from "../components/search_bar";
 import { NavTabs } from "../components/nav-bar";
 import { ButtonProfile } from "../components/button_profile";
-
 import MobileNavBar from "../components/mobile-nav-bar";
 import MobileNavBarHome from "../components/mobile-nav-bar-home";
 import MobileTopFilter from "../components/mobile-top-filter";
