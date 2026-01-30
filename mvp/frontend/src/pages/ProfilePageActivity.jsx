@@ -1,0 +1,497 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Logo } from "../components/logo";
+import { NavTabs } from "../components/nav-bar";
+import { SearchBar } from "../components/search_bar";
+import { NavTabsProfils } from "../components/nav-barre-profile";
+import { ButtonMsg } from "../components/button_message";
+import { ButtonProfile } from "../components/button_profile";
+import ButtonLogOut from "../components/button_logout";
+import MobileNavBarLoged from "../components/mobile-nav-bar-loged";
+import MobileTopFilter from "../components/mobile-top-filter";
+import API_BASE from "../config";
+
+const gamesImgs = import.meta.glob("../assets/Games/*", {
+  eager: true,
+  import: "default",
+});
+const moviesImgs = import.meta.glob("../assets/Movies/*", {
+  eager: true,
+  import: "default",
+});
+const booksImgs = import.meta.glob("../assets/Books/*", {
+  eager: true,
+  import: "default",
+});
+const tvShowsImgs = import.meta.glob("../assets/Series/*", {
+  eager: true,
+  import: "default",
+});
+
+function makeIndex(globMap) {
+  const index = {};
+  for (const [path, url] of Object.entries(globMap)) {
+    const filename = path.split("/").pop();
+    if (!filename) continue;
+    index[filename] = url;
+    index[filename.toLowerCase()] = url;
+  }
+  return index;
+}
+
+async function safeJson(res) {
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    console.error("Réponse non-JSON:", {
+      status: res.status,
+      url: res.url,
+      text: text.slice(0, 200),
+    });
+    return null;
+  }
+}
+
+function resolveCoverFromPicture(picture, indexes) {
+  const key = String(picture || "").trim();
+  if (!key) return null;
+  const lower = key.toLowerCase();
+  return (
+    indexes.movies[key] ||
+    indexes.movies[lower] ||
+    indexes.tv_shows[key] ||
+    indexes.tv_shows[lower] ||
+    indexes.books[key] ||
+    indexes.books[lower] ||
+    indexes.games[key] ||
+    indexes.games[lower] ||
+    null
+  );
+}
+
+export function ProfilePage() {
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [activeTop, setActiveTop] = useState("");
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path === "/home/log") setActiveTop("Home");
+    else if (path.startsWith("/category")) setActiveTop("Categories");
+    else if (path.startsWith("/profile")) setActiveTop("Profile");
+    else setActiveTop("");
+  }, [location.pathname]);
+
+  const [activeProfileTab, setActiveProfileTab] = useState("Activity");
+  const [mobileCategory, setMobileCategory] = useState("Games");
+
+  const profilePathByLabel = useMemo(
+    () => ({
+      Activity: "/profile",
+      Reviews: "/profile/reviews",
+      Statistics: "/profile/statistics",
+      Games: "/profile/games?status=seen",
+      Movies: "/profile/movies?status=seen",
+      "TV Shows": "/profile/tv_shows?status=seen",
+      Books: "/profile/books?status=seen",
+    }),
+    [],
+  );
+
+  const imageIndexes = useMemo(() => {
+    return {
+      games: makeIndex(gamesImgs),
+      movies: makeIndex(moviesImgs),
+      books: makeIndex(booksImgs),
+      tv_shows: makeIndex(tvShowsImgs),
+    };
+  }, []);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    async function load() {
+      setLoading(true);
+
+      const favRes = await fetch(`${API_BASE}/user/${userId}/favorites`);
+      const favData = await safeJson(favRes);
+      setFavorites(Array.isArray(favData) ? favData : []);
+
+      try {
+        const userRes = await fetch(`${API_BASE}/user/${userId}`);
+        const userData = await safeJson(userRes);
+        if (userData && typeof userData === "object") setUser(userData);
+      } catch (e) {
+        console.warn("API user absente ou erreur:", e);
+      }
+
+      try {
+        const cRes = await fetch(`${API_BASE}/user/${userId}/comments`);
+        const cData = await safeJson(cRes);
+        setComments(Array.isArray(cData) ? cData : []);
+      } catch (e) {
+        console.warn("API comments absente ou erreur:", e);
+      }
+
+      setLoading(false);
+    }
+
+    load().catch((err) => {
+      console.error("Erreur chargement Profile:", err);
+      setLoading(false);
+    });
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    navigate("/login");
+  };
+
+  const initials = useMemo(() => {
+    const name = user?.username || user?.email || "U";
+    return String(name).trim().charAt(0).toUpperCase();
+  }, [user]);
+
+  const followers = 24;
+  const following = 50;
+
+  const chart = useMemo(
+    () => [
+      { label: "Games", value: 20 },
+      { label: "Movies", value: 50 },
+      { label: "Shows", value: 70 },
+      { label: "Books", value: 10 },
+    ],
+    [],
+  );
+  const maxV = Math.max(...chart.map((d) => d.value), 1);
+
+  const favoritesWithCover = useMemo(() => {
+    return (favorites || []).map((f) => ({
+      ...f,
+      cover:
+        (typeof f.image === "string" && f.image.trim().length > 0
+          ? f.image
+          : null) || resolveCoverFromPicture(f.picture, imageIndexes),
+    }));
+  }, [favorites, imageIndexes]);
+
+  const goProfile = (label) => {
+    const path = profilePathByLabel[label];
+    if (!path) return;
+    setActiveProfileTab(label);
+    navigate(path);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#000814] text-blue-200 flex items-center justify-center">
+        Chargement du Codex...
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#000814] text-blue-200">
+      {/*  DESKTOP  */}
+      <div className="hidden md:block">
+        <div className="sticky top-0 z-50">
+          <div className="bg-[#000814]/70 backdrop-blur-md border-b border-white/5">
+            <header className="w-full flex justify-between items-center px-8 py-4">
+              <Logo />
+
+              <div className="flex items-center gap-6">
+                <NavTabs active={activeTop} onChange={setActiveTop} />
+                <SearchBar />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <ButtonMsg type="button" aria-label="Quick action" />
+                <ButtonProfile type="button" aria-label="Profile">
+                  Profile
+                </ButtonProfile>
+              </div>
+            </header>
+          </div>
+        </div>
+
+        <main className="max-w-6xl mx-auto px-8 py-10 space-y-10">
+          <section className="flex items-center justify-between">
+            <div className="flex items-center gap-10">
+              <div className="relative flex flex-col items-center">
+                <div className="h-45 w-45 rounded-full bg-linear-to-br from-blue-300/40 to-blue-100/10 border border-white/10 flex items-center justify-center overflow-hidden">
+                  <span className="text-4xl font-bold text-blue-50">
+                    {initials}
+                  </span>
+                </div>
+                <button
+                  className="mt-3 h-8 px-4 rounded-lg bg-[#001D3D]/60 border border-white/10 text-blue-200 text-sm font-semibold hover:bg-[#001D3D]/80 transition-colors"
+                  onClick={() => console.log("edit")}
+                >
+                  Edit
+                </button>
+              </div>
+
+              <div className="flex items-center gap-10">
+                <div>
+                  <h1 className="text-2xl text-blue-200 font-semibold leading-tight">
+                    {user?.username || "User"}
+                  </h1>
+                  <p className="text-blue-100/60 text-sm">
+                    Joined on {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-10">
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">{followers}</div>
+                    <div className="text-blue-100/60 text-sm">Followers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">{following}</div>
+                    <div className="text-blue-100/60 text-sm">Following</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ButtonLogOut onClick={handleLogout} />
+          </section>
+
+          <div className="flex justify-center">
+            <NavTabsProfils
+              active={activeProfileTab}
+              onChange={(label) => goProfile(label)}
+            />
+          </div>
+
+          <section className="grid grid-cols-[1fr_220px] gap-10 items-start">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-yellow-400 font-semibold">Recent likes</h2>
+                <button className="text-blue-200 text-sm hover:text-blue-100">
+                  See all {">"}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-6">
+                {(favoritesWithCover.length
+                  ? favoritesWithCover
+                  : [null, null, null, null]
+                )
+                  .slice(0, 4)
+                  .map((item, idx) => (
+                    <div
+                      key={item?.id ?? idx}
+                      className="aspect-2/3 rounded-2xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                      title={item?.title || ""}
+                    >
+                      {item?.cover ? (
+                        <img
+                          src={item.cover}
+                          alt={item?.title || ""}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-sm">
+                          Cover
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            <div className="pt-38">
+              <div className="h-44 w-full flex items-end gap-3">
+                {chart.map((d) => (
+                  <div
+                    key={d.label}
+                    className="flex-1 flex flex-col items-center gap-3"
+                  >
+                    <div className="text-blue-100/70 text-xs">{d.value}</div>
+                    <div
+                      className="w-full rounded-t-sm bg-[#1F6FEB]/60"
+                      style={{
+                        height: `${Math.round((d.value / maxV) * 140)}px`,
+                      }}
+                    />
+                    <div className="text-yellow-400 text-xs">{d.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      {/* MOBILE  */}
+      <div className="md:hidden min-h-screen bg-[#000814] pt-[calc(env(safe-area-inset-top)+32px)]">
+        <MobileTopFilter value={mobileCategory} onChange={setMobileCategory} />
+
+        <main className="px-5 pt-8 pb-[calc(140px+env(safe-area-inset-bottom))]">
+          <section className="flex items-start gap-5">
+            <div className="flex flex-col items-center">
+              <div className="relative">
+                <div className="h-28 w-28 rounded-full overflow-hidden border border-white/10 bg-[#001D3D]/40 flex items-center justify-center">
+                  <span className="text-3xl font-black text-blue-200">
+                    {initials}
+                  </span>
+                </div>
+
+                <div className="absolute -top-2 -right-2 h-11 w-11 rounded-full bg-[#0B2A52] border border-white/10 flex items-center justify-center">
+                  <div className="h-6 w-6 rounded bg-yellow-400" />
+                </div>
+              </div>
+
+              <button
+                className="mt-4 h-8 px-4 rounded-lg bg-[#001D3D]/60 border border-white/10 text-blue-200 text-base font-semibold"
+                onClick={() => console.log("edit")}
+              >
+                Edit
+              </button>
+            </div>
+
+            <div className="flex-1">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h1 className="text-3xl text-blue-200 font-black leading-tight">
+                    {user?.username || "User"}
+                  </h1>
+                  <p className="text-blue-200/75 text-base mt-1">
+                    Joined on {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+
+                <div className="pt-1">
+                  <ButtonLogOut onClick={handleLogout} />
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center gap-10">
+                <div className="text-center">
+                  <div className="text-2xl font-black">{followers}</div>
+                  <div className="text-blue-100/70 text-base">Followers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-black">{following}</div>
+                  <div className="text-blue-100/70 text-base">Following</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-10">
+            <div className="flex items-center justify-between">
+              <h2 className="text-yellow-400 font-black text-xl">
+                Recent likes
+              </h2>
+              <button className="text-blue-200 text-base font-semibold">
+                See all {">"}
+              </button>
+            </div>
+
+            <div className="mt-5 grid grid-cols-3 gap-5">
+              {(favoritesWithCover.length
+                ? favoritesWithCover
+                : [null, null, null]
+              )
+                .slice(0, 3)
+                .map((item, idx) => (
+                  <div
+                    key={item?.id ?? idx}
+                    className="aspect-[2/3] rounded-3xl overflow-hidden bg-[#001D3D]/40 border border-white/10"
+                    title={item?.title || ""}
+                  >
+                    {item?.cover ? (
+                      <img
+                        src={item.cover}
+                        alt={item?.title || ""}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-blue-100/40 text-sm">
+                        Cover
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </div>
+
+            <section className="mt-12 grid grid-cols-[1fr_1.25fr] gap-7 items-end">
+              <div className="space-y-4">
+                {[
+                  "Reviews",
+                  "Statistics",
+                  "Games",
+                  "Movies",
+                  "TV Shows",
+                  "Books",
+                ].map((label) => (
+                  <button
+                    key={label}
+                    type="button"
+                    className="w-full h-12 px-4 rounded-sm bg-[#001D3D]/60 border border-white/10 flex items-center justify-between text-blue-100/90"
+                    onClick={() => goProfile(label)}
+                  >
+                    <span className="text-base font-semibold">{label}</span>
+                    <span className="text-blue-100/70 text-lg">{">"}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="pb-2">
+                <div className="h-48 w-full flex items-end gap-3">
+                  {chart.map((d) => (
+                    <div
+                      key={d.label}
+                      className="flex-1 flex flex-col items-center"
+                    >
+                      <div className="text-blue-100/85 text-sm mb-3 font-semibold">
+                        {d.value}
+                      </div>
+                      <div
+                        className="w-full rounded-t-sm bg-[#1F6FEB]/60"
+                        style={{
+                          height: `${Math.round((d.value / maxV) * 170)}px`,
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex items-center justify-between text-sm">
+                  {chart.map((d) => (
+                    <div
+                      key={d.label}
+                      className="flex-1 text-center text-yellow-400 font-semibold"
+                    >
+                      {d.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </section>
+        </main>
+
+        <div className="fixed left-0 right-0 px-4 bottom-[calc(env(safe-area-inset-bottom)+12px)]">
+          <MobileNavBarLoged />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ProfilePage;
