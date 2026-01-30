@@ -4,6 +4,7 @@ import { Logo } from "../components/logo";
 import { NavTabs } from "../components/nav-bar";
 import { ButtonMsg } from "../components/button_message";
 import { ButtonProfile } from "../components/button_profile";
+import { ButtonLog } from "../components/button_log";
 import { SearchBar } from "../components/search_bar";
 import NavTabsReview from "../components/nav_tab_review";
 import API_BASE from "../config";
@@ -631,10 +632,16 @@ export function ReviewPage() {
               </div>
 
               <div className="flex items-center gap-3">
-                <ButtonMsg type="button" aria-label="Quick action" />
-                <ButtonProfile type="button" aria-label="Profile">
-                  Profile
-                </ButtonProfile>
+                {isLoggedIn ? (
+                  <>
+                    <ButtonMsg type="button" aria-label="Quick action" />
+                    <ButtonProfile type="button" aria-label="Profile">
+                      Profile
+                    </ButtonProfile>
+                  </>
+                ) : (
+                  <ButtonLog />
+                )}
               </div>
             </header>
           </div>
@@ -816,7 +823,7 @@ export function ReviewPage() {
                   </p>
                   <ClickableStars
                     value={userRating}
-                    onChange={setUserRating}
+                    onChange={isLoggedIn ? setUserRating : () => {}}
                     size="text-2xl"
                   />
                 </div>
@@ -824,27 +831,29 @@ export function ReviewPage() {
                 <textarea
                   value={userComment}
                   onChange={(e) => setUserComment(e.target.value)}
-                  placeholder="Write here..."
-                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-[#000814]/35 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-100/35 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                  placeholder={isLoggedIn ? "Write here..." : "Login to write a review"}
+                  disabled={!isLoggedIn}
+                  className={`w-full min-h-[120px] rounded-2xl border border-white/10 bg-[#000814]/35 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-100/35 focus:outline-none focus:ring-2 focus:ring-blue-800 ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
                 />
 
-                <button
-                  type="button"
-                  onClick={handlePostReview}
-                  disabled={
-                    !isLoggedIn ||
-                    isPosting ||
-                    !userRating ||
-                    !userComment.trim()
-                  }
-                  className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {!isLoggedIn
-                    ? "Login to Review"
-                    : isPosting
-                      ? "Sending..."
-                      : "Send"}
-                </button>
+                {!isLoggedIn ? (
+                  <button
+                    type="button"
+                    onClick={() => navigate("/login")}
+                    className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition"
+                  >
+                    Login to Review
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handlePostReview}
+                    disabled={isPosting || !userRating || !userComment.trim()}
+                    className="w-full h-11 rounded-2xl bg-yellow-400 text-[#001D3D] font-black uppercase tracking-widest text-xs hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isPosting ? "Sending..." : "Send"}
+                  </button>
+                )}
               </div>
             </aside>
           </section>
@@ -895,7 +904,7 @@ export function ReviewPage() {
                 </p>
                 <ClickableStars
                   value={userRating}
-                  onChange={setUserRating}
+                  onChange={isLoggedIn ? setUserRating : () => {}}
                   size="text-2xl"
                 />
               </div>
@@ -903,20 +912,29 @@ export function ReviewPage() {
               <textarea
                 value={userComment}
                 onChange={(e) => setUserComment(e.target.value)}
-                placeholder="Write here..."
-                className="w-full min-h-[110px] rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-800"
+                placeholder={isLoggedIn ? "Write here..." : "Login to write a review"}
+                disabled={!isLoggedIn}
+                className={`w-full min-h-[110px] rounded-2xl border border-white/10 bg-[#0A2144]/50 px-4 py-3 text-sm text-blue-200 placeholder:text-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-800 ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
               />
 
-              <button
-                type="button"
-                onClick={handlePostReview}
-                disabled={
-                  !isLoggedIn || isPosting || !userRating || !userComment.trim()
-                }
-                className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {!isLoggedIn ? "Login" : isPosting ? "..." : "Send"}
-              </button>
+              {!isLoggedIn ? (
+                <button
+                  type="button"
+                  onClick={() => navigate("/login")}
+                  className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition"
+                >
+                  Login
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handlePostReview}
+                  disabled={isPosting || !userRating || !userComment.trim()}
+                  className="w-24 h-10 rounded-md bg-yellow-400 text-[#001D3D] font-black text-xs uppercase tracking-widest hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isPosting ? "..." : "Send"}
+                </button>
+              )}
             </div>
           </div>
         </div>

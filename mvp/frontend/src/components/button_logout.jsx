@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ButtonLogOut({ onClick, to = "/home" }) {
+export default function ButtonLogOut({ onClick, to = "/" }) {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
+    // Clear authentication data from localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+
     if (onClick) return onClick(e);
     navigate(to);
   };
