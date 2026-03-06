@@ -3,7 +3,7 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const app = express();
 
@@ -17,11 +17,11 @@ app.use(
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
+  host: process.env.DB_HOST || "localhost",
   port: 3306,
-  user: "vscode",
-  password: "root",
-  database: "yowl_db",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
 });
 
 db.connect((err) => {

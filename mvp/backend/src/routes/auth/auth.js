@@ -4,7 +4,7 @@ const mysql = require("mysql2/promise");
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -15,10 +15,10 @@ router.post("/login", async (req, res) => {
 
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "vscode",
-      password: "root",
-      database: "yowl_db",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
     const [rows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",
@@ -61,10 +61,10 @@ router.post("/register", async (req, res) => {
 
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "vscode",
-      password: "root",
-      database: "yowl_db",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
     const [existingRows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",
@@ -96,10 +96,10 @@ router.post("/register", async (req, res) => {
 router.post("/register-test", async (req, res) => {
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "vscode",
-      password: "root",
-      database: "yowl_db",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
     const [rows] = await connection.execute(
       "SELECT * FROM users WHERE email = ?",

@@ -16,9 +16,10 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
     }
 
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      database: "yowl",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
     let query = "";
     let params = [];
@@ -61,9 +62,10 @@ router.put("/:id", authenticateToken, async (req, res) => {
     }
 
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      database: "yowl",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
     const [existingRows] = await connection.execute(
       "SELECT password FROM users WHERE id = ?",
@@ -103,10 +105,10 @@ router.get("/:id/favorites", async (req, res) => {
 
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "vscode",
-      password: "root",
-      database: "yowl_db",
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
 
     const [reviews] = await connection.execute(
