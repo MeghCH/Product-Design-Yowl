@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS yowl_db;
 CREATE DATABASE yowl_db;
 USE yowl_db;
 
--- Table des utilisateurs
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -12,7 +11,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des Jeux Vidéo
 CREATE TABLE Jeu_video (
     id_jeu INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -22,7 +20,6 @@ CREATE TABLE Jeu_video (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des Films
 CREATE TABLE Film (
     id_film INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -32,7 +29,6 @@ CREATE TABLE Film (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des Séries
 CREATE TABLE Serie (
     id_serie INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -41,7 +37,6 @@ CREATE TABLE Serie (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des Livres
 CREATE TABLE Livre (
     id_livre INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -51,7 +46,6 @@ CREATE TABLE Livre (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table des Reviews/Avis
 CREATE TABLE Reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -63,7 +57,6 @@ CREATE TABLE Reviews (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Table user_media_list
 CREATE TABLE user_media_list (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -74,7 +67,6 @@ CREATE TABLE user_media_list (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Table des Posts
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -83,7 +75,6 @@ CREATE TABLE posts (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Table des Commentaires
 CREATE TABLE commentaire (
     id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT NOT NULL,
@@ -94,7 +85,6 @@ CREATE TABLE commentaire (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Table des Playlists
 CREATE TABLE playlist (
     id_playlist INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -103,7 +93,6 @@ CREATE TABLE playlist (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- ==================== SEED DATA ====================
 
 -- Utilisateurs
 INSERT INTO users (username, email, password_hash) VALUES 

@@ -107,9 +107,10 @@ function HomeSection({ title, seeAllTo, items, mediaType }) {
 }
 
 function MobileSection({ title, seeAllTo, items }) {
+  const top = (items ?? []).slice(0, 3);
   const filled = [
-    ...items,
-    ...Array.from({ length: Math.max(0, 3 - items.length) }, () => null),
+    ...top,
+    ...Array.from({ length: Math.max(0, 3 - top.length) }, () => null),
   ];
 
   return (
